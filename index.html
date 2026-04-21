@@ -1,0 +1,56 @@
+<script>
+    const spreadsheetId = '1SRPdUt9DJPMyNQyHnR3zYy48VAX028xGenGT7dWjW_bHDfUBGRtgK9eEG89_0SaD40tEiYya7ba8ym';
+    // This URL fetches the data in a format specifically meant for web apps
+    const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json`;
+
+    async function loadData() {
+        console.log("Starting fetch...");
+        try {
+            const response = await fetch(url);
+            const text = await response.text();
+            
+            // Google's JSON response has a protective wrapper we need to remove
+            // It looks like: /*_google_visualization_Query_setResponse({...});*/
+            const jsonText = text.match(/google\.visualization\.Query\.setResponse\(([\s\S\w]+)\)/);
+            
+            if (!jsonText) {
+                throw new Error("Could not find valid data in the Google response.");
+            }
+
+            const data = JSON.parse(jsonText[1]);
+            const table = data.table;
+
+            // 1. Build Headers
+            const head = document.getElementById('tableHead');
+            let headHtml = '<tr>';
+            table.cols.forEach(col => {
+                headHtml += `<th>${col.label || 'Column'}</th>`;
+            });
+            headHtml += '</tr>';
+            head.innerHTML = headHtml;
+
+            // 2. Build Body
+            const body = document.getElementById('tableBody');
+            let bodyHtml = '';
+            table.rows.forEach(row => {
+                bodyHtml += '<tr>';
+                row.c.forEach(cell => {
+                    // Handle empty cells vs cells with values
+                    let value = cell ? (cell.f ? cell.f : cell.v) : '';
+                    bodyHtml += `<td>${value}</td>`;
+                });
+                bodyHtml += '</tr>';
+            });
+            body.innerHTML = bodyHtml;
+
+            console.log("Table successfully rendered!");
+
+        } catch (err) {
+            console.error("Error Detail:", err);
+            document.getElementById('error-msg').style.display = 'block';
+            document.getElementById('error-msg').innerText = "Status: " + err.message;
+        }
+    }
+
+    loadData();
+</script>

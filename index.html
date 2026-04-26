@@ -14,28 +14,36 @@
 
 <header>📈 $100,000 March 2026</header>
 
+<!-- ===== TABLE ===== -->
 <div class="container">
   <table id="stocks">
-    <thead><tr id="headers"></tr></thead>
+    <thead>
+      <tr id="headers"></tr>
+    </thead>
     <tbody></tbody>
   </table>
 </div>
 
-<!-- 🔥 DASHBOARD -->
-<div class="dashboard">
+<!-- ===== TOTAL (FULL WIDTH) ===== -->
+<div class="total-bar">
+  <div class="total-label">Total Portfolio Value</div>
+  <div id="totalValue">$0</div>
+</div>
 
-  <!-- 💰 TOTAL -->
-  <div class="chart-box total-card full-width">
-    <div>
-      <div class="total-label">Total Portfolio Value</div>
-      <div id="totalValue">$0</div>
-    </div>
+<!-- ===== CHARTS (CRITICAL WRAPPER) ===== -->
+<div class="charts">
+
+  <div class="chart-box">
+    <canvas id="changeChart"></canvas>
   </div>
 
-  <!-- 📊 CHARTS -->
-  <div class="chart-box"><canvas id="changeChart"></canvas></div>
-  <div class="chart-box"><canvas id="holdingChart"></canvas></div>
-  <div class="chart-box"><canvas id="pieChart"></canvas></div>
+  <div class="chart-box">
+    <canvas id="holdingChart"></canvas>
+  </div>
+
+  <div class="chart-box">
+    <canvas id="pieChart"></canvas>
+  </div>
 
 </div>
 
@@ -46,7 +54,7 @@ const sheetURL = "https://script.google.com/macros/s/AKfycbwEO4t-V8lIIUh37i-0pQ3
 
 let changeChart, holdingChart, pieChart;
 
-// Center text plugin
+// ===== Donut center text =====
 const centerTextPlugin = {
   id: 'centerText',
   beforeDraw(chart) {
@@ -62,6 +70,7 @@ const centerTextPlugin = {
   }
 };
 
+// ===== BUILD CHARTS =====
 function buildCharts(data) {
   const labels = data.map(r => r["Ticker"]);
   const change = data.map(r => parseFloat(r["Change %"]) || 0);
@@ -69,11 +78,13 @@ function buildCharts(data) {
 
   [changeChart, holdingChart, pieChart].forEach(c => c && c.destroy());
 
+  // Change %
   changeChart = new Chart(document.getElementById("changeChart"), {
     type: "bar",
     data: {
       labels,
       datasets: [{
+        label: "Change %",
         data: change,
         backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444")
       }]
@@ -81,11 +92,13 @@ function buildCharts(data) {
     options: { maintainAspectRatio:false }
   });
 
+  // Holdings $
   holdingChart = new Chart(document.getElementById("holdingChart"), {
     type: "bar",
     data: {
       labels,
       datasets: [{
+        label: "Holdings $",
         data: totals,
         backgroundColor: "#3b82f6"
       }]
@@ -93,6 +106,7 @@ function buildCharts(data) {
     options: { maintainAspectRatio:false }
   });
 
+  // Donut
   pieChart = new Chart(document.getElementById("pieChart"), {
     type: "doughnut",
     data: {
@@ -113,16 +127,6 @@ function buildCharts(data) {
         legend:{
           position:"bottom",
           labels:{ color:"#e2e8f0", font:{size:11} }
-        },
-        tooltip:{
-          callbacks:{
-            label:function(ctx){
-              const v=ctx.raw;
-              const t=ctx.dataset.data.reduce((a,b)=>a+b,0);
-              const p=(v/t*100).toFixed(1);
-              return `${ctx.label}: $${v.toLocaleString()} (${p}%)`;
-            }
-          }
         }
       }
     },
@@ -130,6 +134,7 @@ function buildCharts(data) {
   });
 }
 
+// ===== LOAD DATA =====
 function handleData(data) {
   const headersRow = document.getElementById("headers");
   const tbody = document.querySelector("#stocks tbody");
@@ -154,7 +159,7 @@ function handleData(data) {
       const num=parseFloat(v);
 
       if(k.toLowerCase().includes("price") || k.toLowerCase().includes("total")){
-        td.textContent=!isNaN(num)?"$"+num.toFixed(2):v;
+        td.textContent=!isNaN(num) ? "$" + num.toFixed(2) : v;
       } else {
         td.textContent=v;
       }
@@ -175,6 +180,7 @@ function handleData(data) {
   buildCharts(data);
 }
 
+// JSONP load (avoids CORS)
 function loadData(){
   const s=document.createElement("script");
   s.src=sheetURL+"?callback=handleData";

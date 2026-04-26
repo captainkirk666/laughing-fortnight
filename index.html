@@ -1,70 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Google Sheets Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900">
+
+<!-- 🔷 TOP BAR -->
 <div class="bg-slate-900 text-slate-200 px-4 md:px-8 py-3">
-    
-    <div class="flex items-center justify-between">
-        
-        <!-- Left -->
-        <div class="flex items-center gap-4">
-            <span class="font-semibold text-white">Menu</span>
-        </div>
+    <div class="flex justify-between items-center">
+        <span class="text-white font-semibold">Dashboard Menu</span>
+        <button id="menuToggle" class="md:hidden">☰</button>
 
-        <!-- Mobile button -->
-        <button id="menuToggle" class="md:hidden text-slate-200 focus:outline-none">
-            ☰
-        </button>
-
-        <!-- Desktop menu -->
-        <div class="hidden md:flex items-center gap-6 text-sm">
-            
-            <!-- Dropdown -->
-            <div class="relative">
-                <button onclick="toggleDropdown('dd1')" class="hover:text-white">Data Sources ▾</button>
-                <div id="dd1" class="hidden absolute bg-white text-slate-800 mt-2 rounded-lg shadow-lg w-48 z-50">
-                    <a href="#" class="block px-4 py-2 hover:bg-slate-100">Google Sheets</a>
-                    <a href="#" class="block px-4 py-2 hover:bg-slate-100">CSV Upload</a>
-                    <a href="#" class="block px-4 py-2 hover:bg-slate-100">API Integration</a>
-                </div>
-            </div>
-
-            <div class="relative">
-                <button onclick="toggleDropdown('dd2')" class="hover:text-white">Filters ▾</button>
-                <div id="dd2" class="hidden absolute bg-white text-slate-800 mt-2 rounded-lg shadow-lg w-48 z-50">
-                    <a href="#" class="block px-4 py-2 hover:bg-slate-100">Last 7 Days</a>
-                    <a href="#" class="block px-4 py-2 hover:bg-slate-100">Last 30 Days</a>
-                </div>
-            </div>
-
-            <div class="relative">
-                <button onclick="toggleDropdown('dd3')" class="hover:text-white">Export ▾</button>
-                <div id="dd3" class="hidden absolute bg-white text-slate-800 mt-2 rounded-lg shadow-lg w-48 z-50">
-                    <a href="#" class="block px-4 py-2 hover:bg-slate-100">CSV</a>
-                    <a href="#" class="block px-4 py-2 hover:bg-slate-100">PDF</a>
-                </div>
-            </div>
-
+        <div class="hidden md:flex gap-6 text-sm">
+            <button onclick="toggleDropdown('dd1')">Data ▾</button>
+            <button onclick="toggleDropdown('dd2')">Filters ▾</button>
         </div>
     </div>
 
-    <!-- Mobile menu -->
-    <div id="mobileMenu" class="hidden mt-4 flex flex-col gap-2 md:hidden text-sm">
-        
-        <button onclick="toggleDropdown('mdd1')" class="text-left">Data Sources ▾</button>
-        <div id="mdd1" class="hidden pl-4">
-            <a href="#" class="block py-1">Google Sheets</a>
-            <a href="#" class="block py-1">CSV Upload</a>
-        </div>
-
-        <button onclick="toggleDropdown('mdd2')" class="text-left">Filters ▾</button>
-        <div id="mdd2" class="hidden pl-4">
-            <a href="#" class="block py-1">Last 7 Days</a>
-            <a href="#" class="block py-1">Last 30 Days</a>
-        </div>
-
-        <button onclick="toggleDropdown('mdd3')" class="text-left">Export ▾</button>
-        <div id="mdd3" class="hidden pl-4">
-            <a href="#" class="block py-1">CSV</a>
-            <a href="#" class="block py-1">PDF</a>
-        </div>
-
+    <div id="mobileMenu" class="hidden mt-3 md:hidden">
+        <button onclick="toggleDropdown('m1')" class="block w-full text-left">Data ▾</button>
+        <div id="m1" class="hidden pl-4 text-sm">Google Sheets</div>
     </div>
-
 </div>
+
+<!-- 🔷 NAV -->
+<nav class="bg-white border-b py-4 px-8 flex justify-between">
+    <span class="text-xl font-semibold text-indigo-600">Analytics.io</span>
+    <div class="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-700">JD</div>
+</nav>
+
+<!-- 🔷 MAIN -->
+<main class="max-w-7xl mx-auto p-6">
+
+    <h1 class="text-2xl font-bold mb-6">Live Data from Google Sheets</h1>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Chart -->
+        <div class="lg:col-span-2 bg-white p-6 rounded shadow">
+            <canvas id="mainChart"></canvas>
+        </div>
+
+        <!-- List -->
+        <div class="bg-white p-6 rounded shadow">
+            <h2 class="font-semibold mb-4">Recent Records</h2>
+            <ul id="data-list"></ul>
+        </div>
+
+    </div>
+
+</main>
+
+<script>
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTjEdatFjbF1-4mk9S_bvWXitZaX7hJ5TS38bmPPj6x5z5rcNiVBkJjotWEk8JvpPPFFj08h5SwRkG4/pub?gid=1328614085&single=true&output=csv";
+
+// Dropdown toggle
+function toggleDropdown(id) {
+    document.getElementById(id).classList.toggle("hidden");
+}
+
+// Mobile menu
+document.getElementById("menuToggle").onclick = () => {
+    document.getElementById("mobileMenu").classList.toggle("hidden");
+};
+
+// Fetch CSV
+async function getData() {
+    const res = await fetch(SHEET_URL);
+    const text = await res.text();
+
+    const rows = text.trim().split("\n").map(r => r.split(","));
+    rows.shift(); // remove headers
+
+    return rows;
+}
+
+// Update list
+function updateList(rows) {
+    const list = document.getElementById("data-list");
+    list.innerHTML = "";
+
+    rows.slice(0, 6).forEach(r => {
+        const li = document.createElement("li");
+        li.className = "flex justify-between py-2 border-b";
+
+        li.innerHTML = `
+            <span>${r[0]}</span>
+            <span class="font-mono">$${r[1]}</span>
+        `;
+
+        list.appendChild(li);
+    });
+}
+
+// Chart
+function renderChart(labels, values) {
+    const ctx = document.getElementById("mainChart");
+
+    new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [{
+                data: values,
+                borderColor: "#4f46e5",
+                backgroundColor: "rgba(79,70,229,0.1)",
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } }
+        }
+    });
+}
+
+// Init
+document.addEventListener("DOMContentLoaded", async () => {
+    const rows = await getData();
+
+    const labels = rows.map(r => r[0]);
+    const values = rows.map(r => Number(r[1]));
+
+    updateList(rows);
+    renderChart(labels, values);
+});
+</script>
+
+</body>
+</html>

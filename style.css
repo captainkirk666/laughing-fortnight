@@ -48,6 +48,24 @@ tr:hover {
 .positive { color:#22c55e; }
 .negative { color:#ef4444; }
 
+/* ===== BIG TOTAL ===== */
+.total-box {
+  text-align: center;
+  margin: 10px 0 5px 0;
+}
+
+.total-label {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+#totalValue {
+  font-size: 48px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* ===== CHARTS ===== */
 .charts {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -70,14 +88,7 @@ tr:hover {
   height: 100% !important;
 }
 
-.footer {
-  margin: 10px auto;
-  background: #020617;
-  padding: 10px 16px;
-  display: flex;
-  justify-content: space-between;
-}
-
+/* ===== MOBILE ===== */
 @media (max-width: 900px) {
   .charts {
     grid-template-columns: 1fr;

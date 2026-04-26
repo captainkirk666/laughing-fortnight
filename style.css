@@ -38,6 +38,7 @@ header {
 .info-text {
   font-family: 'Roboto', sans-serif;
   font-weight: 700;
+  text-align: center;
   color: #ffffff;
   padding: 10px 12px;
   font-size: 14px;

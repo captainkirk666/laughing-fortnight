@@ -1,18 +1,9 @@
-/* ===== IMPORT FONTS ===== */
-/* (keep this even though you also load in HTML — safe fallback) */
+/* ===== GOOGLE FONTS (fallback if HTML fails) ===== */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&display=swap');
 
 /* ===== GLOBAL (ROBOTO = DATA) ===== */
 body {
-  font-family: 'Roboto', Arial, sans-serif !important;
-}
-
-header,
-.total-bar,
-#totalValue {
-  font-family: 'Inter', Arial, sans-serif !important;
-}
-}
+  font-family: 'Roboto', Arial, sans-serif;
   margin: 0;
   background: #0f172a;
   color: #e2e8f0;
@@ -25,13 +16,13 @@ header,
 
 /* ===== HEADER (INTER) ===== */
 header {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   font-weight: 600;
   letter-spacing: 0.5px;
   background: #020617;
   padding: 10px 16px;
   margin-bottom: 10px;
-  font-size: 45px;
+  font-size: 18px;
 }
 
 /* ===== TABLE ===== */
@@ -44,12 +35,11 @@ table {
   border-collapse: collapse;
   background: #020617;
   font-size: 13px;
-  font-family: 'Roboto', sans-serif;
 }
 
 th, td {
   padding: 5px 7px;
-  border: 1px solid rgba(30,41,59,0.5);
+  border: 1px solid rgba(30, 41, 59, 0.5);
 }
 
 th {
@@ -63,7 +53,7 @@ th {
 
 td {
   font-weight: 400;
-  font-variant-numeric: tabular-nums; /* 👈 clean number alignment */
+  font-variant-numeric: tabular-nums;
 }
 
 td:not(:first-child) {
@@ -74,12 +64,19 @@ tr:hover {
   background: #1e293b;
 }
 
-.positive { color:#22c55e; }
-.negative { color:#ef4444; }
+.positive {
+  color: #22c55e;
+  font-weight: 500;
+}
+
+.negative {
+  color: #ef4444;
+  font-weight: 500;
+}
 
 /* ===== TOTAL BAR (INTER) ===== */
 .total-bar {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   background: #020617;
   border-top: 1px solid #1e293b;
   border-bottom: 1px solid #1e293b;
@@ -95,16 +92,16 @@ tr:hover {
 }
 
 #totalValue {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   font-size: 56px;
   font-weight: 700;
   letter-spacing: 2px;
 }
 
-/* ===== CHARTS GRID ===== */
+/* ===== CHARTS GRID (FORCES 3 IN A ROW) ===== */
 .charts {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 👈 FORCE 3 COLUMNS */
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   padding: 10px;
 }
@@ -119,7 +116,6 @@ tr:hover {
   justify-content: center;
   border-radius: 10px;
   padding: 10px;
-  font-family: 'Roboto', sans-serif;
 }
 
 /* ===== CANVAS FIX ===== */

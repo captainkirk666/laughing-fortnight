@@ -1,63 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Stock Dashboard</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f5f7fa;
+    }
+
+    header {
+      background: #1e293b;
+      color: white;
+      padding: 15px 20px;
+      font-size: 20px;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background: white;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f1f5f9;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    tr:nth-child(even) {
+      background: #f9fafb;
+    }
+
+    .positive {
+      color: green;
+      font-weight: bold;
+    }
+
+    .negative {
+      color: red;
+      font-weight: bold;
+    }
+
+    /* Sticky footer total bar */
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #111827;
+      color: white;
+      padding: 15px 20px;
+      font-size: 16px;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  📈 Live Stock Dashboard
+</header>
+
+<div class="container">
+  <table id="stocks">
+    <thead>
+      <tr id="headers"></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<div class="footer">
+  <div>Total Portfolio Value:</div>
+  <div id="totalValue">$0</div>
+</div>
+
 <script>
-const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTjEdatFjbF1-4mk9S_bvWXitZaX7hJ5TS38bmPPj6x5z5rcNiVBkJjotWEk8JvpPPFFj08h5SwRkG4/pub?gid=1328614085&single=true&output=csv";
+const sheetURL = "https://script.google.com/macros/s/AKfycbwdOgb4GvdEF7c-VB4s5mdgJpETUWGOZHAT1qjBbJlzgcs-YZExdvV0_5k3TWVMjVlKgQ/exec";
 
-// Fetch + parse CSV
-async function getData() {
-    const res = await fetch(SHEET_URL);
-    const text = await res.text();
+function loadData() {
+  fetch(sheetURL)
+    .then(res => res.json())
+    .then(data => {
+      const headersRow = document.getElementById("headers");
+      const tbody = document.querySelector("#stocks tbody");
+      const totalDisplay = document.getElementById("totalValue");
 
-    return text.trim().split("\n").map(r => r.split(","));
+      headersRow.innerHTML = "";
+      tbody.innerHTML = "";
+
+      if (!data || data.length === 0) return;
+
+      // Create headers
+      Object.keys(data[0]).forEach(key => {
+        const th = document.createElement("th");
+        th.textContent = key;
+        headersRow.appendChild(th);
+      });
+
+      let total = 0;
+
+      // Create rows
+      data.forEach(row => {
+        const tr = document.createElement("tr");
+
+        Object.entries(row).forEach(([key, value]) => {
+          const td = document.createElement("td");
+
+          td.textContent = value;
+
+          // Color gains/losses
+          if (key.toLowerCase().includes("change")) {
+            const num = parseFloat(value);
+            if (!isNaN(num)) {
+              td.classList.add(num >= 0 ? "positive" : "negative");
+            }
+          }
+
+          // Add to total if column matches
+          if (key.toLowerCase().includes("total")) {
+            const num = parseFloat(value);
+            if (!isNaN(num)) total += num;
+          }
+
+          tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+      });
+
+      // Update total footer
+      totalDisplay.textContent = "$" + total.toLocaleString();
+    })
+    .catch(err => console.error("Error:", err));
 }
 
-// Build table
-function renderTable(rows) {
-    const headers = rows[0];
-    const data = rows.slice(1);
+// Load once
+loadData();
 
-    const thead = document.getElementById("table-head");
-    const tbody = document.getElementById("table-body");
-
-    // Header row
-    thead.innerHTML = `
-        <tr>
-            ${headers.map(h => `<th class="px-4 py-2 border">${h}</th>`).join("")}
-        </tr>
-    `;
-
-    // Body rows
-    tbody.innerHTML = data.map(row => `
-        <tr class="hover:bg-slate-50">
-            ${row.map(cell => `<td class="px-4 py-2 border">${cell}</td>`).join("")}
-        </tr>
-    `).join("");
-}
-
-// Optional: still build chart from first 2 columns
-function renderChart(rows) {
-    const labels = rows.slice(1).map(r => r[0]);
-    const values = rows.slice(1).map(r => Number(r[1]));
-
-    const ctx = document.getElementById("mainChart");
-
-    new Chart(ctx, {
-        type: "line",
-        data: {
-            labels,
-            datasets: [{
-                data: values,
-                borderColor: "#4f46e5",
-                backgroundColor: "rgba(79,70,229,0.1)",
-                fill: true
-            }]
-        }
-    });
-}
-
-// Init
-document.addEventListener("DOMContentLoaded", async () => {
-    const rows = await getData();
-
-    renderTable(rows);
-    renderChart(rows);
-});
+// Auto refresh every 10 seconds
+setInterval(loadData, 10000);
 </script>
+
+</body>
+</html>

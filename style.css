@@ -1,0 +1,46 @@
+body {
+  background-color: #0f172a; /* Sets the page background color */
+}
+
+h1 {
+
+
+
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+
+  color: white;             /* Sets the heading text color */
+  text-align: center;       /* Centers the heading text */
+  font-size: 40px;  
+}
+
+p {
+
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+color: white;   
+font-family: Roboto;     /* Sets the paragraph font */
+  font-size: 22px;          /* Sets the paragraph font size */
+  text-align: center;  
+}
+
+.sheet-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.sheet-wrapper iframe {
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.5);
+  background: #ffffff; /* keeps sheet readable */
+}
+

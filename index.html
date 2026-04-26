@@ -1,9 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Stock Dashboard</title>
-
 <style>
 body {
   font-family: Arial;
@@ -14,22 +8,23 @@ body {
 
 header {
   background: #020617;
-  padding: 15px 20px;
-  font-size: 20px;
+  padding: 10px 16px;
+  font-size: 18px;
 }
 
 .container {
-  padding: 20px;
+  padding: 10px;
 }
 
 table {
   border-collapse: collapse;
   width: 100%;
   background: #020617;
+  font-size: 13px; /* smaller text */
 }
 
 th, td {
-  padding: 10px;
+  padding: 6px 8px; /* tighter cells */
   border: 1px solid #1e293b;
   text-align: left;
 }
@@ -38,7 +33,13 @@ th {
   position: sticky;
   top: 0;
   background: #020617;
-  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+}
+
+td {
+  line-height: 1.2;
 }
 
 tr:hover {
@@ -47,12 +48,22 @@ tr:hover {
 
 .positive {
   color: #22c55e;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .negative {
   color: #ef4444;
-  font-weight: bold;
+  font-weight: 600;
+}
+
+/* 👇 Make borders feel lighter */
+th, td {
+  border-color: rgba(30, 41, 59, 0.5);
+}
+
+/* 👇 Remove vertical clutter (optional, looks cleaner) */
+td + td, th + th {
+  border-left: none;
 }
 
 .footer {
@@ -60,156 +71,10 @@ tr:hover {
   bottom: 0;
   width: 100%;
   background: #020617;
-  padding: 15px 20px;
+  padding: 10px 16px;
   border-top: 1px solid #1e293b;
   display: flex;
   justify-content: space-between;
-  font-size: 16px;
+  font-size: 14px;
 }
 </style>
-</head>
-
-<body>
-
-<header>
-  📈 $100,000 March 2026
-</header>
-
-<div class="container">
-  <table id="stocks">
-    <thead>
-      <tr id="headers"></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
-
-<div class="footer">
-  <div>Total Portfolio Value:</div>
-  <div id="totalValue">$0</div>
-</div>
-
-<script>
-const sheetURL = "https://script.google.com/macros/s/AKfycbyuoNPjZDuKzvTpylFMKf7tk7PAAg1qYT1rqOtQVTRec4IPVMDVGi05n0zyI0tS1rEb5Q/exec";
-
-// Main render function
-function handleData(data) {
-  const headersRow = document.getElementById("headers");
-  const tbody = document.querySelector("#stocks tbody");
-  const totalDisplay = document.getElementById("totalValue");
-
-  headersRow.innerHTML = "";
-  tbody.innerHTML = "";
-
-  if (!data || data.length === 0) return;
-
-  // Create headers
-  Object.keys(data[0]).forEach((key, colIndex) => {
-    const th = document.createElement("th");
-    th.textContent = key;
-
-    // Sorting
-    th.addEventListener("click", () => {
-      const rows = Array.from(tbody.querySelectorAll("tr"));
-
-      const sorted = rows.sort((a, b) => {
-        let A = a.children[colIndex].textContent.replace(/,/g, "").replace("$","");
-        let B = b.children[colIndex].textContent.replace(/,/g, "").replace("$","");
-
-        let numA = parseFloat(A);
-        let numB = parseFloat(B);
-
-        if (!isNaN(numA) && !isNaN(numB)) return numB - numA;
-
-        return A.localeCompare(B);
-      });
-
-      tbody.innerHTML = "";
-      sorted.forEach(tr => tbody.appendChild(tr));
-    });
-
-    headersRow.appendChild(th);
-  });
-
-  let total = 0;
-  let best = -Infinity;
-  let worst = Infinity;
-  let bestRowIndex = -1;
-  let worstRowIndex = -1;
-
-  // Build rows
-  data.forEach((row, i) => {
-    const tr = document.createElement("tr");
-
-    Object.entries(row).forEach(([key, value]) => {
-      const td = document.createElement("td");
-
-      let displayValue = value;
-
-      // Format currency
-      if (key.toLowerCase().includes("price") || key.toLowerCase().includes("total")) {
-        const num = parseFloat(value);
-        if (!isNaN(num)) displayValue = "$" + num.toLocaleString();
-      }
-
-      td.textContent = displayValue;
-
-      // Color changes
-      if (key.toLowerCase().includes("change")) {
-        const num = parseFloat(value);
-        if (!isNaN(num)) {
-          td.classList.add(num >= 0 ? "positive" : "negative");
-        }
-      }
-
-      // Calculate total
-      if (key.toLowerCase().includes("total")) {
-        const num = parseFloat(value);
-        if (!isNaN(num)) total += num;
-      }
-
-      tr.appendChild(td);
-    });
-
-    // Track best/worst
-    const change = parseFloat(row["Change %"]);
-    if (!isNaN(change)) {
-      if (change > best) {
-        best = change;
-        bestRowIndex = i;
-      }
-      if (change < worst) {
-        worst = change;
-        worstRowIndex = i;
-      }
-    }
-
-    tbody.appendChild(tr);
-  });
-
-  // Highlight best/worst
-  const rows = tbody.querySelectorAll("tr");
-  if (rows[bestRowIndex]) rows[bestRowIndex].style.background = "#063d2e";
-  if (rows[worstRowIndex]) rows[worstRowIndex].style.background = "#3d0606";
-
-  // Update total display
-  totalDisplay.textContent = "$" + total.toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
-}
-
-// JSONP loader (CORS-safe)
-function loadData() {
-  const script = document.createElement("script");
-  script.src = sheetURL + "?callback=handleData";
-  document.body.appendChild(script);
-}
-
-// Run + refresh
-loadData();
-setInterval(loadData, 10000);
-</script>
-
-</body>
-</html>

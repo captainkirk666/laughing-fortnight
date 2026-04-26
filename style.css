@@ -15,6 +15,34 @@ body {
   margin: 0 auto;
 }
 
+/* ===== NAVIGATION ===== */
+.nav {
+  display: flex;
+  gap: 20px;
+  padding: 10px 12px;
+  background: #0f172a;
+  border-bottom: 1px solid #1e293b;
+}
+
+.nav a {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  text-decoration: none;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.nav a:hover {
+  color: #e2e8f0;
+}
+
+/* Active page */
+.nav a.active {
+  color: #ffffff;
+  border-bottom: 2px solid #3b82f6;
+  padding-bottom: 2px;
+}
+
 /* ===== SHARED HORIZONTAL ALIGNMENT ===== */
 header,
 .container,

@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
 
 <!-- CSS -->
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=6">
 
 <!-- CHART.JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -67,12 +67,11 @@ function buildCharts(data) {
 
   [changeChart, holdingChart, pieChart].forEach(c => c && c.destroy());
 
-  changeChart = new Chart(changeChartEl, {
+  changeChart = new Chart(document.getElementById("changeChart"), {
     type: "bar",
     data: {
       labels,
       datasets: [{
-        label: "Change %",
         data: change,
         backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444")
       }]
@@ -80,12 +79,11 @@ function buildCharts(data) {
     options: { maintainAspectRatio:false }
   });
 
-  holdingChart = new Chart(holdingChartEl, {
+  holdingChart = new Chart(document.getElementById("holdingChart"), {
     type: "bar",
     data: {
       labels,
       datasets: [{
-        label: "Holdings $",
         data: totals,
         backgroundColor: "#3b82f6"
       }]
@@ -93,7 +91,7 @@ function buildCharts(data) {
     options: { maintainAspectRatio:false }
   });
 
-  pieChart = new Chart(pieChartEl, {
+  pieChart = new Chart(document.getElementById("pieChart"), {
     type: "doughnut",
     data: {
       labels,
@@ -119,10 +117,6 @@ function buildCharts(data) {
     plugins:[centerTextPlugin]
   });
 }
-
-const changeChartEl = document.getElementById("changeChart");
-const holdingChartEl = document.getElementById("holdingChart");
-const pieChartEl = document.getElementById("pieChart");
 
 function handleData(data) {
   const headersRow = document.getElementById("headers");

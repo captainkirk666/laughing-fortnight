@@ -1,42 +1,70 @@
-<div class="bg-slate-900 text-slate-200 px-8 py-2 flex items-center justify-between text-sm">
+<div class="bg-slate-900 text-slate-200 px-4 md:px-8 py-3">
     
-    <!-- Left side -->
-    <div class="flex items-center gap-6">
+    <div class="flex items-center justify-between">
         
-        <!-- Dropdown 1 -->
-        <div class="relative group">
-            <button class="hover:text-white">Data Sources ▾</button>
-            <div class="absolute hidden group-hover:block bg-white text-slate-800 mt-2 rounded-lg shadow-lg w-48">
-                <a href="#" class="block px-4 py-2 hover:bg-slate-100">Google Sheets</a>
-                <a href="#" class="block px-4 py-2 hover:bg-slate-100">CSV Upload</a>
-                <a href="#" class="block px-4 py-2 hover:bg-slate-100">API Integration</a>
-            </div>
+        <!-- Left -->
+        <div class="flex items-center gap-4">
+            <span class="font-semibold text-white">Menu</span>
         </div>
 
-        <!-- Dropdown 2 -->
-        <div class="relative group">
-            <button class="hover:text-white">Filters ▾</button>
-            <div class="absolute hidden group-hover:block bg-white text-slate-800 mt-2 rounded-lg shadow-lg w-48">
-                <a href="#" class="block px-4 py-2 hover:bg-slate-100">Last 7 Days</a>
-                <a href="#" class="block px-4 py-2 hover:bg-slate-100">Last 30 Days</a>
-                <a href="#" class="block px-4 py-2 hover:bg-slate-100">Custom Range</a>
-            </div>
-        </div>
+        <!-- Mobile button -->
+        <button id="menuToggle" class="md:hidden text-slate-200 focus:outline-none">
+            ☰
+        </button>
 
-        <!-- Dropdown 3 -->
-        <div class="relative group">
-            <button class="hover:text-white">Export ▾</button>
-            <div class="absolute hidden group-hover:block bg-white text-slate-800 mt-2 rounded-lg shadow-lg w-48">
-                <a href="#" class="block px-4 py-2 hover:bg-slate-100">Download CSV</a>
-                <a href="#" class="block px-4 py-2 hover:bg-slate-100">Download PDF</a>
+        <!-- Desktop menu -->
+        <div class="hidden md:flex items-center gap-6 text-sm">
+            
+            <!-- Dropdown -->
+            <div class="relative">
+                <button onclick="toggleDropdown('dd1')" class="hover:text-white">Data Sources ▾</button>
+                <div id="dd1" class="hidden absolute bg-white text-slate-800 mt-2 rounded-lg shadow-lg w-48 z-50">
+                    <a href="#" class="block px-4 py-2 hover:bg-slate-100">Google Sheets</a>
+                    <a href="#" class="block px-4 py-2 hover:bg-slate-100">CSV Upload</a>
+                    <a href="#" class="block px-4 py-2 hover:bg-slate-100">API Integration</a>
+                </div>
             </div>
-        </div>
 
+            <div class="relative">
+                <button onclick="toggleDropdown('dd2')" class="hover:text-white">Filters ▾</button>
+                <div id="dd2" class="hidden absolute bg-white text-slate-800 mt-2 rounded-lg shadow-lg w-48 z-50">
+                    <a href="#" class="block px-4 py-2 hover:bg-slate-100">Last 7 Days</a>
+                    <a href="#" class="block px-4 py-2 hover:bg-slate-100">Last 30 Days</a>
+                </div>
+            </div>
+
+            <div class="relative">
+                <button onclick="toggleDropdown('dd3')" class="hover:text-white">Export ▾</button>
+                <div id="dd3" class="hidden absolute bg-white text-slate-800 mt-2 rounded-lg shadow-lg w-48 z-50">
+                    <a href="#" class="block px-4 py-2 hover:bg-slate-100">CSV</a>
+                    <a href="#" class="block px-4 py-2 hover:bg-slate-100">PDF</a>
+                </div>
+            </div>
+
+        </div>
     </div>
 
-    <!-- Right side -->
-    <div class="text-xs text-slate-400">
-        System Status: <span class="text-green-400">● Live</span>
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="hidden mt-4 flex flex-col gap-2 md:hidden text-sm">
+        
+        <button onclick="toggleDropdown('mdd1')" class="text-left">Data Sources ▾</button>
+        <div id="mdd1" class="hidden pl-4">
+            <a href="#" class="block py-1">Google Sheets</a>
+            <a href="#" class="block py-1">CSV Upload</a>
+        </div>
+
+        <button onclick="toggleDropdown('mdd2')" class="text-left">Filters ▾</button>
+        <div id="mdd2" class="hidden pl-4">
+            <a href="#" class="block py-1">Last 7 Days</a>
+            <a href="#" class="block py-1">Last 30 Days</a>
+        </div>
+
+        <button onclick="toggleDropdown('mdd3')" class="text-left">Export ▾</button>
+        <div id="mdd3" class="hidden pl-4">
+            <a href="#" class="block py-1">CSV</a>
+            <a href="#" class="block py-1">PDF</a>
+        </div>
+
     </div>
 
 </div>

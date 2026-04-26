@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <title>Stock Dashboard</title>
 
-<!-- 🔤 FONTS -->
+<!-- FONTS -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
-  
-<!-- 🎨 CSS -->
-<link rel="stylesheet" href="style.css">
 
-<!-- 📊 Charts -->
+<!-- CSS -->
+<link rel="stylesheet" href="style.css?v=5">
+
+<!-- CHART.JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -18,39 +18,24 @@
 
 <div class="page">
 
-<header> $100,000 March 2026</header>
+<header>📈 $100,000 March 2026</header>
 
-<!-- ===== TABLE ===== -->
 <div class="container">
   <table id="stocks">
-    <thead>
-      <tr id="headers"></tr>
-    </thead>
+    <thead><tr id="headers"></tr></thead>
     <tbody></tbody>
   </table>
 </div>
 
-<!-- ===== TOTAL (FULL WIDTH) ===== -->
 <div class="total-bar">
   <div class="total-label">Total Portfolio Value</div>
   <div id="totalValue">$0</div>
 </div>
 
-<!-- ===== CHARTS ===== -->
 <div class="charts">
-
-  <div class="chart-box">
-    <canvas id="changeChart"></canvas>
-  </div>
-
-  <div class="chart-box">
-    <canvas id="holdingChart"></canvas>
-  </div>
-
-  <div class="chart-box">
-    <canvas id="pieChart"></canvas>
-  </div>
-
+  <div class="chart-box"><canvas id="changeChart"></canvas></div>
+  <div class="chart-box"><canvas id="holdingChart"></canvas></div>
+  <div class="chart-box"><canvas id="pieChart"></canvas></div>
 </div>
 
 </div>
@@ -60,7 +45,6 @@ const sheetURL = "https://script.google.com/macros/s/AKfycbwEO4t-V8lIIUh37i-0pQ3
 
 let changeChart, holdingChart, pieChart;
 
-// 🍩 Center text plugin
 const centerTextPlugin = {
   id: 'centerText',
   beforeDraw(chart) {
@@ -76,7 +60,6 @@ const centerTextPlugin = {
   }
 };
 
-// 📊 Build charts
 function buildCharts(data) {
   const labels = data.map(r => r["Ticker"]);
   const change = data.map(r => parseFloat(r["Change %"]) || 0);
@@ -84,8 +67,7 @@ function buildCharts(data) {
 
   [changeChart, holdingChart, pieChart].forEach(c => c && c.destroy());
 
-  // Change %
-  changeChart = new Chart(document.getElementById("changeChart"), {
+  changeChart = new Chart(changeChartEl, {
     type: "bar",
     data: {
       labels,
@@ -98,8 +80,7 @@ function buildCharts(data) {
     options: { maintainAspectRatio:false }
   });
 
-  // Holdings $
-  holdingChart = new Chart(document.getElementById("holdingChart"), {
+  holdingChart = new Chart(holdingChartEl, {
     type: "bar",
     data: {
       labels,
@@ -112,8 +93,7 @@ function buildCharts(data) {
     options: { maintainAspectRatio:false }
   });
 
-  // Donut
-  pieChart = new Chart(document.getElementById("pieChart"), {
+  pieChart = new Chart(pieChartEl, {
     type: "doughnut",
     data: {
       labels,
@@ -133,17 +113,6 @@ function buildCharts(data) {
         legend:{
           position:"bottom",
           labels:{ color:"#e2e8f0", font:{size:11, family:"Roboto"} }
-        },
-        tooltip:{
-          bodyFont:{ family:"Roboto" },
-          callbacks:{
-            label:function(ctx){
-              const v=ctx.raw;
-              const t=ctx.dataset.data.reduce((a,b)=>a+b,0);
-              const p=(v/t*100).toFixed(1);
-              return `${ctx.label}: $${v.toLocaleString()} (${p}%)`;
-            }
-          }
         }
       }
     },
@@ -151,7 +120,10 @@ function buildCharts(data) {
   });
 }
 
-// 📥 Load data
+const changeChartEl = document.getElementById("changeChart");
+const holdingChartEl = document.getElementById("holdingChart");
+const pieChartEl = document.getElementById("pieChart");
+
 function handleData(data) {
   const headersRow = document.getElementById("headers");
   const tbody = document.querySelector("#stocks tbody");
@@ -197,7 +169,6 @@ function handleData(data) {
   buildCharts(data);
 }
 
-// JSONP load
 function loadData(){
   const s=document.createElement("script");
   s.src=sheetURL+"?callback=handleData";

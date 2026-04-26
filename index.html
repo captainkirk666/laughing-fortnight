@@ -21,15 +21,16 @@
   </table>
 </div>
 
+<!-- 🔥 BIG TOTAL (NEW POSITION) -->
+<div class="total-box">
+  <div class="total-label">Total Portfolio Value</div>
+  <div id="totalValue">$0</div>
+</div>
+
 <div class="charts">
   <div class="chart-box"><canvas id="changeChart"></canvas></div>
   <div class="chart-box"><canvas id="holdingChart"></canvas></div>
   <div class="chart-box"><canvas id="pieChart"></canvas></div>
-</div>
-
-<div class="footer">
-  <div>Total Portfolio Value:</div>
-  <div id="totalValue">$0</div>
 </div>
 
 </div>
@@ -39,7 +40,7 @@ const sheetURL = "https://script.google.com/macros/s/AKfycbwEO4t-V8lIIUh37i-0pQ3
 
 let changeChart, holdingChart, pieChart;
 
-// 🔥 Center text plugin
+// Center text plugin
 const centerTextPlugin = {
   id: 'centerText',
   beforeDraw(chart) {
@@ -63,7 +64,7 @@ function buildCharts(data) {
   [changeChart, holdingChart, pieChart].forEach(c => c && c.destroy());
 
   // Change chart
-  changeChart = new Chart(changeChartEl, {
+  changeChart = new Chart(document.getElementById("changeChart"), {
     type: "bar",
     data: {
       labels,
@@ -76,7 +77,7 @@ function buildCharts(data) {
   });
 
   // Holdings chart
-  holdingChart = new Chart(holdingChartEl, {
+  holdingChart = new Chart(document.getElementById("holdingChart"), {
     type: "bar",
     data: {
       labels,
@@ -88,8 +89,8 @@ function buildCharts(data) {
     options: { maintainAspectRatio:false }
   });
 
-  // Donut chart (PRO)
-  pieChart = new Chart(pieChartEl, {
+  // Donut chart
+  pieChart = new Chart(document.getElementById("pieChart"), {
     type: "doughnut",
     data: {
       labels,
@@ -126,10 +127,6 @@ function buildCharts(data) {
   });
 }
 
-const changeChartEl = document.getElementById("changeChart");
-const holdingChartEl = document.getElementById("holdingChart");
-const pieChartEl = document.getElementById("pieChart");
-
 function handleData(data) {
   const headersRow = document.getElementById("headers");
   const tbody = document.querySelector("#stocks tbody");
@@ -151,10 +148,9 @@ function handleData(data) {
 
     Object.entries(row).forEach(([k,v])=>{
       const td=document.createElement("td");
-
       const num=parseFloat(v);
 
-      if(k.toLowerCase().includes("total")||k.toLowerCase().includes("price")){
+      if(k.toLowerCase().includes("price") || k.toLowerCase().includes("total")){
         td.textContent=!isNaN(num)?"$"+num.toFixed(2):v;
       } else {
         td.textContent=v;
@@ -164,7 +160,7 @@ function handleData(data) {
         if(!isNaN(num)) td.classList.add(num>=0?"positive":"negative");
       }
 
-      if(k.toLowerCase().includes("total")&&!isNaN(num)) total+=num;
+      if(k.toLowerCase().includes("total") && !isNaN(num)) total+=num;
 
       tr.appendChild(td);
     });

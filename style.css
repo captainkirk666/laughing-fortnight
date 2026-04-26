@@ -53,40 +53,19 @@ tr:hover {
 .positive { color:#22c55e; }
 .negative { color:#ef4444; }
 
-/* ===== DASHBOARD GRID ===== */
-.dashboard {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 16px;
-  padding: 10px;
-}
-
-.full-width {
-  grid-column: span 3;
-}
-
-/* ===== CARDS ===== */
-.chart-box {
+/* ===== TOTAL BAR ===== */
+.total-bar {
   background: #020617;
-  border: 1px solid #1e293b;
-  height: 260px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  padding: 10px;
-}
-
-/* ===== TOTAL CARD ===== */
-.total-card {
-  height: 160px;
+  border-top: 1px solid #1e293b;
+  border-bottom: 1px solid #1e293b;
+  padding: 30px 10px;
   text-align: center;
 }
 
 .total-label {
   font-size: 14px;
   color: #94a3b8;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 #totalValue {
@@ -95,19 +74,35 @@ tr:hover {
   letter-spacing: 2px;
 }
 
-/* ===== CANVAS ===== */
+/* ===== CHARTS GRID (FIXED) ===== */
+.charts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 👈 forces 3 columns */
+  gap: 16px;
+  padding: 10px;
+}
+
+/* ===== CHART CARDS ===== */
+.chart-box {
+  background: #020617;
+  border: 1px solid #1e293b;
+  height: 280px; /* 👈 consistent height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+/* ===== CANVAS FIX ===== */
 .chart-box canvas {
   width: 100% !important;
   height: 100% !important;
 }
 
-/* ===== MOBILE ===== */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 900px) {
-  .dashboard {
-    grid-template-columns: 1fr;
-  }
-
-  .full-width {
-    grid-column: span 1;
+  .charts {
+    grid-template-columns: 1fr; /* stack ONLY on mobile */
   }
 }

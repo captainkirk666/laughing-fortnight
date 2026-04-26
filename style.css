@@ -34,16 +34,13 @@ header {
   font-size: 32px;
 }
 
+/* ===== INFO TEXT BLOCK ===== */
 .info-text {
   font-family: 'Roboto', sans-serif;
   font-weight: 700;
   color: #ffffff;
-  padding: 12px;
+  padding: 10px 12px;
   font-size: 14px;
-
-  background: #0f172a;
-  border-left: 3px solid #3b82f6;
-  border-radius: 6px;
 }
 
 /* ===== TABLE ===== */

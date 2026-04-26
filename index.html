@@ -1,96 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Stock Dashboard</title>
-
-  <style>
-    body {
-      font-family: Arial;
-      margin: 0;
-      background: #0f172a;
-      color: #e2e8f0;
-    }
-
-    header {
-      background: #020617;
-      padding: 15px 20px;
-      font-size: 20px;
-    }
-
-    .container {
-      padding: 20px;
-    }
-
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      background: #020617;
-    }
-
-    th, td {
-      padding: 10px;
-      border: 1px solid #1e293b;
-      text-align: left;
-    }
-
-    th {
-      position: sticky;
-      top: 0;
-      background: #020617;
-    }
-
-    tr:hover {
-      background: #1e293b;
-    }
-
-    .positive {
-      color: #22c55e;
-      font-weight: bold;
-    }
-
-    .negative {
-      color: #ef4444;
-      font-weight: bold;
-    }
-
-    .footer {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: #020617;
-      padding: 15px 20px;
-      border-top: 1px solid #1e293b;
-      display: flex;
-      justify-content: space-between;
-    }
-  </style>
-</head>
-
-<body>
-
-<header>
-  📈 Live Stock Dashboard
-</header>
-
-<div class="container">
-  <table id="stocks">
-    <thead>
-      <tr id="headers"></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
-
-<div class="footer">
-  <div>Total Portfolio Value:</div>
-  <div id="totalValue">$0</div>
-</div>
-
 <script>
 const sheetURL = "https://script.google.com/macros/s/AKfycbyuoNPjZDuKzvTpylFMKf7tk7PAAg1qYT1rqOtQVTRec4IPVMDVGi05n0zyI0tS1rEb5Q/exec";
 
-// This function is called by Google (JSONP)
 function handleData(data) {
   const headersRow = document.getElementById("headers");
   const tbody = document.querySelector("#stocks tbody");
@@ -110,7 +20,6 @@ function handleData(data) {
 
   let total = 0;
 
-  // Rows
   data.forEach(row => {
     const tr = document.createElement("tr");
 
@@ -118,7 +27,7 @@ function handleData(data) {
       const td = document.createElement("td");
       td.textContent = value;
 
-      // Colour changes
+      // Colour gains/losses
       if (key.toLowerCase().includes("change")) {
         const num = parseFloat(value);
         if (!isNaN(num)) {
@@ -126,7 +35,7 @@ function handleData(data) {
         }
       }
 
-      // Total calculation
+      // Calculate TOTAL properly
       if (key.toLowerCase().includes("total")) {
         const num = parseFloat(value);
         if (!isNaN(num)) total += num;
@@ -138,20 +47,20 @@ function handleData(data) {
     tbody.appendChild(tr);
   });
 
-  totalDisplay.textContent = "$" + total.toLocaleString();
+  // 💰 Display total nicely formatted
+  totalDisplay.textContent = "$" + total.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
 }
 
-// Load data using JSONP (CORS-safe)
+// JSONP load
 function loadData() {
   const script = document.createElement("script");
   script.src = sheetURL + "?callback=handleData";
   document.body.appendChild(script);
 }
 
-// Run + refresh
 loadData();
 setInterval(loadData, 10000);
 </script>
-
-</body>
-</html>

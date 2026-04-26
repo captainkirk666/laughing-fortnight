@@ -1,4 +1,77 @@
-/* CHARTS */
+/* ===== GLOBAL ===== */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+/* ===== PAGE CONTAINER ===== */
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===== HEADER ===== */
+header {
+  background: #020617;
+  padding: 10px 16px;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+/* ===== TABLE ===== */
+.container {
+  padding: 10px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background: #020617;
+  font-size: 13px;
+}
+
+th, td {
+  padding: 5px 7px;
+  border: 1px solid rgba(30, 41, 59, 0.5);
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background: #020617;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+td {
+  line-height: 1.2;
+}
+
+/* Align numbers right */
+td:not(:first-child) {
+  text-align: right;
+}
+
+/* Row hover */
+tr:hover {
+  background: #1e293b;
+}
+
+/* Gain / Loss colours */
+.positive {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.negative {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* ===== CHARTS ===== */
 .charts {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -16,8 +89,36 @@
   justify-content: center;
 }
 
-/* 🔥 IMPORTANT: allow proper scaling */
+/* 🔥 KEY FIX: prevent distortion */
 .chart-box canvas {
   width: 100% !important;
-  height: auto !important;
+  height: 100% !important;
+}
+
+/* Donut specific sizing */
+#pieChart {
+  max-height: 240px;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  max-width: 1200px;
+  margin: 10px auto;
+  background: #020617;
+  padding: 10px 16px;
+  border-top: 1px solid #1e293b;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .charts {
+    grid-template-columns: 1fr;
+  }
+
+  .page {
+    padding: 0 10px;
+  }
 }

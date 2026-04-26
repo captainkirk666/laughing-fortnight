@@ -4,32 +4,52 @@
 <meta charset="UTF-8">
 <title>Stock Dashboard</title>
 
-<!-- Link your CSS -->
 <link rel="stylesheet" href="style.css">
-
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+/* Chart layout fixes */
+.charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  padding: 10px;
+}
+
+.chart-box {
+  background: #020617;
+  border: 1px solid #1e293b;
+  padding: 10px;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-box canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+</style>
+
 </head>
 
 <body>
 
 <div class="page">
 
-<header>
-  📈 $100,000 March 2026
-</header>
+<header>📈 $100,000 March 2026</header>
 
 <div class="container">
   <table id="stocks">
-    <thead>
-      <tr id="headers"></tr>
-    </thead>
+    <thead><tr id="headers"></tr></thead>
     <tbody></tbody>
   </table>
 </div>
 
-<!-- ✅ Charts (fixed layout) -->
+<!-- Charts -->
 <div class="charts">
+
   <div class="chart-box">
     <canvas id="changeChart"></canvas>
   </div>
@@ -41,6 +61,7 @@
   <div class="chart-box">
     <canvas id="pieChart"></canvas>
   </div>
+
 </div>
 
 <div class="footer">
@@ -63,45 +84,77 @@ function buildCharts(data) {
   const sum = totals.reduce((a,b)=>a+b,0);
   const perc = totals.map(v => (v/sum*100));
 
-  // Destroy old charts
   [changeChart, holdingChart, pieChart].forEach(c => c && c.destroy());
 
-  // 📊 Daily % Change
+  // 📊 Change Chart
   changeChart = new Chart(document.getElementById("changeChart"), {
     type: "bar",
     data: {
       labels,
       datasets: [{
-        data: change
+        data: change,
+        backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444"),
+        borderRadius: 4
       }]
     },
     options: {
-      plugins: { legend: { display: false } }
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display:false } },
+      scales: {
+        x: { ticks:{color:"#94a3b8"}, grid:{display:false}},
+        y: { ticks:{color:"#94a3b8"}, grid:{color:"#1e293b"}}
+      }
     }
   });
 
-  // 📊 Holdings $
+  // 📊 Holdings Chart
   holdingChart = new Chart(document.getElementById("holdingChart"), {
     type: "bar",
     data: {
       labels,
       datasets: [{
-        data: totals
+        data: totals,
+        backgroundColor: "#3b82f6",
+        borderRadius: 4
       }]
     },
     options: {
-      plugins: { legend: { display: false } }
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display:false } },
+      scales: {
+        x: { ticks:{color:"#94a3b8"}, grid:{display:false}},
+        y: { ticks:{color:"#94a3b8"}, grid:{color:"#1e293b"}}
+      }
     }
   });
 
-  // 🍩 Holdings %
+  // 🍩 Donut Chart (FIXED)
   pieChart = new Chart(document.getElementById("pieChart"), {
     type: "doughnut",
     data: {
       labels,
       datasets: [{
-        data: perc
+        data: perc,
+        backgroundColor: [
+          "#3b82f6","#ef4444","#f59e0b","#10b981",
+          "#8b5cf6","#14b8a6","#eab308","#f97316",
+          "#a3a3a3","#ec4899"
+        ]
       }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1, // 🔥 fixes squashing
+      cutout: "60%",
+      plugins: {
+        legend: {
+          position: "top",
+          labels: { color:"#e2e8f0" }
+        }
+      }
     }
   });
 }
@@ -114,59 +167,47 @@ function handleData(data) {
   headersRow.innerHTML = "";
   tbody.innerHTML = "";
 
-  if (!data || data.length === 0) return;
+  if (!data.length) return;
 
-  // Headers + sorting
   Object.keys(data[0]).forEach((key, colIndex) => {
     const th = document.createElement("th");
     th.textContent = key;
 
-    th.addEventListener("click", () => {
-      const rows = Array.from(tbody.querySelectorAll("tr"));
-
-      const sorted = rows.sort((a, b) => {
-        let A = a.children[colIndex].textContent.replace(/[$,]/g, "");
-        let B = b.children[colIndex].textContent.replace(/[$,]/g, "");
-
-        return (parseFloat(B) || 0) - (parseFloat(A) || 0);
+    th.onclick = () => {
+      const rows = [...tbody.rows];
+      rows.sort((a,b)=>{
+        let A = a.cells[colIndex].textContent.replace(/[$,]/g,"");
+        let B = b.cells[colIndex].textContent.replace(/[$,]/g,"");
+        return (parseFloat(B)||0)-(parseFloat(A)||0);
       });
-
-      tbody.innerHTML = "";
-      sorted.forEach(tr => tbody.appendChild(tr));
-    });
+      tbody.innerHTML="";
+      rows.forEach(r=>tbody.appendChild(r));
+    };
 
     headersRow.appendChild(th);
   });
 
   let total = 0;
 
-  // Build rows
-  data.forEach(row => {
+  data.forEach(row=>{
     const tr = document.createElement("tr");
 
-    Object.entries(row).forEach(([key, value]) => {
-      const td = document.createElement("td");
+    Object.entries(row).forEach(([k,v])=>{
+      const td=document.createElement("td");
 
-      // Format currency
-      if (key.toLowerCase().includes("price") || key.toLowerCase().includes("total")) {
-        const num = parseFloat(value);
-        td.textContent = !isNaN(num) ? "$" + num.toLocaleString() : value;
-      } else {
-        td.textContent = value;
+      if(k.toLowerCase().includes("price")||k.toLowerCase().includes("total")){
+        let num=parseFloat(v);
+        td.textContent=!isNaN(num)?"$"+num.toLocaleString():v;
+      } else td.textContent=v;
+
+      if(k.toLowerCase().includes("change")){
+        let num=parseFloat(v);
+        if(!isNaN(num)) td.classList.add(num>=0?"positive":"negative");
       }
 
-      // Colour change
-      if (key.toLowerCase().includes("change")) {
-        const num = parseFloat(value);
-        if (!isNaN(num)) {
-          td.classList.add(num >= 0 ? "positive" : "negative");
-        }
-      }
-
-      // Total calculation
-      if (key.toLowerCase().includes("total")) {
-        const num = parseFloat(value);
-        if (!isNaN(num)) total += num;
+      if(k.toLowerCase().includes("total")){
+        let num=parseFloat(v);
+        if(!isNaN(num)) total+=num;
       }
 
       tr.appendChild(td);
@@ -175,21 +216,19 @@ function handleData(data) {
     tbody.appendChild(tr);
   });
 
-  totalDisplay.textContent = "$" + total.toLocaleString();
+  totalDisplay.textContent="$"+total.toLocaleString();
 
-  // Build charts
   buildCharts(data);
 }
 
-// JSONP loader
-function loadData() {
-  const script = document.createElement("script");
-  script.src = sheetURL + "?callback=handleData";
-  document.body.appendChild(script);
+function loadData(){
+  const s=document.createElement("script");
+  s.src=sheetURL+"?callback=handleData";
+  document.body.appendChild(s);
 }
 
 loadData();
-setInterval(loadData, 10000);
+setInterval(loadData,10000);
 </script>
 
 </body>

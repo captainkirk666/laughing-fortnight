@@ -1,127 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Google Sheets Dashboard</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
-</head>
-
-<body class="bg-slate-50 text-slate-900">
-
-<!-- 🔷 TOP BAR -->
-<div class="bg-slate-900 text-slate-200 px-4 md:px-8 py-3">
-    <div class="flex justify-between items-center">
-        <span class="text-white font-semibold">Dashboard Menu</span>
-        <button id="menuToggle" class="md:hidden">☰</button>
-
-        <div class="hidden md:flex gap-6 text-sm">
-            <button onclick="toggleDropdown('dd1')">Data ▾</button>
-            <button onclick="toggleDropdown('dd2')">Filters ▾</button>
-        </div>
-    </div>
-
-    <div id="mobileMenu" class="hidden mt-3 md:hidden">
-        <button onclick="toggleDropdown('m1')" class="block w-full text-left">Data ▾</button>
-        <div id="m1" class="hidden pl-4 text-sm">Google Sheets</div>
-    </div>
-</div>
-
-<!-- 🔷 NAV -->
-<nav class="bg-white border-b py-4 px-8 flex justify-between">
-    <span class="text-xl font-semibold text-indigo-600">Analytics.io</span>
-    <div class="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-700">JD</div>
-</nav>
-
-<!-- 🔷 MAIN -->
-<main class="max-w-7xl mx-auto p-6">
-
-    <h1 class="text-2xl font-bold mb-6">Live Data from Google Sheets</h1>
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        <!-- Chart -->
-        <div class="lg:col-span-2 bg-white p-6 rounded shadow">
-            <canvas id="mainChart"></canvas>
-        </div>
-
-        <!-- List -->
-        <div class="bg-white p-6 rounded shadow">
-            <h2 class="font-semibold mb-4">Recent Records</h2>
-            <ul id="data-list"></ul>
-        </div>
-
-    </div>
-
-</main>
-
 <script>
 const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTjEdatFjbF1-4mk9S_bvWXitZaX7hJ5TS38bmPPj6x5z5rcNiVBkJjotWEk8JvpPPFFj08h5SwRkG4/pub?gid=1328614085&single=true&output=csv";
 
-// Dropdown toggle
-function toggleDropdown(id) {
-    document.getElementById(id).classList.toggle("hidden");
-}
-
-// Mobile menu
-document.getElementById("menuToggle").onclick = () => {
-    document.getElementById("mobileMenu").classList.toggle("hidden");
-};
-
-// Fetch CSV
+// Fetch + parse CSV
 async function getData() {
     const res = await fetch(SHEET_URL);
     const text = await res.text();
 
-    const rows = text.trim().split("\n").map(r => r.split(","));
-    rows.shift(); // remove headers
-
-    return rows;
+    return text.trim().split("\n").map(r => r.split(","));
 }
 
-// Update list
-function updateList(rows) {
-    const list = document.getElementById("data-list");
-    list.innerHTML = "";
+// Build table
+function renderTable(rows) {
+    const headers = rows[0];
+    const data = rows.slice(1);
 
-    rows.slice(0, 6).forEach(r => {
-        const li = document.createElement("li");
-        li.className = "flex justify-between py-2 border-b";
+    const thead = document.getElementById("table-head");
+    const tbody = document.getElementById("table-body");
 
-        li.innerHTML = `
-            <span>${r[0]}</span>
-            <span class="font-mono">$${r[1]}</span>
-        `;
+    // Header row
+    thead.innerHTML = `
+        <tr>
+            ${headers.map(h => `<th class="px-4 py-2 border">${h}</th>`).join("")}
+        </tr>
+    `;
 
-        list.appendChild(li);
-    });
+    // Body rows
+    tbody.innerHTML = data.map(row => `
+        <tr class="hover:bg-slate-50">
+            ${row.map(cell => `<td class="px-4 py-2 border">${cell}</td>`).join("")}
+        </tr>
+    `).join("");
 }
 
-// Chart
-function renderChart(labels, values) {
+// Optional: still build chart from first 2 columns
+function renderChart(rows) {
+    const labels = rows.slice(1).map(r => r[0]);
+    const values = rows.slice(1).map(r => Number(r[1]));
+
     const ctx = document.getElementById("mainChart");
 
     new Chart(ctx, {
         type: "line",
         data: {
-            labels: labels,
+            labels,
             datasets: [{
                 data: values,
                 borderColor: "#4f46e5",
                 backgroundColor: "rgba(79,70,229,0.1)",
-                fill: true,
-                tension: 0.4
+                fill: true
             }]
-        },
-        options: {
-            plugins: { legend: { display: false } }
         }
     });
 }
@@ -130,13 +57,7 @@ function renderChart(labels, values) {
 document.addEventListener("DOMContentLoaded", async () => {
     const rows = await getData();
 
-    const labels = rows.map(r => r[0]);
-    const values = rows.map(r => Number(r[1]));
-
-    updateList(rows);
-    renderChart(labels, values);
+    renderTable(rows);
+    renderChart(rows);
 });
 </script>
-
-</body>
-</html>

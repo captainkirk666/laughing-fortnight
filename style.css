@@ -6,7 +6,6 @@ body {
   color: #e2e8f0;
 }
 
-/* ===== PAGE CONTAINER ===== */
 .page {
   max-width: 1200px;
   margin: 0 auto;
@@ -34,15 +33,13 @@ table {
 
 th, td {
   padding: 5px 7px;
-  border: 1px solid rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(30,41,59,0.5);
 }
 
 th {
   position: sticky;
   top: 0;
   background: #020617;
-  font-weight: 600;
-  font-size: 12px;
 }
 
 td:not(:first-child) {
@@ -53,26 +50,22 @@ tr:hover {
   background: #1e293b;
 }
 
-/* ===== VALUE COLORS ===== */
-.positive {
-  color: #22c55e;
-  font-weight: 600;
-}
+.positive { color:#22c55e; }
+.negative { color:#ef4444; }
 
-.negative {
-  color: #ef4444;
-  font-weight: 600;
-}
-
-/* ===== CHART GRID ===== */
-.charts {
+/* ===== DASHBOARD GRID ===== */
+.dashboard {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 16px;
   padding: 10px;
 }
 
-/* Chart cards */
+.full-width {
+  grid-column: span 3;
+}
+
+/* ===== CARDS ===== */
 .chart-box {
   background: #020617;
   border: 1px solid #1e293b;
@@ -80,41 +73,37 @@ tr:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 10px;
-}
-
-/* Canvas behavior */
-.chart-box canvas {
-  width: 100% !important;
-  height: 100% !important;
 }
 
 /* ===== TOTAL CARD ===== */
 .total-card {
+  height: 160px;
   text-align: center;
 }
 
 .total-label {
   font-size: 14px;
   color: #94a3b8;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 #totalValue {
-  font-size: 42px;
+  font-size: 56px;
   font-weight: bold;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
 }
 
-/* ===== FULL WIDTH DONUT ===== */
-.full-width {
-  grid-column: span 3;
+/* ===== CANVAS ===== */
+.chart-box canvas {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 /* ===== MOBILE ===== */
 @media (max-width: 900px) {
-  .charts {
+  .dashboard {
     grid-template-columns: 1fr;
   }
 

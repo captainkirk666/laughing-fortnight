@@ -5,36 +5,44 @@
 body {
   font-family: 'Roboto', Arial, sans-serif;
   margin: 0;
-  background: #020617; /* 👈 deep black */
+  background: #020617;
   color: #e2e8f0;
 }
 
 .page {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
+}
+
+/* ===== SHARED HORIZONTAL ALIGNMENT ===== */
+header,
+.container,
+.total-bar,
+.charts {
+  padding-left: 12px;
+  padding-right: 12px;
 }
 
 /* ===== HEADER ===== */
 header {
   font-family: 'Source Serif 4', serif;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  background: #0f172a; /* 👈 panel */
-  padding: 12px 16px;
+  background: #0f172a;
+  padding-top: 14px;
+  padding-bottom: 14px;
   text-align: center;
-  margin-bottom: 10px;
   font-size: 32px;
 }
 
 /* ===== TABLE ===== */
 .container {
-  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  background: #0f172a; /* 👈 panel */
+  background: #0f172a;
   font-size: 13px;
 }
 
@@ -72,13 +80,15 @@ tr:hover {
   background: #0f172a;
   border-top: 1px solid #1e293b;
   border-bottom: 1px solid #1e293b;
-  padding: 30px 10px;
+  padding-top: 28px;
+  padding-bottom: 28px;
   text-align: center;
 }
 
 .total-label {
   font-size: 14px;
   color: #94a3b8;
+  margin-bottom: 6px;
 }
 
 #totalValue {
@@ -93,7 +103,8 @@ tr:hover {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
-  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .chart-box {
@@ -111,6 +122,11 @@ tr:hover {
 .chart-box canvas {
   width: 100% !important;
   height: 100% !important;
+}
+
+/* ===== CONSISTENT SECTION SPACING ===== */
+.page > * {
+  margin-bottom: 8px;
 }
 
 /* ===== MOBILE ===== */

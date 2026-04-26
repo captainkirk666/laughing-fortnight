@@ -8,7 +8,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-/* Chart layout fixes */
 .charts {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -28,7 +27,12 @@
 
 .chart-box canvas {
   width: 100% !important;
-  height: auto !important;
+  height: 100% !important;
+}
+
+/* Fix donut sizing */
+#pieChart {
+  max-height: 240px;
 }
 </style>
 
@@ -47,7 +51,6 @@
   </table>
 </div>
 
-<!-- Charts -->
 <div class="charts">
 
   <div class="chart-box">
@@ -130,7 +133,7 @@ function buildCharts(data) {
     }
   });
 
-  // 🍩 Donut Chart (FIXED)
+  // 🍩 Donut Chart (FIXED + COMPACT LEGEND)
   pieChart = new Chart(document.getElementById("pieChart"), {
     type: "doughnut",
     data: {
@@ -141,18 +144,24 @@ function buildCharts(data) {
           "#3b82f6","#ef4444","#f59e0b","#10b981",
           "#8b5cf6","#14b8a6","#eab308","#f97316",
           "#a3a3a3","#ec4899"
-        ]
+        ],
+        borderWidth: 2
       }]
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,
-      aspectRatio: 1, // 🔥 fixes squashing
-      cutout: "60%",
+      maintainAspectRatio: false,
+      cutout: "65%",
+      layout: { padding: 10 },
       plugins: {
         legend: {
-          position: "top",
-          labels: { color:"#e2e8f0" }
+          position: "bottom",
+          labels: {
+            color: "#e2e8f0",
+            boxWidth: 10,
+            padding: 10,
+            font: { size: 10 }
+          }
         }
       }
     }

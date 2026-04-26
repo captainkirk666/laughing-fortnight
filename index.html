@@ -8,9 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
 
 <!-- CSS -->
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=7">
 
-<!-- CHART.JS -->
+<!-- CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -72,6 +72,7 @@ function buildCharts(data) {
     data: {
       labels,
       datasets: [{
+        label: "Change %",
         data: change,
         backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444")
       }]
@@ -84,6 +85,7 @@ function buildCharts(data) {
     data: {
       labels,
       datasets: [{
+        label: "Holdings $",
         data: totals,
         backgroundColor: "#3b82f6"
       }]

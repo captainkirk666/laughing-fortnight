@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Stock Dashboard</title>
+<title>Portfolio Dashboard</title>
 
 <!-- FONTS -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
 
 <!-- CSS -->
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="style.css?v=8">
 
 <!-- CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -17,31 +17,41 @@
 <body>
 
 <div class="page">
+
+<!-- NAV -->
 <nav class="nav">
   <a href="index.html">Portfolio</a>
   <a href="crypto.html">Crypto</a>
   <a href="growth.html">Growth</a>
 </nav>
-  
-<header> $100,000 March 2026</header>
+
+<!-- HEADER -->
+<header>$100,000 March 2026</header>
+
+<!-- INFO TEXT -->
 <div class="info-text">
-This is a sample portfolio created to test the effectiveness of different trading strategies. 
-<br>It is not intended as a buy recommendation, as many of the stocks featured are highly volatile and can experience significant daily gains and losses. 
-<br>The purpose of this site is to identify stocks that are trending and evaluate their potential as buy opportunities. </br>
+  <p>This is a sample portfolio created to test the effectiveness of different trading strategies.</p>
+  <p>It is not intended as a buy recommendation, as many of the stocks featured are highly volatile and can experience significant daily gains and losses.</p>
+  <p>The purpose of this site is to identify stocks that are trending and evaluate their potential as buy opportunities.</p>
 </div>
-  
+
+<!-- TABLE -->
 <div class="container">
   <table id="stocks">
-    <thead><tr id="headers"></tr></thead>
+    <thead>
+      <tr id="headers"></tr>
+    </thead>
     <tbody></tbody>
   </table>
 </div>
 
+<!-- TOTAL -->
 <div class="total-bar">
   <div class="total-label">Total Portfolio Value</div>
   <div id="totalValue">$0</div>
 </div>
 
+<!-- CHARTS -->
 <div class="charts">
   <div class="chart-box"><canvas id="changeChart"></canvas></div>
   <div class="chart-box"><canvas id="holdingChart"></canvas></div>
@@ -55,6 +65,7 @@ const sheetURL = "https://script.google.com/macros/s/AKfycbwEO4t-V8lIIUh37i-0pQ3
 
 let changeChart, holdingChart, pieChart;
 
+// 🍩 Center text plugin
 const centerTextPlugin = {
   id: 'centerText',
   beforeDraw(chart) {
@@ -66,10 +77,11 @@ const centerTextPlugin = {
     ctx.fillStyle = "#e2e8f0";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("$" + total.toLocaleString(), width/2, height/2);
+    ctx.fillText("$" + total.toLocaleString(), width / 2, height / 2);
   }
 };
 
+// 📊 Build charts
 function buildCharts(data) {
   const labels = data.map(r => r["Ticker"]);
   const change = data.map(r => parseFloat(r["Change %"]) || 0);
@@ -130,6 +142,7 @@ function buildCharts(data) {
   });
 }
 
+// 📥 Handle data
 function handleData(data) {
   const headersRow = document.getElementById("headers");
   const tbody = document.querySelector("#stocks tbody");
@@ -139,31 +152,33 @@ function handleData(data) {
   tbody.innerHTML = "";
 
   Object.keys(data[0]).forEach(key=>{
-    const th=document.createElement("th");
-    th.textContent=key;
+    const th = document.createElement("th");
+    th.textContent = key;
     headersRow.appendChild(th);
   });
 
-  let total=0;
+  let total = 0;
 
   data.forEach(row=>{
-    const tr=document.createElement("tr");
+    const tr = document.createElement("tr");
 
     Object.entries(row).forEach(([k,v])=>{
-      const td=document.createElement("td");
-      const num=parseFloat(v);
+      const td = document.createElement("td");
+      const num = parseFloat(v);
 
       if(k.toLowerCase().includes("price") || k.toLowerCase().includes("total")){
-        td.textContent=!isNaN(num) ? "$" + num.toFixed(2) : v;
+        td.textContent = !isNaN(num) ? "$" + num.toFixed(2) : v;
       } else {
-        td.textContent=v;
+        td.textContent = v;
       }
 
-      if(k.toLowerCase().includes("change")){
-        if(!isNaN(num)) td.classList.add(num>=0?"positive":"negative");
+      if(k.toLowerCase().includes("change") && !isNaN(num)){
+        td.classList.add(num >= 0 ? "positive" : "negative");
       }
 
-      if(k.toLowerCase().includes("total") && !isNaN(num)) total+=num;
+      if(k.toLowerCase().includes("total") && !isNaN(num)){
+        total += num;
+      }
 
       tr.appendChild(td);
     });
@@ -171,18 +186,33 @@ function handleData(data) {
     tbody.appendChild(tr);
   });
 
-  totalDisplay.textContent="$"+total.toLocaleString();
+  totalDisplay.textContent = "$" + total.toLocaleString();
   buildCharts(data);
 }
 
+// 🔄 Load data safely (no stacking scripts)
 function loadData(){
-  const s=document.createElement("script");
-  s.src=sheetURL+"?callback=handleData";
+  const existing = document.getElementById("dataScript");
+  if (existing) existing.remove();
+
+  const s = document.createElement("script");
+  s.id = "dataScript";
+  s.src = sheetURL + "?callback=handleData";
   document.body.appendChild(s);
 }
 
 loadData();
-setInterval(loadData,10000);
+setInterval(loadData, 10000);
+
+// 🧭 Active nav highlight
+const links = document.querySelectorAll(".nav a");
+const current = window.location.pathname.split("/").pop();
+
+links.forEach(link => {
+  if (link.getAttribute("href") === current) {
+    link.classList.add("active");
+  }
+});
 </script>
 
 </body>

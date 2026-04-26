@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 <meta charset="UTF-8">
 <title>Stock Dashboard</title>
 
+<!-- 🔤 FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- 🎨 CSS -->
 <link rel="stylesheet" href="style.css">
+
+<!-- 📊 Charts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -31,7 +36,7 @@
   <div id="totalValue">$0</div>
 </div>
 
-<!-- ===== CHARTS (CRITICAL WRAPPER) ===== -->
+<!-- ===== CHARTS ===== -->
 <div class="charts">
 
   <div class="chart-box">
@@ -55,7 +60,7 @@ const sheetURL = "https://script.google.com/macros/s/AKfycbwEO4t-V8lIIUh37i-0pQ3
 
 let changeChart, holdingChart, pieChart;
 
-// ===== Donut center text =====
+// 🍩 Center text plugin
 const centerTextPlugin = {
   id: 'centerText',
   beforeDraw(chart) {
@@ -63,7 +68,7 @@ const centerTextPlugin = {
     const total = chart.config.data.datasets[0].data.reduce((a,b)=>a+b,0);
 
     ctx.save();
-    ctx.font = "bold 16px Arial";
+    ctx.font = "bold 16px Inter";
     ctx.fillStyle = "#e2e8f0";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -71,7 +76,7 @@ const centerTextPlugin = {
   }
 };
 
-// ===== BUILD CHARTS =====
+// 📊 Build charts
 function buildCharts(data) {
   const labels = data.map(r => r["Ticker"]);
   const change = data.map(r => parseFloat(r["Change %"]) || 0);
@@ -127,7 +132,18 @@ function buildCharts(data) {
       plugins:{
         legend:{
           position:"bottom",
-          labels:{ color:"#e2e8f0", font:{size:11} }
+          labels:{ color:"#e2e8f0", font:{size:11, family:"Roboto"} }
+        },
+        tooltip:{
+          bodyFont:{ family:"Roboto" },
+          callbacks:{
+            label:function(ctx){
+              const v=ctx.raw;
+              const t=ctx.dataset.data.reduce((a,b)=>a+b,0);
+              const p=(v/t*100).toFixed(1);
+              return `${ctx.label}: $${v.toLocaleString()} (${p}%)`;
+            }
+          }
         }
       }
     },
@@ -135,7 +151,7 @@ function buildCharts(data) {
   });
 }
 
-// ===== LOAD DATA =====
+// 📥 Load data
 function handleData(data) {
   const headersRow = document.getElementById("headers");
   const tbody = document.querySelector("#stocks tbody");
@@ -181,7 +197,7 @@ function handleData(data) {
   buildCharts(data);
 }
 
-// JSONP load (avoids CORS)
+// JSONP load
 function loadData(){
   const s=document.createElement("script");
   s.src=sheetURL+"?callback=handleData";

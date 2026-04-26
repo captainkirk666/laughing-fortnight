@@ -21,25 +21,23 @@
   </table>
 </div>
 
-<!-- 🔥 BIG TOTAL (NEW POSITION) -->
-<div class="charts">
+<!-- 🔥 DASHBOARD -->
+<div class="dashboard">
 
-  <!-- 💰 TOTAL CARD -->
-  <div class="chart-box total-card">
+  <!-- 💰 TOTAL -->
+  <div class="chart-box total-card full-width">
     <div>
       <div class="total-label">Total Portfolio Value</div>
       <div id="totalValue">$0</div>
     </div>
   </div>
 
-  <!-- 📊 Charts -->
+  <!-- 📊 CHARTS -->
   <div class="chart-box"><canvas id="changeChart"></canvas></div>
   <div class="chart-box"><canvas id="holdingChart"></canvas></div>
+  <div class="chart-box"><canvas id="pieChart"></canvas></div>
 
-  <!-- 🍩 Donut full width -->
-  <div class="chart-box full-width">
-    <canvas id="pieChart"></canvas>
-  </div>
+</div>
 
 </div>
 
@@ -71,7 +69,6 @@ function buildCharts(data) {
 
   [changeChart, holdingChart, pieChart].forEach(c => c && c.destroy());
 
-  // Change chart
   changeChart = new Chart(document.getElementById("changeChart"), {
     type: "bar",
     data: {
@@ -84,7 +81,6 @@ function buildCharts(data) {
     options: { maintainAspectRatio:false }
   });
 
-  // Holdings chart
   holdingChart = new Chart(document.getElementById("holdingChart"), {
     type: "bar",
     data: {
@@ -97,7 +93,6 @@ function buildCharts(data) {
     options: { maintainAspectRatio:false }
   });
 
-  // Donut chart
   pieChart = new Chart(document.getElementById("pieChart"), {
     type: "doughnut",
     data: {
@@ -177,7 +172,6 @@ function handleData(data) {
   });
 
   totalDisplay.textContent="$"+total.toLocaleString();
-
   buildCharts(data);
 }
 

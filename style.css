@@ -1,6 +1,10 @@
-/* ===== GLOBAL ===== */
+/* ===== IMPORT FONTS ===== */
+/* (keep this even though you also load in HTML — safe fallback) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&display=swap');
+
+/* ===== GLOBAL (ROBOTO = DATA) ===== */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
   margin: 0;
   background: #0f172a;
   color: #e2e8f0;
@@ -11,12 +15,15 @@ body {
   margin: 0 auto;
 }
 
-/* ===== HEADER ===== */
+/* ===== HEADER (INTER) ===== */
 header {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   background: #020617;
   padding: 10px 16px;
   margin-bottom: 10px;
-  font-size: 42px;
+  font-size: 18px;
 }
 
 /* ===== TABLE ===== */
@@ -29,6 +36,7 @@ table {
   border-collapse: collapse;
   background: #020617;
   font-size: 13px;
+  font-family: 'Roboto', sans-serif;
 }
 
 th, td {
@@ -40,6 +48,14 @@ th {
   position: sticky;
   top: 0;
   background: #020617;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+}
+
+td {
+  font-weight: 400;
+  font-variant-numeric: tabular-nums; /* 👈 clean number alignment */
 }
 
 td:not(:first-child) {
@@ -53,8 +69,9 @@ tr:hover {
 .positive { color:#22c55e; }
 .negative { color:#ef4444; }
 
-/* ===== TOTAL BAR ===== */
+/* ===== TOTAL BAR (INTER) ===== */
 .total-bar {
+  font-family: 'Inter', sans-serif;
   background: #020617;
   border-top: 1px solid #1e293b;
   border-bottom: 1px solid #1e293b;
@@ -66,18 +83,20 @@ tr:hover {
   font-size: 14px;
   color: #94a3b8;
   margin-bottom: 6px;
+  font-weight: 400;
 }
 
 #totalValue {
+  font-family: 'Inter', sans-serif;
   font-size: 56px;
-  font-weight: bold;
+  font-weight: 700;
   letter-spacing: 2px;
 }
 
-/* ===== CHARTS GRID (FIXED) ===== */
+/* ===== CHARTS GRID ===== */
 .charts {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 👈 forces 3 columns */
+  grid-template-columns: repeat(3, 1fr); /* 👈 FORCE 3 COLUMNS */
   gap: 16px;
   padding: 10px;
 }
@@ -86,12 +105,13 @@ tr:hover {
 .chart-box {
   background: #020617;
   border: 1px solid #1e293b;
-  height: 280px; /* 👈 consistent height */
+  height: 280px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 10px;
   padding: 10px;
+  font-family: 'Roboto', sans-serif;
 }
 
 /* ===== CANVAS FIX ===== */
@@ -100,9 +120,9 @@ tr:hover {
   height: 100% !important;
 }
 
-/* ===== RESPONSIVE ===== */
+/* ===== MOBILE ===== */
 @media (max-width: 900px) {
   .charts {
-    grid-template-columns: 1fr; /* stack ONLY on mobile */
+    grid-template-columns: 1fr;
   }
 }

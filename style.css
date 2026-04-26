@@ -36,8 +36,8 @@ header {
 
 /* ===== INFO TEXT BLOCK ===== */
 .info-text {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 700;
+  font-family: 'Source Serif 4', serif;
+  background: #0f172a;
   text-align: center;
   color: #ffffff;
   padding: 10px 12px;

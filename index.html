@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Live Stock Dashboard</title>
+  <title>Stock Dashboard</title>
 
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: Arial;
       margin: 0;
       background: #0f172a;
       color: #e2e8f0;
@@ -16,7 +16,6 @@
       background: #020617;
       padding: 15px 20px;
       font-size: 20px;
-      border-bottom: 1px solid #1e293b;
     }
 
     .container {
@@ -33,17 +32,11 @@
       padding: 10px;
       border: 1px solid #1e293b;
       text-align: left;
-      font-size: 14px;
     }
 
     th {
-      background: #020617;
       position: sticky;
       top: 0;
-      z-index: 2;
-    }
-
-    tr:nth-child(even) {
       background: #020617;
     }
 
@@ -64,12 +57,10 @@
     .footer {
       position: fixed;
       bottom: 0;
-      left: 0;
       width: 100%;
       background: #020617;
-      border-top: 1px solid #1e293b;
       padding: 15px 20px;
-      font-size: 16px;
+      border-top: 1px solid #1e293b;
       display: flex;
       justify-content: space-between;
     }
@@ -97,67 +88,67 @@
 </div>
 
 <script>
-const sheetURL = "https://script.googleusercontent.com/macros/s/AKfycbwdOgb4GvdEF7c-VB4s5mdgJpETUWGOZHAT1qjBbJlzgcs-YZExdvV0_5k3TWVMjVlKgQ/exec";
+const sheetURL = "https://script.google.com/macros/s/AKfycbyuoNPjZDuKzvTpylFMKf7tk7PAAg1qYT1rqOtQVTRec4IPVMDVGi05n0zyI0tS1rEb5Q/exec";
 
-async function loadData() {
-  try {
-    const res = await fetch(sheetURL);
-    const data = await res.json();
+// This function is called by Google (JSONP)
+function handleData(data) {
+  const headersRow = document.getElementById("headers");
+  const tbody = document.querySelector("#stocks tbody");
+  const totalDisplay = document.getElementById("totalValue");
 
-    const headersRow = document.getElementById("headers");
-    const tbody = document.querySelector("#stocks tbody");
-    const totalDisplay = document.getElementById("totalValue");
+  headersRow.innerHTML = "";
+  tbody.innerHTML = "";
 
-    headersRow.innerHTML = "";
-    tbody.innerHTML = "";
+  if (!data || data.length === 0) return;
 
-    if (!data || data.length === 0) return;
+  // Headers
+  Object.keys(data[0]).forEach(key => {
+    const th = document.createElement("th");
+    th.textContent = key;
+    headersRow.appendChild(th);
+  });
 
-    // Headers
-    Object.keys(data[0]).forEach(key => {
-      const th = document.createElement("th");
-      th.textContent = key;
-      headersRow.appendChild(th);
+  let total = 0;
+
+  // Rows
+  data.forEach(row => {
+    const tr = document.createElement("tr");
+
+    Object.entries(row).forEach(([key, value]) => {
+      const td = document.createElement("td");
+      td.textContent = value;
+
+      // Colour changes
+      if (key.toLowerCase().includes("change")) {
+        const num = parseFloat(value);
+        if (!isNaN(num)) {
+          td.classList.add(num >= 0 ? "positive" : "negative");
+        }
+      }
+
+      // Total calculation
+      if (key.toLowerCase().includes("total")) {
+        const num = parseFloat(value);
+        if (!isNaN(num)) total += num;
+      }
+
+      tr.appendChild(td);
     });
 
-    let total = 0;
+    tbody.appendChild(tr);
+  });
 
-    // Rows
-    data.forEach(row => {
-      const tr = document.createElement("tr");
-
-      Object.entries(row).forEach(([key, value]) => {
-        const td = document.createElement("td");
-        td.textContent = value;
-
-        // Color gains/losses
-        if (key.toLowerCase().includes("change")) {
-          const num = parseFloat(value);
-          if (!isNaN(num)) {
-            td.classList.add(num >= 0 ? "positive" : "negative");
-          }
-        }
-
-        // Calculate total
-        if (key.toLowerCase().includes("total")) {
-          const num = parseFloat(value);
-          if (!isNaN(num)) total += num;
-        }
-
-        tr.appendChild(td);
-      });
-
-      tbody.appendChild(tr);
-    });
-
-    totalDisplay.textContent = "$" + total.toLocaleString();
-
-  } catch (err) {
-    console.error("ERROR:", err);
-  }
+  totalDisplay.textContent = "$" + total.toLocaleString();
 }
 
-// Load + auto refresh
+// Load data using JSONP (CORS-safe)
+function loadData() {
+  const script = document.createElement("script");
+  script.src = sheetURL + "?callback=handleData";
+  document.body.appendChild(script);
+}
+
+// Run + refresh
 loadData();
 setInterval(loadData, 10000);
 </script>

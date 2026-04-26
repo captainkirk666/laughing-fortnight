@@ -4,7 +4,14 @@
 
 /* ===== GLOBAL (ROBOTO = DATA) ===== */
 body {
-  font-family: 'Comic Sans MS';
+  font-family: 'Roboto', Arial, sans-serif !important;
+}
+
+header,
+.total-bar,
+#totalValue {
+  font-family: 'Inter', Arial, sans-serif !important;
+}
 }
   margin: 0;
   background: #0f172a;

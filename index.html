@@ -1,6 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Stock Dashboard</title>
+
+<style>
+body {
+  font-family: Arial;
+  margin: 0;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+header {
+  background: #020617;
+  padding: 15px 20px;
+  font-size: 20px;
+}
+
+.container {
+  padding: 20px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background: #020617;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #1e293b;
+  text-align: left;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background: #020617;
+  cursor: pointer;
+}
+
+tr:hover {
+  background: #1e293b;
+}
+
+.positive {
+  color: #22c55e;
+  font-weight: bold;
+}
+
+.negative {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #020617;
+  padding: 15px 20px;
+  border-top: 1px solid #1e293b;
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  📈 $100,000 March 2026
+</header>
+
+<div class="container">
+  <table id="stocks">
+    <thead>
+      <tr id="headers"></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<div class="footer">
+  <div>Total Portfolio Value:</div>
+  <div id="totalValue">$0</div>
+</div>
+
 <script>
 const sheetURL = "https://script.google.com/macros/s/AKfycbyuoNPjZDuKzvTpylFMKf7tk7PAAg1qYT1rqOtQVTRec4IPVMDVGi05n0zyI0tS1rEb5Q/exec";
 
+// Main render function
 function handleData(data) {
   const headersRow = document.getElementById("headers");
   const tbody = document.querySelector("#stocks tbody");
@@ -11,23 +103,58 @@ function handleData(data) {
 
   if (!data || data.length === 0) return;
 
-  // Headers
-  Object.keys(data[0]).forEach(key => {
+  // Create headers
+  Object.keys(data[0]).forEach((key, colIndex) => {
     const th = document.createElement("th");
     th.textContent = key;
+
+    // Sorting
+    th.addEventListener("click", () => {
+      const rows = Array.from(tbody.querySelectorAll("tr"));
+
+      const sorted = rows.sort((a, b) => {
+        let A = a.children[colIndex].textContent.replace(/,/g, "").replace("$","");
+        let B = b.children[colIndex].textContent.replace(/,/g, "").replace("$","");
+
+        let numA = parseFloat(A);
+        let numB = parseFloat(B);
+
+        if (!isNaN(numA) && !isNaN(numB)) return numB - numA;
+
+        return A.localeCompare(B);
+      });
+
+      tbody.innerHTML = "";
+      sorted.forEach(tr => tbody.appendChild(tr));
+    });
+
     headersRow.appendChild(th);
   });
 
   let total = 0;
+  let best = -Infinity;
+  let worst = Infinity;
+  let bestRowIndex = -1;
+  let worstRowIndex = -1;
 
-  data.forEach(row => {
+  // Build rows
+  data.forEach((row, i) => {
     const tr = document.createElement("tr");
 
     Object.entries(row).forEach(([key, value]) => {
       const td = document.createElement("td");
-      td.textContent = value;
 
-      // Colour gains/losses
+      let displayValue = value;
+
+      // Format currency
+      if (key.toLowerCase().includes("price") || key.toLowerCase().includes("total")) {
+        const num = parseFloat(value);
+        if (!isNaN(num)) displayValue = "$" + num.toLocaleString();
+      }
+
+      td.textContent = displayValue;
+
+      // Color changes
       if (key.toLowerCase().includes("change")) {
         const num = parseFloat(value);
         if (!isNaN(num)) {
@@ -35,7 +162,7 @@ function handleData(data) {
         }
       }
 
-      // Calculate TOTAL properly
+      // Calculate total
       if (key.toLowerCase().includes("total")) {
         const num = parseFloat(value);
         if (!isNaN(num)) total += num;
@@ -44,23 +171,45 @@ function handleData(data) {
       tr.appendChild(td);
     });
 
+    // Track best/worst
+    const change = parseFloat(row["Change %"]);
+    if (!isNaN(change)) {
+      if (change > best) {
+        best = change;
+        bestRowIndex = i;
+      }
+      if (change < worst) {
+        worst = change;
+        worstRowIndex = i;
+      }
+    }
+
     tbody.appendChild(tr);
   });
 
-  // 💰 Display total nicely formatted
+  // Highlight best/worst
+  const rows = tbody.querySelectorAll("tr");
+  if (rows[bestRowIndex]) rows[bestRowIndex].style.background = "#063d2e";
+  if (rows[worstRowIndex]) rows[worstRowIndex].style.background = "#3d0606";
+
+  // Update total display
   totalDisplay.textContent = "$" + total.toLocaleString(undefined, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   });
 }
 
-// JSONP load
+// JSONP loader (CORS-safe)
 function loadData() {
   const script = document.createElement("script");
   script.src = sheetURL + "?callback=handleData";
   document.body.appendChild(script);
 }
 
+// Run + refresh
 loadData();
 setInterval(loadData, 10000);
 </script>
+
+</body>
+</html>

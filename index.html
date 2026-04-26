@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>Stock Dashboard</title>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
 body {
   font-family: Arial;
@@ -38,16 +40,9 @@ th {
   position: sticky;
   top: 0;
   background: #020617;
-  font-weight: 600;
-  font-size: 12px;
   cursor: pointer;
 }
 
-td {
-  line-height: 1.2;
-}
-
-/* Right-align numbers */
 td:not(:first-child) {
   text-align: right;
 }
@@ -56,15 +51,8 @@ tr:hover {
   background: #1e293b;
 }
 
-.positive {
-  color: #22c55e;
-  font-weight: 600;
-}
-
-.negative {
-  color: #ef4444;
-  font-weight: 600;
-}
+.positive { color: #22c55e; }
+.negative { color: #ef4444; }
 
 .footer {
   position: fixed;
@@ -75,24 +63,39 @@ tr:hover {
   border-top: 1px solid #1e293b;
   display: flex;
   justify-content: space-between;
-  font-size: 14px;
+}
+
+/* Charts */
+.charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  padding: 20px;
+}
+
+canvas {
+  background: #020617;
+  border: 1px solid #1e293b;
+  padding: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  📈 $100,000 March 2026
-</header>
+<header>📈 $100,000 March 2026</header>
 
 <div class="container">
   <table id="stocks">
-    <thead>
-      <tr id="headers"></tr>
-    </thead>
+    <thead><tr id="headers"></tr></thead>
     <tbody></tbody>
   </table>
+</div>
+
+<div class="charts">
+  <canvas id="changeChart"></canvas>
+  <canvas id="holdingChart"></canvas>
+  <canvas id="pieChart"></canvas>
 </div>
 
 <div class="footer">
@@ -103,6 +106,36 @@ tr:hover {
 <script>
 const sheetURL = "https://script.google.com/macros/s/AKfycbwEO4t-V8lIIUh37i-0pQ3UOJWkFGapd3lHQ-mJoBccOY6i4dlTTnYi3nVjTxlf-pTqTA/exec";
 
+let changeChart, holdingChart, pieChart;
+
+function buildCharts(data) {
+  const labels = data.map(r => r["Ticker"]);
+  const change = data.map(r => parseFloat(r["Change %"]) || 0);
+  const totals = data.map(r => parseFloat(r["TOTAL $"]) || 0);
+
+  const sum = totals.reduce((a,b)=>a+b,0);
+  const perc = totals.map(v => (v/sum*100));
+
+  [changeChart, holdingChart, pieChart].forEach(c => c && c.destroy());
+
+  changeChart = new Chart(document.getElementById("changeChart"), {
+    type: "bar",
+    data: { labels, datasets: [{ data: change }] },
+    options: { plugins: { legend: { display:false } } }
+  });
+
+  holdingChart = new Chart(document.getElementById("holdingChart"), {
+    type: "bar",
+    data: { labels, datasets: [{ data: totals }] },
+    options: { plugins: { legend: { display:false } } }
+  });
+
+  pieChart = new Chart(document.getElementById("pieChart"), {
+    type: "doughnut",
+    data: { labels, datasets: [{ data: perc }] }
+  });
+}
+
 function handleData(data) {
   const headersRow = document.getElementById("headers");
   const tbody = document.querySelector("#stocks tbody");
@@ -111,111 +144,68 @@ function handleData(data) {
   headersRow.innerHTML = "";
   tbody.innerHTML = "";
 
-  if (!data || data.length === 0) return;
+  if (!data.length) return;
 
-  // Create headers + sorting
   Object.keys(data[0]).forEach((key, colIndex) => {
     const th = document.createElement("th");
     th.textContent = key;
 
-    th.addEventListener("click", () => {
-      const rows = Array.from(tbody.querySelectorAll("tr"));
-
-      const sorted = rows.sort((a, b) => {
-        let A = a.children[colIndex].textContent.replace(/[$,]/g, "");
-        let B = b.children[colIndex].textContent.replace(/[$,]/g, "");
-
-        let numA = parseFloat(A);
-        let numB = parseFloat(B);
-
-        if (!isNaN(numA) && !isNaN(numB)) return numB - numA;
-        return A.localeCompare(B);
+    th.onclick = () => {
+      const rows = [...tbody.rows];
+      rows.sort((a,b)=>{
+        let A = a.cells[colIndex].textContent.replace(/[$,]/g,"");
+        let B = b.cells[colIndex].textContent.replace(/[$,]/g,"");
+        return (parseFloat(B)||0)-(parseFloat(A)||0);
       });
-
-      tbody.innerHTML = "";
-      sorted.forEach(tr => tbody.appendChild(tr));
-    });
+      tbody.innerHTML="";
+      rows.forEach(r=>tbody.appendChild(r));
+    };
 
     headersRow.appendChild(th);
   });
 
   let total = 0;
-  let best = -Infinity;
-  let worst = Infinity;
-  let bestRowIndex = -1;
-  let worstRowIndex = -1;
 
-  // Build rows
-  data.forEach((row, i) => {
+  data.forEach(row=>{
     const tr = document.createElement("tr");
 
-    Object.entries(row).forEach(([key, value]) => {
-      const td = document.createElement("td");
+    Object.entries(row).forEach(([k,v])=>{
+      const td=document.createElement("td");
 
-      let displayValue = value;
+      if(k.toLowerCase().includes("price")||k.toLowerCase().includes("total")){
+        let num=parseFloat(v);
+        td.textContent=!isNaN(num)?"$"+num.toLocaleString():v;
+      } else td.textContent=v;
 
-      // Format currency
-      if (key.toLowerCase().includes("price") || key.toLowerCase().includes("total")) {
-        const num = parseFloat(value);
-        if (!isNaN(num)) displayValue = "$" + num.toLocaleString();
+      if(k.toLowerCase().includes("change")){
+        let num=parseFloat(v);
+        if(!isNaN(num)) td.classList.add(num>=0?"positive":"negative");
       }
 
-      td.textContent = displayValue;
-
-      // Colour changes
-      if (key.toLowerCase().includes("change")) {
-        const num = parseFloat(value);
-        if (!isNaN(num)) {
-          td.classList.add(num >= 0 ? "positive" : "negative");
-        }
-      }
-
-      // Calculate total
-      if (key.toLowerCase().includes("total")) {
-        const num = parseFloat(value);
-        if (!isNaN(num)) total += num;
+      if(k.toLowerCase().includes("total")){
+        let num=parseFloat(v);
+        if(!isNaN(num)) total+=num;
       }
 
       tr.appendChild(td);
     });
 
-    // Track best/worst
-    const change = parseFloat(row["Change %"]);
-    if (!isNaN(change)) {
-      if (change > best) {
-        best = change;
-        bestRowIndex = i;
-      }
-      if (change < worst) {
-        worst = change;
-        worstRowIndex = i;
-      }
-    }
-
     tbody.appendChild(tr);
   });
 
-  // Highlight best/worst
-  const rows = tbody.querySelectorAll("tr");
-  if (rows[bestRowIndex]) rows[bestRowIndex].style.background = "#063d2e";
-  if (rows[worstRowIndex]) rows[worstRowIndex].style.background = "#3d0606";
+  totalDisplay.textContent="$"+total.toLocaleString();
 
-  // Update total
-  totalDisplay.textContent = "$" + total.toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
+  buildCharts(data);
 }
 
-// JSONP loader
-function loadData() {
-  const script = document.createElement("script");
-  script.src = sheetURL + "?callback=handleData";
-  document.body.appendChild(script);
+function loadData(){
+  const s=document.createElement("script");
+  s.src=sheetURL+"?callback=handleData";
+  document.body.appendChild(s);
 }
 
 loadData();
-setInterval(loadData, 10000);
+setInterval(loadData,10000);
 </script>
 
 </body>

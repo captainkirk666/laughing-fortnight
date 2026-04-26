@@ -4,110 +4,43 @@
 <meta charset="UTF-8">
 <title>Stock Dashboard</title>
 
+<!-- Link your CSS -->
+<link rel="stylesheet" href="style.css">
+
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<style>
-body {
-  font-family: Arial;
-  margin: 0;
-  background: #0f172a;
-  color: #e2e8f0;
-}
-
-/* 🔥 PAGE CONTAINER */
-.page {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* HEADER */
-header {
-  background: #020617;
-  padding: 10px 16px;
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-/* TABLE */
-.container {
-  padding: 10px;
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-  background: #020617;
-  font-size: 13px;
-}
-
-th, td {
-  padding: 5px 7px;
-  border: 1px solid rgba(30, 41, 59, 0.5);
-}
-
-th {
-  position: sticky;
-  top: 0;
-  background: #020617;
-  cursor: pointer;
-}
-
-td:not(:first-child) {
-  text-align: right;
-}
-
-tr:hover {
-  background: #1e293b;
-}
-
-.positive { color: #22c55e; }
-.negative { color: #ef4444; }
-
-/* CHARTS */
-.charts {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  padding: 16px 10px;
-}
-
-canvas {
-  background: #020617;
-  border: 1px solid #1e293b;
-  padding: 10px;
-}
-
-/* FOOTER */
-.footer {
-  max-width: 1200px;
-  margin: 0 auto;
-  background: #020617;
-  padding: 10px 16px;
-  border-top: 1px solid #1e293b;
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-}
-</style>
 </head>
 
 <body>
 
 <div class="page">
 
-<header>📈 $100,000 March 2026</header>
+<header>
+  📈 $100,000 March 2026
+</header>
 
 <div class="container">
   <table id="stocks">
-    <thead><tr id="headers"></tr></thead>
+    <thead>
+      <tr id="headers"></tr>
+    </thead>
     <tbody></tbody>
   </table>
 </div>
 
+<!-- ✅ Charts (fixed layout) -->
 <div class="charts">
-  <canvas id="changeChart"></canvas>
-  <canvas id="holdingChart"></canvas>
-  <canvas id="pieChart"></canvas>
+  <div class="chart-box">
+    <canvas id="changeChart"></canvas>
+  </div>
+
+  <div class="chart-box">
+    <canvas id="holdingChart"></canvas>
+  </div>
+
+  <div class="chart-box">
+    <canvas id="pieChart"></canvas>
+  </div>
 </div>
 
 <div class="footer">
@@ -130,23 +63,46 @@ function buildCharts(data) {
   const sum = totals.reduce((a,b)=>a+b,0);
   const perc = totals.map(v => (v/sum*100));
 
+  // Destroy old charts
   [changeChart, holdingChart, pieChart].forEach(c => c && c.destroy());
 
+  // 📊 Daily % Change
   changeChart = new Chart(document.getElementById("changeChart"), {
     type: "bar",
-    data: { labels, datasets: [{ data: change }] },
-    options: { plugins: { legend: { display:false } } }
+    data: {
+      labels,
+      datasets: [{
+        data: change
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } }
+    }
   });
 
+  // 📊 Holdings $
   holdingChart = new Chart(document.getElementById("holdingChart"), {
     type: "bar",
-    data: { labels, datasets: [{ data: totals }] },
-    options: { plugins: { legend: { display:false } } }
+    data: {
+      labels,
+      datasets: [{
+        data: totals
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } }
+    }
   });
 
+  // 🍩 Holdings %
   pieChart = new Chart(document.getElementById("pieChart"), {
     type: "doughnut",
-    data: { labels, datasets: [{ data: perc }] }
+    data: {
+      labels,
+      datasets: [{
+        data: perc
+      }]
+    }
   });
 }
 
@@ -158,47 +114,59 @@ function handleData(data) {
   headersRow.innerHTML = "";
   tbody.innerHTML = "";
 
-  if (!data.length) return;
+  if (!data || data.length === 0) return;
 
+  // Headers + sorting
   Object.keys(data[0]).forEach((key, colIndex) => {
     const th = document.createElement("th");
     th.textContent = key;
 
-    th.onclick = () => {
-      const rows = [...tbody.rows];
-      rows.sort((a,b)=>{
-        let A = a.cells[colIndex].textContent.replace(/[$,]/g,"");
-        let B = b.cells[colIndex].textContent.replace(/[$,]/g,"");
-        return (parseFloat(B)||0)-(parseFloat(A)||0);
+    th.addEventListener("click", () => {
+      const rows = Array.from(tbody.querySelectorAll("tr"));
+
+      const sorted = rows.sort((a, b) => {
+        let A = a.children[colIndex].textContent.replace(/[$,]/g, "");
+        let B = b.children[colIndex].textContent.replace(/[$,]/g, "");
+
+        return (parseFloat(B) || 0) - (parseFloat(A) || 0);
       });
-      tbody.innerHTML="";
-      rows.forEach(r=>tbody.appendChild(r));
-    };
+
+      tbody.innerHTML = "";
+      sorted.forEach(tr => tbody.appendChild(tr));
+    });
 
     headersRow.appendChild(th);
   });
 
   let total = 0;
 
-  data.forEach(row=>{
+  // Build rows
+  data.forEach(row => {
     const tr = document.createElement("tr");
 
-    Object.entries(row).forEach(([k,v])=>{
-      const td=document.createElement("td");
+    Object.entries(row).forEach(([key, value]) => {
+      const td = document.createElement("td");
 
-      if(k.toLowerCase().includes("price")||k.toLowerCase().includes("total")){
-        let num=parseFloat(v);
-        td.textContent=!isNaN(num)?"$"+num.toLocaleString():v;
-      } else td.textContent=v;
-
-      if(k.toLowerCase().includes("change")){
-        let num=parseFloat(v);
-        if(!isNaN(num)) td.classList.add(num>=0?"positive":"negative");
+      // Format currency
+      if (key.toLowerCase().includes("price") || key.toLowerCase().includes("total")) {
+        const num = parseFloat(value);
+        td.textContent = !isNaN(num) ? "$" + num.toLocaleString() : value;
+      } else {
+        td.textContent = value;
       }
 
-      if(k.toLowerCase().includes("total")){
-        let num=parseFloat(v);
-        if(!isNaN(num)) total+=num;
+      // Colour change
+      if (key.toLowerCase().includes("change")) {
+        const num = parseFloat(value);
+        if (!isNaN(num)) {
+          td.classList.add(num >= 0 ? "positive" : "negative");
+        }
+      }
+
+      // Total calculation
+      if (key.toLowerCase().includes("total")) {
+        const num = parseFloat(value);
+        if (!isNaN(num)) total += num;
       }
 
       tr.appendChild(td);
@@ -207,19 +175,21 @@ function handleData(data) {
     tbody.appendChild(tr);
   });
 
-  totalDisplay.textContent="$"+total.toLocaleString();
+  totalDisplay.textContent = "$" + total.toLocaleString();
 
+  // Build charts
   buildCharts(data);
 }
 
-function loadData(){
-  const s=document.createElement("script");
-  s.src=sheetURL+"?callback=handleData";
-  document.body.appendChild(s);
+// JSONP loader
+function loadData() {
+  const script = document.createElement("script");
+  script.src = sheetURL + "?callback=handleData";
+  document.body.appendChild(script);
 }
 
 loadData();
-setInterval(loadData,10000);
+setInterval(loadData, 10000);
 </script>
 
 </body>

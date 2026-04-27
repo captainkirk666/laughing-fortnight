@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
 
 <!-- CSS -->
-<link rel="stylesheet" href="style.css?v=11">
+<link rel="stylesheet" href="style.css?v=12">
 </head>
 
 <body>
@@ -51,9 +51,10 @@
   <div class="chart-box"><canvas id="pieChart"></canvas></div>
 </div>
 
-<!-- PERFORMANCE CHART (NEW) -->
+<!-- PERFORMANCE CHART -->
 <div class="charts">
-  <div class="chart-box">
+  <div class="chart-box performance-box">
+    <div class="chart-title">Portfolio Performance</div>
     <canvas id="performanceChart"></canvas>
   </div>
 </div>
@@ -181,25 +182,18 @@ function handleHistory(data) {
       datasets: [{
         data: totals,
         borderColor: "#3b82f6",
-        backgroundColor: "rgba(59,130,246,0.1)",
+        backgroundColor: "rgba(59,130,246,0.12)",
         fill: true,
-        tension: 0.3
+        tension: 0.35,
+        pointRadius: 0,
+        pointHoverRadius: 4
       }]
     },
     options: {
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
-        title: {
-          display: true,
-          text: "Portfolio Performance",
-          color: "#cbd5e1",
-          font: {
-            family: "Source Serif 4",
-            size: 16,
-            weight: "600"
-          }
-        }
+        title: { display: false }
       },
       scales: {
         x: {

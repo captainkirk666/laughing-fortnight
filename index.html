@@ -23,13 +23,14 @@
   <a href="darvas.html">Darvas</a>
 </nav>
 
-   <h2>BREAKOUT STOCKS</h2>
+<h2>BREAKOUT STOCKS</h2>
+
 <div class="info-text">
   <p>This is a sample portfolio created to test the effectiveness of different trading strategies.</p>
   <p>It is not intended as a buy recommendation, as many of the stocks featured are highly volatile and can experience significant daily gains and losses.</p>
   <p>The purpose of this site is to identify stocks that are trending and evaluate their potential as buy opportunities.</p>
 </div>
-  
+
 <header>$100,000 March 2026</header>
 
 <div class="container">
@@ -59,14 +60,15 @@
   </div>
 </div>
 
-<!-- ✅ KEEP THIS INSIDE .page -->
+<!-- DISCLAIMER -->
 <div class="disclaimer">
   <p>
     The portfolio presented is a market simulation designed to test and evaluate different trading strategies. 
     No real capital has been invested, and all totals are indicative only, serving as a guide to measure the effectiveness of each approach.
   </p>
   <p>
-    Strategies are explored using market analysis tools such as TradingView. 
+    Strategies are explored using market analysis tools such as 
+    <a href="https://www.tradingview.com" target="_blank">TradingView</a>. 
     This site is intended for development and educational purposes only and should not be considered financial or investment advice.
   </p>
   <p>
@@ -77,22 +79,15 @@
   </p>
 </div>
 
-</div> <!-- CLOSE .page -->
+</div> <!-- END .page -->
 
+<!-- CHART.JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-/* ===== DONUT CENTER TEXT ===== */
-const centerTextPlugin = {
-  ...
-};
+const sheetURL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
 
-/* ALL YOUR JS HERE */
-
-</script>
-
-</body>
-</html>
+let changeChart, holdingChart, pieChart, performanceChart;
 
 /* ===== DONUT CENTER TEXT ===== */
 const centerTextPlugin = {
@@ -127,18 +122,7 @@ function buildCharts(data) {
         backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444")
       }]
     },
-    options: {
-      maintainAspectRatio:false,
-      plugins: {
-        legend: { display: false },
-        title: {
-          display: true,
-          text: "Change %",
-          color: "#cbd5e1",
-          font: { family: "Source Serif 4", size: 16, weight: "600" }
-        }
-      }
-    }
+    options: { maintainAspectRatio:false }
   });
 
   holdingChart = new Chart(document.getElementById("holdingChart"), {
@@ -150,18 +134,7 @@ function buildCharts(data) {
         backgroundColor: "#3b82f6"
       }]
     },
-    options: {
-      maintainAspectRatio:false,
-      plugins: {
-        legend: { display: false },
-        title: {
-          display: true,
-          text: "Holdings $",
-          color: "#cbd5e1",
-          font: { family: "Source Serif 4", size: 16, weight: "600" }
-        }
-      }
-    }
+    options: { maintainAspectRatio:false }
   });
 
   pieChart = new Chart(document.getElementById("pieChart"), {
@@ -180,15 +153,7 @@ function buildCharts(data) {
     options: {
       maintainAspectRatio:false,
       cutout:"70%",
-      plugins:{
-        legend: { display: false },
-        title: {
-          display: true,
-          text: "Portfolio Allocation",
-          color: "#cbd5e1",
-          font: { family: "Source Serif 4", size: 16, weight: "600" }
-        }
-      }
+      plugins:{ legend:{ display:false } }
     },
     plugins:[centerTextPlugin]
   });
@@ -196,17 +161,11 @@ function buildCharts(data) {
 
 /* ===== PERFORMANCE CHART ===== */
 function handleHistory(data) {
-
-  // ✅ Format dates nicely
   const dates = data.map(r => {
     const d = new Date(r["Date"]);
-    return d.toLocaleDateString("en-AU", {
-      day: "numeric",
-      month: "short"
-    });
+    return d.toLocaleDateString("en-AU", { day:"numeric", month:"short" });
   });
 
-  // ✅ Raw totals (keep dollars)
   const totals = data.map(r => parseFloat(r["Total"]) || 0);
 
   if (performanceChart) performanceChart.destroy();
@@ -217,25 +176,9 @@ function handleHistory(data) {
       labels: dates,
       datasets: [{
         data: totals,
-
-        // 🎨 Line styling
         borderColor: "#3b82f6",
         borderWidth: 2,
         tension: 0.35,
-
-        // ✨ Gradient fill (kept!)
-        backgroundColor: (ctx) => {
-          const chart = ctx.chart;
-          const {ctx: c, chartArea} = chart;
-          if (!chartArea) return null;
-
-          const gradient = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-          gradient.addColorStop(0, "rgba(59,130,246,0.25)");
-          gradient.addColorStop(1, "rgba(59,130,246,0)");
-
-          return gradient;
-        },
-
         fill: true,
         pointRadius: 0,
         pointHoverRadius: 5
@@ -243,46 +186,12 @@ function handleHistory(data) {
     },
     options: {
       maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        title: { display: false } // using HTML title
-      },
-      layout: {
-        padding: {
-          top: 10
-        }
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: "#94a3b8",
-            font: {
-              family: "Roboto",
-              size: 11
-            }
-          },
-          grid: { display: false }
-        },
-        y: {
-          ticks: {
-            color: "#94a3b8",
-            font: {
-              family: "Roboto",
-              size: 11
-            },
-            // 💰 FORMAT AS DOLLARS
-            callback: value => "$" + value.toLocaleString()
-          },
-          grid: {
-            color: "#1e293b"
-          }
-        }
-      }
+      plugins: { legend: { display: false } }
     }
   });
 }
 
-/* ===== TABLE + DATA ===== */
+/* ===== TABLE ===== */
 function handleData(data) {
   const headersRow = document.getElementById("headers");
   const tbody = document.querySelector("#stocks tbody");
@@ -292,33 +201,29 @@ function handleData(data) {
   tbody.innerHTML = "";
 
   Object.keys(data[0]).forEach(key=>{
-    const th = document.createElement("th");
-    th.textContent = key;
+    const th=document.createElement("th");
+    th.textContent=key;
     headersRow.appendChild(th);
   });
 
-  let total = 0;
+  let total=0;
 
   data.forEach(row=>{
-    const tr = document.createElement("tr");
+    const tr=document.createElement("tr");
 
     Object.entries(row).forEach(([k,v])=>{
-      const td = document.createElement("td");
-      const num = parseFloat(v);
+      const td=document.createElement("td");
+      const num=parseFloat(v);
 
-      if(k.toLowerCase().includes("price") || k.toLowerCase().includes("total")){
-        td.textContent = !isNaN(num) ? "$" + num.toFixed(2) : v;
-      } else {
-        td.textContent = v;
-      }
+      td.textContent = (!isNaN(num) && k.toLowerCase().includes("total"))
+        ? "$"+num.toFixed(2)
+        : v;
 
       if(k.toLowerCase().includes("change") && !isNaN(num)){
-        td.classList.add(num >= 0 ? "positive" : "negative");
+        td.classList.add(num>=0?"positive":"negative");
       }
 
-      if(k.toLowerCase().includes("total") && !isNaN(num)){
-        total += num;
-      }
+      if(k.toLowerCase().includes("total") && !isNaN(num)) total+=num;
 
       tr.appendChild(td);
     });
@@ -326,44 +231,26 @@ function handleData(data) {
     tbody.appendChild(tr);
   });
 
-  totalDisplay.textContent = "$" + total.toLocaleString();
+  totalDisplay.textContent="$"+total.toLocaleString();
   buildCharts(data);
 }
 
-
-  
-/* ===== LOAD DATA ===== */
+/* ===== LOADERS ===== */
 function loadData(){
-  const existing = document.getElementById("dataScript");
-  if (existing) existing.remove();
-
-  const s = document.createElement("script");
-  s.id = "dataScript";
-  s.src = sheetURL + "?callback=handleData";
+  const s=document.createElement("script");
+  s.src=sheetURL+"?callback=handleData";
   document.body.appendChild(s);
 }
 
-/* ===== LOAD HISTORY ===== */
 function loadHistory(){
-  const s = document.createElement("script");
-  s.src = sheetURL + "?sheet=History&callback=handleHistory";
+  const s=document.createElement("script");
+  s.src=sheetURL+"?sheet=History&callback=handleHistory";
   document.body.appendChild(s);
 }
 
-/* ===== INIT ===== */
 loadData();
 loadHistory();
-setInterval(loadData, 10000);
-
-/* ===== NAV ACTIVE ===== */
-const links = document.querySelectorAll(".nav a");
-const current = window.location.pathname.split("/").pop() || "index.html";
-
-links.forEach(link => {
-  if (link.getAttribute("href") === current) {
-    link.classList.add("active");
-  }
-});
+setInterval(loadData,10000);
 </script>
 
 </body>

@@ -241,7 +241,7 @@ tr:hover {
   flex-direction: column;   /* 👈 ensures title sits above chart */
   align-items: center;
 
-  height: 280px;
+  height: 320px;
 
   box-shadow: 0 12px 30px rgba(0,0,0,0.35);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -278,7 +278,7 @@ tr:hover {
 }
 
 .performance-box canvas {
-  height: 340px !important;
+  height: 360px !important;
 }
 
 /* ===== PERFORMANCE ROW (FULL WIDTH) ===== */

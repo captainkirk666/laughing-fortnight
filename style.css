@@ -222,6 +222,10 @@ tr:hover {
   height: 100% !important;
 }
 
+.charts:last-of-type {
+  grid-template-columns: 1fr;
+}
+
 /* ===== MOBILE ===== */
 @media (max-width: 900px) {
   .charts {

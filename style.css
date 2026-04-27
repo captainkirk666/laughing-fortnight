@@ -288,6 +288,9 @@ tr:hover {
 #performanceChart {
   height: 300px !important;
 }
+.performance-box {
+  width: 100%;
+}
 
 /* ===== MOBILE ===== */
 @media (max-width: 900px) {

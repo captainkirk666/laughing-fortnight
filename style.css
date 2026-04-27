@@ -142,9 +142,20 @@ table {
   font-size: 13px;
 }
 
+/* Remove heavy borders */
 th, td {
   padding: 6px 8px;
-  border: 1px solid rgba(30, 41, 59, 0.4);
+  border: none;
+}
+
+/* Add subtle row separators */
+tbody tr {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.15); /* light grey */
+}
+
+/* Optional: slightly stronger header line */
+thead tr {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
 }
 
 th {

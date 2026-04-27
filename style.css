@@ -108,7 +108,6 @@ h2 {
   color: #94a3b8;
   text-align: center;
   line-height: 1.6;
-  margin-bottom: -2;
 }
 
 /* ===== INFO TEXT ===== */
@@ -125,23 +124,21 @@ h2 {
   margin: 6px 0;
 }
 
+/* ===== DISCLAIMER ===== */
 .disclaimer {
   font-family: 'Roboto', sans-serif;
   font-size: 10px;
   color: #64748b;
   text-align: center;
 
-  margin-top: 30px;   /* 👈 creates separation */
-  padding: 0 16px;    /* 👈 remove vertical padding */
-
+  margin-top: 30px;
+  padding: 0 16px;
   line-height: 1.5;
-}
 
-  max-width: 900px;     /* 👈 match your .page width */
+  max-width: 900px;
   width: 100%;
-
-  background: none;
-  border: none;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* ===== TABLE CARD ===== */
@@ -161,18 +158,16 @@ table {
   font-size: 13px;
 }
 
-/* Remove heavy borders */
 th, td {
   padding: 6px 8px;
   border: none;
+  text-align: center;
 }
 
-/* Add subtle row separators */
 tbody tr {
-  border-bottom: 1px solid rgba(148, 163, 184, 0.15); /* light grey */
+  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
 }
 
-/* Optional: slightly stronger header line */
 thead tr {
   border-bottom: 1px solid rgba(148, 163, 184, 0.25);
 }
@@ -189,15 +184,6 @@ th {
 td {
   font-weight: 500;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.2px;
-}
-
-th, td {
-  text-align: center;
-}
-
-tr {
-  transition: background 0.2s ease;
 }
 
 tr:hover {
@@ -238,8 +224,9 @@ tr:hover {
   gap: var(--gap);
 }
 
-/* Make performance chart full width */
-.charts:last-of-type {
+/* ===== PERFORMANCE ROW (FULL WIDTH) ===== */
+.performance-row {
+  display: grid;
   grid-template-columns: 1fr;
 }
 
@@ -269,53 +256,27 @@ tr:hover {
   height: 100% !important;
 }
 
-/* ===== PERFORMANCE CHART (FULL CONTROL) ===== */
-
-/* Make the performance row full width */
-.charts:last-of-type {
-  grid-template-columns: 1fr;
-}
-
-/* Performance chart container */
+/* ===== PERFORMANCE CHART ===== */
 .performance-box {
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  width: 100%;                 /* ✅ full width */
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  width: 100%;
   padding: 16px;
-
-  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
 }
 
-/* Title above chart */
 .performance-box .chart-title {
   font-family: 'Source Serif 4', serif;
   font-size: 18px;
   font-weight: 600;
   color: var(--text-muted);
   text-align: center;
-
   margin-bottom: 12px;
 }
 
-/* Canvas sizing */
 .performance-box canvas {
   width: 100% !important;
-  height: 320px !important;   /* ✅ nice full-width height */
-}
-
-/* ===== FORCE PERFORMANCE CHART FULL WIDTH ===== */
-.performance-row {
-  display: grid;
-  grid-template-columns: 1fr;   /* ✅ single column */
-}
-
-.performance-row .chart-box {
-  width: 100%;
+  height: 340px !important;
 }
 
 /* ===== MOBILE ===== */

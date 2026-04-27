@@ -278,7 +278,14 @@ tr:hover {
   width: 100% !important;
   height: 340px !important;
 }
+/* Make performance chart behave differently */
+.performance-row .chart-box {
+  height: auto;           /* 👈 remove fixed height */
+}
 
+.performance-box canvas {
+  height: 340px !important;
+}
 /* ===== MOBILE ===== */
 @media (max-width: 900px) {
   .charts {

@@ -28,7 +28,8 @@ header,
 /* ===== NAVIGATION ===== */
 .nav {
   display: flex;
-  gap: 20px;
+  justify-content: center;
+  gap: 28px;
   padding-top: 12px;
   padding-bottom: 12px;
   background: #0f172a;
@@ -36,16 +37,17 @@ header,
 }
 
 .nav a {
-  font-family: 'Inter', sans-serif; /* 👈 INTER */
-  font-size: 14px;
+  font-family: 'Source Serif 4', serif;
+  font-size: 16px;
   text-decoration: none;
-  color: #94a3b8;
+  color: #cbd5e1; /* soft grey */
   font-weight: 600;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.4px;
+  transition: color 0.2s ease;
 }
 
 .nav a:hover {
-  color: #e2e8f0;
+  color: #ffffff;
 }
 
 .nav a.active {
@@ -58,20 +60,22 @@ header,
 header {
   font-family: 'Source Serif 4', serif;
   background: #0f172a;
-  padding-top: 14px;
-  padding-bottom: 14px;
+  padding-top: 16px;
+  padding-bottom: 12px;
   text-align: center;
   font-size: 32px;
 }
 
-/* ===== INFO TEXT ===== */
+/* ===== INFO TEXT (MATCH NAV STYLE) ===== */
 .info-text {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 700;
-  color: #ffffff;
-  padding-top: 10px;
+  font-family: 'Source Serif 4', serif;
+  font-weight: 600;
+  color: #cbd5e1; /* same as nav */
+  text-align: center;
+  padding-top: 8px;
   padding-bottom: 10px;
-  font-size: 14px;
+  font-size: 15px;
+  line-height: 1.5;
 }
 
 .info-text p {

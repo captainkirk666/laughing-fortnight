@@ -8,52 +8,41 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
 
 <!-- CSS -->
-<link rel="stylesheet" href="style.css?v=8">
-
-<!-- CHART -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="style.css?v=9">
 </head>
 
 <body>
 
 <div class="page">
 
-<!-- NAV -->
 <nav class="nav">
   <a href="index.html">Dashboard</a>
-  <a href="In Trend.html">In Trend</a>
-  <a href="Breakout.html">Breakout</a>
-  <a href="ETF.html">ETF</a>
-  <a href="Darvis.html">Darvis</a>
+  <a href="in-trend.html">In Trend</a>
+  <a href="breakout.html">Breakout</a>
+  <a href="etf.html">ETF</a>
+  <a href="darvas.html">Darvas</a>
 </nav>
 
-<!-- HEADER -->
 <header>$100,000 March 2026</header>
 
-<!-- INFO TEXT -->
 <div class="info-text">
   <p>This is a sample portfolio created to test the effectiveness of different trading strategies.</p>
   <p>It is not intended as a buy recommendation, as many of the stocks featured are highly volatile and can experience significant daily gains and losses.</p>
   <p>The purpose of this site is to identify stocks that are trending and evaluate their potential as buy opportunities.</p>
 </div>
 
-<!-- TABLE -->
 <div class="container">
   <table id="stocks">
-    <thead>
-      <tr id="headers"></tr>
-    </thead>
+    <thead><tr id="headers"></tr></thead>
     <tbody></tbody>
   </table>
 </div>
 
-<!-- TOTAL -->
 <div class="total-bar">
   <div class="total-label">Total Portfolio Value</div>
   <div id="totalValue">$0</div>
 </div>
 
-<!-- CHARTS -->
 <div class="charts">
   <div class="chart-box"><canvas id="changeChart"></canvas></div>
   <div class="chart-box"><canvas id="holdingChart"></canvas></div>
@@ -62,12 +51,14 @@
 
 </div>
 
+<!-- CHART -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
 const sheetURL = "https://script.google.com/macros/s/AKfycbwEO4t-V8lIIUh37i-0pQ3UOJWkFGapd3lHQ-mJoBccOY6i4dlTTnYi3nVjTxlf-pTqTA/exec";
 
 let changeChart, holdingChart, pieChart;
 
-// 🍩 Center text plugin
 const centerTextPlugin = {
   id: 'centerText',
   beforeDraw(chart) {
@@ -79,11 +70,10 @@ const centerTextPlugin = {
     ctx.fillStyle = "#e2e8f0";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("$" + total.toLocaleString(), width / 2, height / 2);
+    ctx.fillText("$" + total.toLocaleString(), width/2, height/2);
   }
 };
 
-// 📊 Build charts
 function buildCharts(data) {
   const labels = data.map(r => r["Ticker"]);
   const change = data.map(r => parseFloat(r["Change %"]) || 0);
@@ -134,9 +124,8 @@ function buildCharts(data) {
       maintainAspectRatio:false,
       cutout:"70%",
       plugins:{
-        legend:{
-          position:"bottom",
-          labels:{ color:"#e2e8f0", font:{size:11, family:"Roboto"} }
+        legend: {
+          display: false /* 👈 removed legend */
         }
       }
     },
@@ -144,7 +133,6 @@ function buildCharts(data) {
   });
 }
 
-// 📥 Handle data
 function handleData(data) {
   const headersRow = document.getElementById("headers");
   const tbody = document.querySelector("#stocks tbody");
@@ -192,7 +180,6 @@ function handleData(data) {
   buildCharts(data);
 }
 
-// 🔄 Load data safely (no stacking scripts)
 function loadData(){
   const existing = document.getElementById("dataScript");
   if (existing) existing.remove();
@@ -206,9 +193,8 @@ function loadData(){
 loadData();
 setInterval(loadData, 10000);
 
-// 🧭 Active nav highlight
 const links = document.querySelectorAll(".nav a");
-const current = window.location.pathname.split("/").pop();
+const current = window.location.pathname.split("/").pop() || "index.html";
 
 links.forEach(link => {
   if (link.getAttribute("href") === current) {

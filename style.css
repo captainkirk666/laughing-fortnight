@@ -230,7 +230,7 @@ tr:hover {
   grid-template-columns: 1fr;
 }
 
-/* ===== CHART CARDS ===== */
+/* ===== CHART CARDS (FIXED) ===== */
 .chart-box {
   background: var(--bg-panel);
   border: 1px solid var(--border);
@@ -238,13 +238,13 @@ tr:hover {
   padding: 14px;
 
   display: flex;
-  flex-direction: column;   /* 👈 REQUIRED */
+  flex-direction: column;   /* 👈 ensures title sits above chart */
   align-items: center;
 
   height: 280px;
-}
 
   box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .chart-box:hover {
@@ -252,21 +252,8 @@ tr:hover {
   box-shadow: 0 16px 40px rgba(0,0,0,0.45);
 }
 
-.chart-box canvas {
-  width: 100% !important;
-  height: auto !important;   /* 👈 key fix */
-}
-
-/* ===== PERFORMANCE CHART ===== */
-.performance-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  padding: 16px;
-}
-
-.performance-box .chart-title {
+/* ===== UNIVERSAL CHART TITLE (ALL CHARTS MATCH) ===== */
+.chart-title {
   font-family: 'Source Serif 4', serif;
   font-size: 18px;
   font-weight: 600;
@@ -275,28 +262,32 @@ tr:hover {
   text-align: center;
   width: 100%;
 
-  margin-bottom: 10px;
+  margin-bottom: 8px;   /* 👈 tighter spacing */
 }
 
+/* ===== CANVAS FIX (PREVENT GROWTH BUG) ===== */
+.chart-box canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* ===== PERFORMANCE CHART (SPECIAL CASE) ===== */
 .performance-box {
-  height: auto;
+  height: auto;   /* 👈 allow full expansion */
+  padding: 16px;
 }
 
 .performance-box canvas {
   height: 340px !important;
 }
 
-/* ===== PERFORMANCE ROW (FULL WIDTH OUTSIDE GRID) ===== */
+/* ===== PERFORMANCE ROW (FULL WIDTH) ===== */
 .performance-row {
+  display: grid;
+  grid-template-columns: 1fr;
   padding-left: 12px;
-  padding-right: 32px;
+  padding-right: 12px;
 }
-
-.performance-row .chart-box {
-  width: 100%;
-  height: auto;
-}
-
 
 /* ===== MOBILE ===== */
 @media (max-width: 900px) {

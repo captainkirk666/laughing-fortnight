@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
 
 <!-- CSS -->
-<link rel="stylesheet" href="style.css?v=9">
+<link rel="stylesheet" href="style.css?v=10">
 </head>
 
 <body>
@@ -51,7 +51,6 @@
 
 </div>
 
-<!-- CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
@@ -86,12 +85,22 @@ function buildCharts(data) {
     data: {
       labels,
       datasets: [{
-        label: "Change %",
         data: change,
         backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444")
       }]
     },
-    options: { maintainAspectRatio:false }
+    options: {
+      maintainAspectRatio:false,
+      plugins: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: "Change %",
+          color: "#cbd5e1",
+          font: { family: "Source Serif 4", size: 16, weight: "600" }
+        }
+      }
+    }
   });
 
   holdingChart = new Chart(document.getElementById("holdingChart"), {
@@ -99,12 +108,22 @@ function buildCharts(data) {
     data: {
       labels,
       datasets: [{
-        label: "Holdings $",
         data: totals,
         backgroundColor: "#3b82f6"
       }]
     },
-    options: { maintainAspectRatio:false }
+    options: {
+      maintainAspectRatio:false,
+      plugins: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: "Holdings $",
+          color: "#cbd5e1",
+          font: { family: "Source Serif 4", size: 16, weight: "600" }
+        }
+      }
+    }
   });
 
   pieChart = new Chart(document.getElementById("pieChart"), {
@@ -124,8 +143,12 @@ function buildCharts(data) {
       maintainAspectRatio:false,
       cutout:"70%",
       plugins:{
-        legend: {
-          display: false /* 👈 removed legend */
+        legend: { display: false },
+        title: {
+          display: true,
+          text: "Portfolio Allocation",
+          color: "#cbd5e1",
+          font: { family: "Source Serif 4", size: 16, weight: "600" }
         }
       }
     },

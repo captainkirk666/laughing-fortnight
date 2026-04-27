@@ -83,7 +83,22 @@ header {
   margin: 6px 0;
 }
 
+
+/* ===== TABLE WRAPPER (ROUNDED) ===== */
+.container {
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 10px; /* 👈 MATCH CHARTS */
+  overflow: hidden; /* 👈 IMPORTANT */
+}
+
+
+
 /* ===== TABLE ===== */
+
 .container {
   padding-top: 10px;
   padding-bottom: 10px;

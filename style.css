@@ -286,7 +286,7 @@ tr:hover {
 /* ===== PERFORMANCE ROW (FULL WIDTH OUTSIDE GRID) ===== */
 .performance-row {
   padding-left: 12px;
-  padding-right: 12px;
+  padding-right: 22px;
 }
 
 .performance-row .chart-box {

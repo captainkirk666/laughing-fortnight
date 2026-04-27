@@ -110,7 +110,7 @@ th {
 
 td {
   font-variant-numeric: tabular-nums;
-  font-weight: 500; /* 👈 improved readability */
+  font-weight: 500;
   letter-spacing: 0.2px;
 }
 

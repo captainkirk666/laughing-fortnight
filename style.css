@@ -238,8 +238,11 @@ tr:hover {
   padding: 14px;
 
   display: flex;
-  flex-direction: column;   /* 👈 THIS FIXES IT */
+  flex-direction: column;
   align-items: center;
+
+  height: 280px;   /* 👈 fixed height = stable charts */
+}
 
   box-shadow: 0 12px 30px rgba(0,0,0,0.35);
 }

@@ -180,12 +180,8 @@ function handleHistory(data) {
     });
   });
 
-  // ✅ Raw totals
+  // ✅ Raw totals (keep dollars)
   const totals = data.map(r => parseFloat(r["Total"]) || 0);
-
-  // ✅ Convert to % return
-  const base = totals[0];
-  const returns = totals.map(v => ((v - base) / base) * 100);
 
   if (performanceChart) performanceChart.destroy();
 
@@ -194,14 +190,14 @@ function handleHistory(data) {
     data: {
       labels: dates,
       datasets: [{
-        data: returns,
+        data: totals,
 
         // 🎨 Line styling
         borderColor: "#3b82f6",
         borderWidth: 2,
         tension: 0.35,
 
-        // ✨ Gradient fill
+        // ✨ Gradient fill (kept!)
         backgroundColor: (ctx) => {
           const chart = ctx.chart;
           const {ctx: c, chartArea} = chart;
@@ -223,7 +219,7 @@ function handleHistory(data) {
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
-        title: { display: false } // using your HTML title
+        title: { display: false } // using HTML title
       },
       layout: {
         padding: {
@@ -248,8 +244,8 @@ function handleHistory(data) {
               family: "Roboto",
               size: 11
             },
-            // 📊 Show % instead of $
-            callback: value => value.toFixed(1) + "%"
+            // 💰 FORMAT AS DOLLARS
+            callback: value => "$" + value.toLocaleString()
           },
           grid: {
             color: "#1e293b"

@@ -1,4 +1,4 @@
-/* ===== GOOGLE FONTS ===== */
+/* ===== GOOGLE FONTS (fallback) ===== */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&family=Source+Serif+4:wght@400;600&display=swap');
 
 /* ===== GLOBAL ===== */
@@ -14,7 +14,7 @@ body {
   margin: 0 auto;
 }
 
-/* ===== ALIGNMENT ===== */
+/* ===== SHARED ALIGNMENT ===== */
 header,
 .container,
 .total-bar,
@@ -25,12 +25,13 @@ header,
   padding-right: 12px;
 }
 
-/* ===== NAV ===== */
+/* ===== NAVIGATION ===== */
 .nav {
   display: flex;
   justify-content: center;
   gap: 28px;
-  padding: 12px;
+  padding-top: 12px;
+  padding-bottom: 12px;
   background: #0f172a;
   border-bottom: 1px solid #1e293b;
 }
@@ -38,21 +39,29 @@ header,
 .nav a {
   font-family: 'Source Serif 4', serif;
   font-size: 16px;
+  text-decoration: none;
   color: #cbd5e1;
   font-weight: 600;
-  text-decoration: none;
+  letter-spacing: 0.4px;
+  transition: color 0.2s ease;
 }
 
-.nav a.active,
 .nav a:hover {
   color: #ffffff;
+}
+
+.nav a.active {
+  color: #ffffff;
+  border-bottom: 2px solid #3b82f6;
+  padding-bottom: 2px;
 }
 
 /* ===== HEADER ===== */
 header {
   font-family: 'Source Serif 4', serif;
   background: #0f172a;
-  padding: 16px 0 12px;
+  padding-top: 16px;
+  padding-bottom: 12px;
   text-align: center;
   font-size: 32px;
 }
@@ -60,8 +69,11 @@ header {
 /* ===== INFO TEXT ===== */
 .info-text {
   font-family: 'Source Serif 4', serif;
+  font-weight: 600;
   color: #cbd5e1;
   text-align: center;
+  padding-top: 8px;
+  padding-bottom: 10px;
   font-size: 15px;
   line-height: 1.5;
 }
@@ -71,6 +83,11 @@ header {
 }
 
 /* ===== TABLE ===== */
+.container {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -84,28 +101,53 @@ th, td {
 }
 
 th {
+  position: sticky;
+  top: 0;
+  background: #0f172a;
   font-weight: 600;
+  font-size: 12px;
 }
 
 td {
+  font-variant-numeric: tabular-nums;
   font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+td:not(:first-child) {
+  text-align: right;
 }
 
 tr:hover {
   background: #1e293b;
 }
 
-/* ===== TOTAL ===== */
+.positive { color: #22c55e; }
+.negative { color: #ef4444; }
+
+/* ===== TOTAL BAR ===== */
 .total-bar {
+  font-family: 'Source Serif 4', serif;
   background: #0f172a;
+  border-top: 1px solid #1e293b;
+  border-bottom: 1px solid #1e293b;
+  padding-top: 28px;
+  padding-bottom: 28px;
   text-align: center;
-  padding: 28px 0;
 }
 
+.total-label {
+  font-size: 14px;
+  color: #94a3b8;
+  margin-bottom: 6px;
+}
+
+/* KPI NUMBER */
 #totalValue {
   font-family: 'Inter', sans-serif;
   font-size: 56px;
   font-weight: 700;
+  letter-spacing: 2px;
 }
 
 /* ===== CHARTS ===== */
@@ -113,20 +155,30 @@ tr:hover {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .chart-box {
   background: #0f172a;
   border: 1px solid #1e293b;
   height: 280px;
-  padding: 14px; /* 👈 more breathing room */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.02) inset;
 }
 
-/* FORCE CANVAS FIT */
 .chart-box canvas {
   width: 100% !important;
   height: 100% !important;
+}
+
+/* ===== CONSISTENT SPACING ===== */
+.page > * {
+  margin-bottom: 8px;
 }
 
 /* ===== MOBILE ===== */

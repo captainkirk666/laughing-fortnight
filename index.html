@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
 
 <!-- CSS -->
-<link rel="stylesheet" href="style.css?v=10">
+<link rel="stylesheet" href="style.css?v=11">
 </head>
 
 <body>
@@ -32,8 +32,6 @@
   
 <header>$100,000 March 2026</header>
 
-
-
 <div class="container">
   <table id="stocks">
     <thead><tr id="headers"></tr></thead>
@@ -46,10 +44,18 @@
   <div id="totalValue">$0</div>
 </div>
 
+<!-- MAIN CHARTS -->
 <div class="charts">
   <div class="chart-box"><canvas id="changeChart"></canvas></div>
   <div class="chart-box"><canvas id="holdingChart"></canvas></div>
   <div class="chart-box"><canvas id="pieChart"></canvas></div>
+</div>
+
+<!-- PERFORMANCE CHART (NEW) -->
+<div class="charts">
+  <div class="chart-box">
+    <canvas id="performanceChart"></canvas>
+  </div>
 </div>
 
 </div>
@@ -59,8 +65,9 @@
 <script>
 const sheetURL = "https://script.google.com/macros/s/AKfycbwEO4t-V8lIIUh37i-0pQ3UOJWkFGapd3lHQ-mJoBccOY6i4dlTTnYi3nVjTxlf-pTqTA/exec";
 
-let changeChart, holdingChart, pieChart;
+let changeChart, holdingChart, pieChart, performanceChart;
 
+/* ===== DONUT CENTER TEXT ===== */
 const centerTextPlugin = {
   id: 'centerText',
   beforeDraw(chart) {
@@ -76,6 +83,7 @@ const centerTextPlugin = {
   }
 };
 
+/* ===== MAIN CHARTS ===== */
 function buildCharts(data) {
   const labels = data.map(r => r["Ticker"]);
   const change = data.map(r => parseFloat(r["Change %"]) || 0);
@@ -159,6 +167,55 @@ function buildCharts(data) {
   });
 }
 
+/* ===== PERFORMANCE CHART ===== */
+function handleHistory(data) {
+  const dates = data.map(r => r["Date"]);
+  const totals = data.map(r => parseFloat(r["Total"]) || 0);
+
+  if (performanceChart) performanceChart.destroy();
+
+  performanceChart = new Chart(document.getElementById("performanceChart"), {
+    type: "line",
+    data: {
+      labels: dates,
+      datasets: [{
+        data: totals,
+        borderColor: "#3b82f6",
+        backgroundColor: "rgba(59,130,246,0.1)",
+        fill: true,
+        tension: 0.3
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: "Portfolio Performance",
+          color: "#cbd5e1",
+          font: {
+            family: "Source Serif 4",
+            size: 16,
+            weight: "600"
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: "#94a3b8" },
+          grid: { display: false }
+        },
+        y: {
+          ticks: { color: "#94a3b8" },
+          grid: { color: "#1e293b" }
+        }
+      }
+    }
+  });
+}
+
+/* ===== TABLE + DATA ===== */
 function handleData(data) {
   const headersRow = document.getElementById("headers");
   const tbody = document.querySelector("#stocks tbody");
@@ -206,6 +263,7 @@ function handleData(data) {
   buildCharts(data);
 }
 
+/* ===== LOAD DATA ===== */
 function loadData(){
   const existing = document.getElementById("dataScript");
   if (existing) existing.remove();
@@ -216,9 +274,19 @@ function loadData(){
   document.body.appendChild(s);
 }
 
+/* ===== LOAD HISTORY ===== */
+function loadHistory(){
+  const s = document.createElement("script");
+  s.src = sheetURL + "?sheet=History&callback=handleHistory";
+  document.body.appendChild(s);
+}
+
+/* ===== INIT ===== */
 loadData();
+loadHistory();
 setInterval(loadData, 10000);
 
+/* ===== NAV ACTIVE ===== */
 const links = document.querySelectorAll(".nav a");
 const current = window.location.pathname.split("/").pop() || "index.html";
 

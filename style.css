@@ -275,9 +275,8 @@ tr:hover {
   margin-bottom: 12px;
 }
 
-.performance-box canvas {
-  width: 100% !important;
-  height: 340px !important;
+.performance-box {
+  height: auto;
 }
 
 .performance-box canvas {

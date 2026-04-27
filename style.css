@@ -100,13 +100,12 @@ header {
   box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
-.heading-secondary {
+h2 {
   font-family: 'Source Serif 4', serif;
   font-size: 20px;
   font-weight: 600;
-  color: #94a3b8; /* your soft grey */
+  color: #94a3b8;
   text-align: center;
-  margin-bottom: 8px;
 }
 
 /* ===== INFO TEXT ===== */

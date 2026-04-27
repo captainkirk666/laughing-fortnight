@@ -234,16 +234,14 @@ tr:hover {
 .chart-box {
   background: var(--bg-panel);
   border: 1px solid var(--border);
-  height: 280px;
   border-radius: var(--radius);
   padding: 14px;
 
   display: flex;
+  flex-direction: column;   /* 👈 THIS FIXES IT */
   align-items: center;
-  justify-content: center;
 
   box-shadow: 0 12px 30px rgba(0,0,0,0.35);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .chart-box:hover {

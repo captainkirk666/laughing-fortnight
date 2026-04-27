@@ -127,14 +127,15 @@ h2 {
 
 .disclaimer {
   font-family: 'Roboto', sans-serif;
-  font-size: 14px;
+  font-size: 10px;
   color: #64748b;
   text-align: center;
 
-  margin: 24px auto 0;   /* 👈 centers it */
-  padding: 10px 16px;
+  margin-top: 30px;   /* 👈 creates separation */
+  padding: 0 16px;    /* 👈 remove vertical padding */
 
-  line-height: 1.4;
+  line-height: 1.5;
+}
 
   max-width: 900px;     /* 👈 match your .page width */
   width: 100%;

@@ -101,11 +101,12 @@ header {
 }
 
 h2 {
-  font-family: 'Roboto';
+  font-family: 'Roboto', sans-serif;
   font-size: 30px;
   font-weight: 600;
   color: #94a3b8;
   text-align: center;
+  line-height: 1.6;
 }
 
 /* ===== INFO TEXT ===== */

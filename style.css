@@ -269,27 +269,43 @@ tr:hover {
   height: 100% !important;
 }
 
-/* ===== PERFORMANCE CHART LAYOUT ===== */
-.performance-box {
-  flex-direction: column;
+/* ===== PERFORMANCE CHART (FULL CONTROL) ===== */
+
+/* Make the performance row full width */
+.charts:last-of-type {
+  grid-template-columns: 1fr;
 }
 
-/* ===== CHART TITLE (MATCH TOTAL LABEL) ===== */
-.chart-title {
+/* Performance chart container */
+.performance-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;                 /* ✅ full width */
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+}
+
+/* Title above chart */
+.performance-box .chart-title {
   font-family: 'Source Serif 4', serif;
   font-size: 18px;
   font-weight: 600;
   color: var(--text-muted);
   text-align: center;
-  margin-bottom: 10px;
+
+  margin-bottom: 12px;
 }
 
-/* Taller performance chart */
-#performanceChart {
-  height: 300px !important;
-}
-.performance-box {
-  width: 1100px;
+/* Canvas sizing */
+.performance-box canvas {
+  width: 100% !important;
+  height: 320px !important;   /* ✅ nice full-width height */
 }
 
 /* ===== MOBILE ===== */

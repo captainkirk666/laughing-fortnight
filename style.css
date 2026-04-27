@@ -238,10 +238,10 @@ tr:hover {
   padding: 14px;
 
   display: flex;
-  flex-direction: column;
+  flex-direction: column;   /* 👈 REQUIRED */
   align-items: center;
 
-  height: 280px;   /* 👈 fixed height = stable charts */
+  height: 280px;
 }
 
   box-shadow: 0 12px 30px rgba(0,0,0,0.35);
@@ -271,8 +271,11 @@ tr:hover {
   font-size: 18px;
   font-weight: 600;
   color: var(--text-muted);
+
   text-align: center;
-  margin-bottom: 12px;
+  width: 100%;
+
+  margin-bottom: 10px;
 }
 
 .performance-box {

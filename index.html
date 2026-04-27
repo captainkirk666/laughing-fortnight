@@ -122,7 +122,7 @@ function buildCharts(data) {
         backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444")
       }]
     },
-    options: { maintainAspectRatio:false }
+    options: {   maintainAspectRatio: false,   plugins: {     legend: { display: false }   } }
   });
 
   holdingChart = new Chart(document.getElementById("holdingChart"), {
@@ -134,7 +134,7 @@ function buildCharts(data) {
         backgroundColor: "#3b82f6"
       }]
     },
-    options: { maintainAspectRatio:false }
+    options: {   maintainAspectRatio: false,   plugins: {     legend: { display: false }   } }
   });
 
   pieChart = new Chart(document.getElementById("pieChart"), {

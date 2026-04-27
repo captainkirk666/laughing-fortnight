@@ -170,9 +170,23 @@ function buildCharts(data) {
 
 /* ===== PERFORMANCE CHART ===== */
 function handleHistory(data) {
-  const dates = data.map(r => r["Date"]);
+
+  // ✅ Format dates properly
+  const dates = data.map(r => {
+    const d = new Date(r["Date"]);
+    return d.toLocaleDateString("en-AU", {
+      day: "numeric",
+      month: "short"
+    });
+  });
+
+  // ✅ Get totals
   const totals = data.map(r => parseFloat(r["Total"]) || 0);
 
+  // 🧪 Debug (optional)
+  console.log("History:", dates, totals);
+
+  // Destroy old chart if exists
   if (performanceChart) performanceChart.destroy();
 
   performanceChart = new Chart(document.getElementById("performanceChart"), {
@@ -186,23 +200,46 @@ function handleHistory(data) {
         fill: true,
         tension: 0.35,
         pointRadius: 0,
-        pointHoverRadius: 4
+        pointHoverRadius: 4,
+        borderWidth: 2
       }]
     },
     options: {
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
-        title: { display: false }
+        title: { display: false } // using HTML title instead
+      },
+      layout: {
+        padding: {
+          top: 10
+        }
       },
       scales: {
         x: {
-          ticks: { color: "#94a3b8" },
-          grid: { display: false }
+          ticks: {
+            color: "#94a3b8",
+            font: {
+              family: "Roboto",
+              size: 11
+            }
+          },
+          grid: {
+            display: false
+          }
         },
         y: {
-          ticks: { color: "#94a3b8" },
-          grid: { color: "#1e293b" }
+          ticks: {
+            color: "#94a3b8",
+            font: {
+              family: "Roboto",
+              size: 11
+            },
+            callback: value => "$" + value.toLocaleString()
+          },
+          grid: {
+            color: "#1e293b"
+          }
         }
       }
     }

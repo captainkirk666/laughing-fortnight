@@ -116,7 +116,7 @@ td {
 }
 
 td:not(:first-child) {
-  text-align: center;
+  text-align: left;
 }
 
 tr:hover {

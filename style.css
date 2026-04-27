@@ -308,6 +308,16 @@ tr:hover {
   height: 320px !important;   /* ✅ nice full-width height */
 }
 
+/* ===== FORCE PERFORMANCE CHART FULL WIDTH ===== */
+.performance-row {
+  display: grid;
+  grid-template-columns: 1fr;   /* ✅ single column */
+}
+
+.performance-row .chart-box {
+  width: 100%;
+}
+
 /* ===== MOBILE ===== */
 @media (max-width: 900px) {
   .charts {

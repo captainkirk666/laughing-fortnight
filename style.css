@@ -173,8 +173,8 @@ td {
   letter-spacing: 0.2px;
 }
 
-td:not(:first-child) {
-  text-align: right;
+th, td {
+  text-align: left;
 }
 
 tr {

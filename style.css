@@ -40,7 +40,7 @@ header,
   font-family: 'Source Serif 4', serif;
   font-size: 16px;
   text-decoration: none;
-  color: #cbd5e1; /* soft grey */
+  color: #cbd5e1;
   font-weight: 600;
   letter-spacing: 0.4px;
   transition: color 0.2s ease;
@@ -66,11 +66,11 @@ header {
   font-size: 32px;
 }
 
-/* ===== INFO TEXT (MATCH NAV STYLE) ===== */
+/* ===== INFO TEXT ===== */
 .info-text {
   font-family: 'Source Serif 4', serif;
   font-weight: 600;
-  color: #cbd5e1; /* same as nav */
+  color: #cbd5e1;
   text-align: center;
   padding-top: 8px;
   padding-bottom: 10px;
@@ -104,12 +104,14 @@ th {
   position: sticky;
   top: 0;
   background: #0f172a;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 12px;
 }
 
 td {
   font-variant-numeric: tabular-nums;
+  font-weight: 500; /* 👈 improved readability */
+  letter-spacing: 0.2px;
 }
 
 td:not(:first-child) {

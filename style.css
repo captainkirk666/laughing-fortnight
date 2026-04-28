@@ -46,6 +46,13 @@ header,
 }
 
 /* ===== NAV ===== */
+
+.tabs {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 24px;
+}
+
 .nav {
   display: flex;
   justify-content: center;

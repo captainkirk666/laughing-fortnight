@@ -47,91 +47,74 @@ header,
 
 /* ===== NAV ===== */
 
-.tab {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.1);
+/* ===== NAVBAR ===== */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  background: var(--bg-main);
+  border-bottom: 1px solid var(--border);
+
+  backdrop-filter: blur(8px);
 }
 
-.tab.active {
-  background: rgba(56,189,248,0.1);
-  border-color: #38bdf8;
+/* INNER LAYOUT */
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 24px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.tab {
+
+/* LOGO */
+.logo {
+  font-family: 'Source Serif 4', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+/* NAV TABS (REPLACES OLD .tab SYSTEM) */
+.nav-links {
+  display: flex;
+  gap: 12px;
+}
+
+/* TAB BUTTONS */
+.nav-tab {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-muted);
+
+  padding: 8px 16px;
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
   transition: all 0.2s ease;
 }
-.tab:hover {
+
+/* HOVER */
+.nav-tab:hover {
+  color: var(--text-main);
   transform: translateY(-1px);
 }
 
-
-.nav {
-  display: flex;
-  justify-content: center;
-  gap: 28px;
-  padding: 14px;
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-}
-
-.nav a {
-  font-family: 'Source Serif 4', serif;
-  font-size: 16px;
-  color: var(--text-soft);
-  font-weight: 600;
-  text-decoration: none;
-  letter-spacing: 0.4px;
-  position: relative;
-  transition: all 0.2s ease;
-}
-
-.nav a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -4px;
-  width: 0%;
-  height: 2px;
-  background: var(--accent);
-  transition: width 0.25s ease;
-}
-
-.nav a:hover::after {
-  width: 100%;
-}
-
-.nav a:hover,
-.nav a.active {
-  color: #ffffff;
-}
-
-.tabs {
-  display: flex;
-  gap: 10px;
-  margin: 20px;
-}
-
-.tab {
-  background: #0f172a;
-  color: #94a3b8;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.tab:hover {
-  color: white;
-}
-
-.tab.active {
-  background: #1e293b;
+/* ACTIVE TAB */
+.nav-tab.active {
+  background: rgba(56,189,248,0.1);
+  border-color: #38bdf8;
   color: #38bdf8;
 }
 
-/* hide inactive content */
+/* ===== TAB CONTENT CONTROL (KEEP THIS) ===== */
 .tab-content {
   display: none;
 }

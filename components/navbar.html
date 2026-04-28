@@ -1,11 +1,31 @@
 <nav class="navbar">
   <div class="nav-container">
+
     <h1 class="logo">My Dashboard</h1>
 
     <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="stocks.html">Stocks</a>
-      <a href="crypto.html">Crypto</a>
+
+      <button class="nav-tab active" data-tab="home">Home</button>
+
+      <button class="nav-tab" data-tab="trend">In Trend</button>
+
+      <button class="nav-tab" data-tab="breakouts">Breakouts</button>
+
+      <!-- DROPDOWN -->
+      <div class="dropdown">
+        <button class="nav-tab dropdown-toggle">ETFs ▾</button>
+        <div class="dropdown-menu">
+          <button data-tab="etf-tech">Tech ETFs</button>
+          <button data-tab="etf-energy">Energy ETFs</button>
+          <button data-tab="etf-global">Global ETFs</button>
+        </div>
+      </div>
+
+      <button class="nav-tab" data-tab="darvis">Darvis</button>
+
+      <button class="nav-tab" data-tab="contact">Contact</button>
+
     </div>
+
   </div>
 </nav>

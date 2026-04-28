@@ -294,6 +294,47 @@ loadData();
 loadHistory();
 setInterval(loadData,10000);
 </script>
+<body>
 
+  <!-- NAVBAR -->
+  <div id="navbar"></div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" data-tab="stocks">Stocks</button>
+    <button class="tab" data-tab="crypto">Crypto</button>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="stocks" class="tab-content active">
+    <!-- stocks table -->
+  </div>
+
+  <div id="crypto" class="tab-content">
+    <!-- crypto table -->
+  </div>
+
+
+  <!-- ✅ STEP 3 GOES HERE -->
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+
+    document.querySelectorAll(".tab").forEach(button => {
+      button.addEventListener("click", () => {
+        
+        document.querySelectorAll(".tab").forEach(btn => btn.classList.remove("active"));
+        document.querySelectorAll(".tab-content").forEach(content => content.classList.remove("active"));
+
+        button.classList.add("active");
+
+        const tabName = button.getAttribute("data-tab");
+        document.getElementById(tabName).classList.add("active");
+      });
+    });
+
+  });
+  </script>
+
+</body>
 </body>
 </html>

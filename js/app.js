@@ -1,22 +1,31 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  // LOAD NAVBAR
   fetch("components/navbar.html")
     .then(res => res.text())
     .then(data => {
       document.getElementById("navbar").innerHTML = data;
 
-      // TAB SWITCHING (now inside navbar)
-      document.querySelectorAll(".nav-tab").forEach(button => {
+      // ALL clickable tab buttons (including dropdown)
+      document.querySelectorAll("[data-tab]").forEach(button => {
         button.addEventListener("click", () => {
-          
+
+          // remove active state from top tabs only
           document.querySelectorAll(".nav-tab").forEach(btn => btn.classList.remove("active"));
-          document.querySelectorAll(".tab-content").forEach(content => content.classList.remove("active"));
 
-          button.classList.add("active");
+          // if it's a top-level tab, activate it
+          if (button.classList.contains("nav-tab")) {
+            button.classList.add("active");
+          }
 
+          // hide all content
+          document.querySelectorAll(".tab-content").forEach(content => {
+            content.classList.remove("active");
+          });
+
+          // show selected content
           const tabName = button.getAttribute("data-tab");
-          document.getElementById(tabName).classList.add("active");
+          document.getElementById(tabName)?.classList.add("active");
+
         });
       });
 

@@ -4,186 +4,215 @@
 <meta charset="UTF-8">
 <title>Portfolio Dashboard</title>
 
-<!-- FONTS -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
-
-<!-- CSS -->
-<link rel="stylesheet" href="style.css?v=14">
+<link rel="stylesheet" href="style.css?v=15">
 </head>
 
 <body>
 
-  <!-- NAVBAR -->
-  <div id="navbar"></div>
+<!-- ✅ NAVBAR -->
+<div id="navbar"></div>
 
-  <!-- PAGE WRAPPER -->
-  <div class="page">
+<div class="page">
 
-    <header>My Dashboard</header>
+<header>My Dashboard</header>
 
-    <!-- MAIN DASHBOARD TAB -->
-    <div id="home" class="tab-content active">
+<h2>BREAKOUT STOCKS</h2>
 
-      <h2>BREAKOUT STOCKS</h2>
+<div class="info-text">
+  <p>This is a sample portfolio created to test the effectiveness of different trading strategies.</p>
+  <p>It is not intended as a buy recommendation, as many of the stocks featured are highly volatile and can experience significant daily gains and losses.</p>
+  <p>The purpose of this site is to identify stocks that are trending and evaluate their potential as buy opportunities.</p>
+</div>
 
-      <div class="info-text">
-        <p>This is a sample portfolio created to test trading strategies.</p>
-        <p>Highly volatile stocks — not financial advice.</p>
-      </div>
+<header>$100,000 March 2026</header>
 
-      <header>$100,000 March 2026</header>
+<!-- TABLE -->
+<div class="container">
+  <table id="stocks">
+    <thead><tr id="headers"></tr></thead>
+    <tbody></tbody>
+  </table>
+</div>
 
-      <!-- TABLE -->
-      <div class="container">
-        <table id="stocks">
-          <thead><tr id="headers"></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
+<!-- TOTAL -->
+<div class="total-bar">
+  <div class="total-label">Total Portfolio Value</div>
+  <div id="totalValue">$0</div>
+</div>
 
-      <!-- TOTAL -->
-      <div class="total-bar">
-        <div class="total-label">Total Portfolio Value</div>
-        <div id="totalValue">$0</div>
-      </div>
+<!-- CHARTS (UNCHANGED STRUCTURE) -->
+<div class="charts">
 
-      <!-- CHARTS -->
-      <div class="charts">
-
-        <div class="chart-box">
-          <div class="chart-title">Change (%)</div>
-          <canvas id="changeChart"></canvas>
-        </div>
-
-        <div class="chart-box">
-          <div class="chart-title">Holdings ($)</div>
-          <canvas id="holdingChart"></canvas>
-        </div>
-
-        <div class="chart-box">
-          <div class="chart-title">Portfolio Allocation</div>
-          <canvas id="pieChart"></canvas>
-        </div>
-
-      </div>
-
-      <!-- PERFORMANCE -->
-      <div class="performance-row">
-        <div class="chart-box performance-box">
-          <div class="chart-title">Portfolio Performance</div>
-          <canvas id="performanceChart"></canvas>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- OTHER TABS -->
-    <div id="trend" class="tab-content"></div>
-    <div id="breakouts" class="tab-content"></div>
-    <div id="etf-tech" class="tab-content"></div>
-    <div id="etf-energy" class="tab-content"></div>
-    <div id="etf-global" class="tab-content"></div>
-    <div id="darvis" class="tab-content"></div>
-    <div id="contact" class="tab-content"></div>
-
-    <!-- DISCLAIMER -->
-    <div class="disclaimer">
-      <p>This is a simulated portfolio for testing strategies only.</p>
-      <p>Not financial advice.</p>
-    </div>
-
+  <div class="chart-box">
+    <div class="chart-title">Change (%)</div>
+    <canvas id="changeChart"></canvas>
   </div>
 
-  <!-- CHART.JS -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <div class="chart-box">
+    <div class="chart-title">Holdings ($)</div>
+    <canvas id="holdingChart"></canvas>
+  </div>
 
-  <!-- NAV + TAB LOGIC -->
-  <script src="js/app.js"></script>
+  <div class="chart-box">
+    <div class="chart-title">Portfolio Allocation</div>
+    <canvas id="pieChart"></canvas>
+  </div>
 
-  <!-- DATA + CHART LOGIC -->
-  <script>
-  const sheetURL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
+</div>
 
-  let changeChart, holdingChart, pieChart, performanceChart;
+<!-- PERFORMANCE -->
+<div class="performance-row">
+  <div class="chart-box performance-box">
+    <div class="chart-title">Portfolio Performance</div>
+    <canvas id="performanceChart"></canvas>
+  </div>
+</div>
 
-  function buildCharts(data) {
-    const labels = data.map(r => r["Ticker"]);
-    const change = data.map(r => parseFloat(r["Change %"]) || 0);
-    const totals = data.map(r => parseFloat(r["TOTAL $"]) || 0);
+<!-- DISCLAIMER (ORIGINAL KEPT) -->
+<div class="disclaimer">
+  <p>
+    The portfolio presented is a market simulation designed to test and evaluate different trading strategies. 
+    No real capital has been invested, and all totals are indicative only.
+  </p>
+  <p>
+    And finally — don’t blindly trust a website run by a graphic designer.
+  </p>
+</div>
 
-    [changeChart, holdingChart, pieChart].forEach(c => c && c.destroy());
+</div>
 
-    changeChart = new Chart(document.getElementById("changeChart"), {
-      type: "bar",
-      data: { labels, datasets: [{ data: change, backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444") }] },
-      options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
+<!-- LIB -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- NAV LOGIC -->
+<script src="js/app.js"></script>
+
+<!-- DATA + CHARTS -->
+<script>
+const sheetURL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
+
+let changeChart, holdingChart, pieChart, performanceChart;
+
+/* ===== MAIN CHARTS ===== */
+function buildCharts(data) {
+  const labels = data.map(r => r["Ticker"]);
+  const change = data.map(r => parseFloat(r["Change %"]) || 0);
+  const totals = data.map(r => parseFloat(r["TOTAL $"]) || 0);
+
+  [changeChart, holdingChart, pieChart].forEach(c => c && c.destroy());
+
+  changeChart = new Chart(document.getElementById("changeChart"), {
+    type: "bar",
+    data: { labels, datasets: [{ data: change, backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444") }] },
+    options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
+  });
+
+  holdingChart = new Chart(document.getElementById("holdingChart"), {
+    type: "bar",
+    data: { labels, datasets: [{ data: totals, backgroundColor: "#3b82f6" }] },
+    options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
+  });
+
+  pieChart = new Chart(document.getElementById("pieChart"), {
+    type: "doughnut",
+    data: { labels, datasets: [{ data: totals }] },
+    options: { maintainAspectRatio:false, cutout:"70%", plugins:{ legend:{ display:false } } }
+  });
+}
+
+/* ===== PERFORMANCE CHART (RESTORED) ===== */
+function handleHistory(data) {
+  const dates = data.map(r => {
+    const d = new Date(r["Date"]);
+    return d.toLocaleDateString("en-AU", { day:"numeric", month:"short" });
+  });
+
+  const totals = data.map(r => parseFloat(r["Total"]) || 0);
+
+  if (performanceChart) performanceChart.destroy();
+
+  performanceChart = new Chart(document.getElementById("performanceChart"), {
+    type: "line",
+    data: {
+      labels: dates,
+      datasets: [{
+        data: totals,
+        borderColor: "#3b82f6",
+        borderWidth: 2,
+        tension: 0.35,
+        fill: true,
+        pointRadius: 0
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+/* ===== TABLE ===== */
+function handleData(data) {
+  const headersRow = document.getElementById("headers");
+  const tbody = document.querySelector("#stocks tbody");
+  const totalDisplay = document.getElementById("totalValue");
+
+  headersRow.innerHTML = "";
+  tbody.innerHTML = "";
+
+  Object.keys(data[0]).forEach(key=>{
+    const th=document.createElement("th");
+    th.textContent=key;
+    headersRow.appendChild(th);
+  });
+
+  let total=0;
+
+  data.forEach(row=>{
+    const tr=document.createElement("tr");
+
+    Object.entries(row).forEach(([k,v])=>{
+      const td=document.createElement("td");
+      const num=parseFloat(v);
+
+      td.textContent = (!isNaN(num) && k.toLowerCase().includes("total"))
+        ? "$"+num.toFixed(2)
+        : v;
+
+      if(k.toLowerCase().includes("change") && !isNaN(num)){
+        td.classList.add(num>=0?"positive":"negative");
+      }
+
+      if(k.toLowerCase().includes("total") && !isNaN(num)) total+=num;
+
+      tr.appendChild(td);
     });
 
-    holdingChart = new Chart(document.getElementById("holdingChart"), {
-      type: "bar",
-      data: { labels, datasets: [{ data: totals, backgroundColor: "#3b82f6" }] },
-      options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
-    });
+    tbody.appendChild(tr);
+  });
 
-    pieChart = new Chart(document.getElementById("pieChart"), {
-      type: "doughnut",
-      data: { labels, datasets: [{ data: totals }] },
-      options: { maintainAspectRatio:false, cutout:"70%", plugins:{ legend:{ display:false } } }
-    });
-  }
+  totalDisplay.textContent="$"+total.toLocaleString();
+  buildCharts(data);
+}
 
-  function handleData(data) {
-    const headersRow = document.getElementById("headers");
-    const tbody = document.querySelector("#stocks tbody");
-    const totalDisplay = document.getElementById("totalValue");
+/* ===== LOADERS ===== */
+function loadData(){
+  const s=document.createElement("script");
+  s.src=sheetURL+"?callback=handleData";
+  document.body.appendChild(s);
+}
 
-    headersRow.innerHTML = "";
-    tbody.innerHTML = "";
+function loadHistory(){
+  const s=document.createElement("script");
+  s.src=sheetURL+"?sheet=History&callback=handleHistory";
+  document.body.appendChild(s);
+}
 
-    Object.keys(data[0]).forEach(key=>{
-      const th=document.createElement("th");
-      th.textContent=key;
-      headersRow.appendChild(th);
-    });
-
-    let total=0;
-
-    data.forEach(row=>{
-      const tr=document.createElement("tr");
-
-      Object.entries(row).forEach(([k,v])=>{
-        const td=document.createElement("td");
-        const num=parseFloat(v);
-
-        td.textContent = (!isNaN(num) && k.toLowerCase().includes("total"))
-          ? "$"+num.toFixed(2)
-          : v;
-
-        if(k.toLowerCase().includes("change") && !isNaN(num)){
-          td.classList.add(num>=0?"positive":"negative");
-        }
-
-        if(k.toLowerCase().includes("total") && !isNaN(num)) total+=num;
-
-        tr.appendChild(td);
-      });
-
-      tbody.appendChild(tr);
-    });
-
-    totalDisplay.textContent="$"+total.toLocaleString();
-    buildCharts(data);
-  }
-
-  function loadData(){
-    const s=document.createElement("script");
-    s.src=sheetURL+"?callback=handleData";
-    document.body.appendChild(s);
-  }
-
-  loadData();
-  setInterval(loadData,10000);
-  </script>
+loadData();
+loadHistory();
+setInterval(loadData,10000);
+</script>
 
 </body>
 </html>

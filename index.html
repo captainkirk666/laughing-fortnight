@@ -8,369 +8,101 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
 
 <!-- CSS -->
-<link rel="stylesheet" href="style.css?v=12">
+<link rel="stylesheet" href="style.css?v=13">
 </head>
 
 <body>
 
-<body>
-
+  <!-- ✅ NAVBAR (LOADED FROM COMPONENT) -->
   <div id="navbar"></div>
 
+  <!-- ✅ PAGE WRAPPER (FIXES YOUR WIDTH ISSUE) -->
   <div class="page">
 
     <header>My Dashboard</header>
 
+    <!-- ========================= -->
+    <!-- TAB CONTENT (MAIN DASHBOARD) -->
+    <!-- ========================= -->
     <div id="home" class="tab-content active">
-      <!-- your tables, charts, etc -->
-    </div>
 
-    <div id="trend" class="tab-content">
-      <!-- content -->
-    </div>
+      <h2>BREAKOUT STOCKS</h2>
 
-    <div id="breakouts" class="tab-content">
-      <!-- content -->
-    </div>
+      <div class="info-text">
+        <p>This is a sample portfolio created to test the effectiveness of different trading strategies.</p>
+        <p>It is not intended as a buy recommendation, as many of the stocks featured are highly volatile and can experience significant daily gains and losses.</p>
+        <p>The purpose of this site is to identify stocks that are trending and evaluate their potential as buy opportunities.</p>
+      </div>
 
-    <div id="etf-tech" class="tab-content"></div>
-    <div id="etf-energy" class="tab-content"></div>
-    <div id="etf-global" class="tab-content"></div>
+      <header>$100,000 March 2026</header>
 
-    <div id="darvis" class="tab-content"></div>
-    <div id="contact" class="tab-content"></div>
+      <div class="container">
+        <table id="stocks">
+          <thead><tr id="headers"></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
 
-  </div>
+      <div class="total-bar">
+        <div class="total-label">Total Portfolio Value</div>
+        <div id="totalValue">$0</div>
+      </div>
 
-  <script src="js/app.js"></script>
-</body>
+      <!-- MAIN CHARTS -->
+      <div class="charts">
+        <div class="chart-box">
+          <div class="chart-title">Change (%)</div>
+          <canvas id="changeChart"></canvas>
+        </div>
 
-      <!-- DROPDOWN -->
-      <div class="dropdown">
-        <button class="nav-tab dropdown-toggle">ETFs ▾</button>
-        <div class="dropdown-menu">
-          <button data-tab="etf-tech">Tech ETFs</button>
-          <button data-tab="etf-energy">Energy ETFs</button>
-          <button data-tab="etf-global">Global ETFs</button>
+        <div class="chart-box">
+          <div class="chart-title">Holdings ($)</div>
+          <canvas id="holdingChart"></canvas>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-title">Portfolio Allocation</div>
+          <canvas id="pieChart"></canvas>
         </div>
       </div>
 
-      <button class="nav-tab" data-tab="darvis">Darvis</button>
-
-      <button class="nav-tab" data-tab="contact">Contact</button>
+      <!-- PERFORMANCE -->
+      <div class="performance-row">
+        <div class="chart-box performance-box">
+          <div class="chart-title">Portfolio Performance</div>
+          <canvas id="performanceChart"></canvas>
+        </div>
+      </div>
 
     </div>
 
-  </div>
-</nav>
-    
-    <h1 class="logo">My Dashboard</h1>
+    <!-- ========================= -->
+    <!-- OTHER TAB SECTIONS -->
+    <!-- ========================= -->
+    <div id="trend" class="tab-content"></div>
+    <div id="breakouts" class="tab-content"></div>
+    <div id="etf-tech" class="tab-content"></div>
+    <div id="etf-energy" class="tab-content"></div>
+    <div id="etf-global" class="tab-content"></div>
+    <div id="darvis" class="tab-content"></div>
+    <div id="contact" class="tab-content"></div>
 
-    <div class="nav-links">
-      <button class="nav-tab active" data-tab="stocks">Stocks</button>
-      <button class="nav-tab" data-tab="crypto">Crypto</button>
+    <!-- DISCLAIMER -->
+    <div class="disclaimer">
+      <p>
+        The portfolio presented is a market simulation designed to test and evaluate different trading strategies. 
+        No real capital has been invested, and all totals are indicative only.
+      </p>
+      <p>
+        And finally — don’t blindly trust a website run by a graphic designer.
+      </p>
     </div>
 
   </div>
-</nav>
 
-<h2>BREAKOUT STOCKS</h2>
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/app.js"></script>
 
-<div class="info-text">
-  <p>This is a sample portfolio created to test the effectiveness of different trading strategies.</p>
-  <p>It is not intended as a buy recommendation, as many of the stocks featured are highly volatile and can experience significant daily gains and losses.</p>
-  <p>The purpose of this site is to identify stocks that are trending and evaluate their potential as buy opportunities.</p>
-</div>
-
-<header>$100,000 March 2026</header>
-
-<div class="container">
-  <table id="stocks">
-    <thead><tr id="headers"></tr></thead>
-    <tbody></tbody>
-  </table>
-</div>
-
-<div class="total-bar">
-  <div class="total-label">Total Portfolio Value</div>
-  <div id="totalValue">$0</div>
-</div>
-
-<!-- MAIN CHARTS -->
-<div class="charts">
-
-  <div class="chart-box">
-    <div class="chart-title">Change (%)</div>
-    <canvas id="changeChart"></canvas>
-  </div>
-
-  <div class="chart-box">
-    <div class="chart-title">Holdings ($)</div>
-    <canvas id="holdingChart"></canvas>
-  </div>
-
-  <div class="chart-box">
-    <div class="chart-title">Portfolio Allocation</div>
-    <canvas id="pieChart"></canvas>
-  </div>
-
-</div>
-<!-- PERFORMANCE CHART -->
-<div class="performance-row">
-  <div class="chart-box performance-box">
-    <div class="chart-title">Portfolio Performance</div>
-    <canvas id="performanceChart"></canvas>
-  </div>
-</div>
-
-<!-- DISCLAIMER -->
-<div class="disclaimer">
-  <p>
-    The portfolio presented is a market simulation designed to test and evaluate different trading strategies. 
-    No real capital has been invested, and all totals are indicative only, serving as a guide to measure the effectiveness of each approach.
-    Strategies are explored using market analysis tools such as 
-    <a href="https://www.tradingview.com" target="_blank">TradingView</a>. 
-    This site is intended for development and educational purposes only and should not be considered financial or investment advice.
-    Always conduct your own research and seek professional advice before making financial decisions.
-  </p>
-  <p>
-    And finally — don’t blindly trust a website run by a graphic designer.
-  </p>
-</div>
-
-</div> <!-- END .page -->
-
-<!-- CHART.JS -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-const sheetURL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
-
-let changeChart, holdingChart, pieChart, performanceChart;
-
-/* ===== DONUT CENTER TEXT ===== */
-const centerTextPlugin = {
-  id: 'centerText',
-  beforeDraw(chart) {
-    const { width, height, ctx } = chart;
-    const total = chart.config.data.datasets[0].data.reduce((a,b)=>a+b,0);
-
-    ctx.save();
-    ctx.font = "bold 16px Inter";
-    ctx.fillStyle = "#e2e8f0";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("$" + total.toLocaleString(), width/2, height/2);
-  }
-};
-
-/* ===== MAIN CHARTS ===== */
-function buildCharts(data) {
-  const labels = data.map(r => r["Ticker"]);
-  const change = data.map(r => parseFloat(r["Change %"]) || 0);
-  const totals = data.map(r => parseFloat(r["TOTAL $"]) || 0);
-
-  [changeChart, holdingChart, pieChart].forEach(c => c && c.destroy());
-
-  changeChart = new Chart(document.getElementById("changeChart"), {
-    type: "bar",
-    data: {
-      labels,
-      datasets: [{
-        data: change,
-        backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444")
-      }]
-    },
-    options: {   maintainAspectRatio: false,   plugins: {     legend: { display: false }   } }
-  });
-
-  holdingChart = new Chart(document.getElementById("holdingChart"), {
-    type: "bar",
-    data: {
-      labels,
-      datasets: [{
-        data: totals,
-        backgroundColor: "#3b82f6"
-      }]
-    },
-    options: {   maintainAspectRatio: false,   plugins: {     legend: { display: false }   } }
-  });
-
-  pieChart = new Chart(document.getElementById("pieChart"), {
-    type: "doughnut",
-    data: {
-      labels,
-      datasets: [{
-        data: totals,
-        backgroundColor: [
-          "#3b82f6","#ef4444","#f59e0b","#10b981",
-          "#8b5cf6","#14b8a6","#eab308","#f97316",
-          "#a3a3a3","#ec4899"
-        ]
-      }]
-    },
-    options: {
-      maintainAspectRatio:false,
-      cutout:"70%",
-      plugins:{ legend:{ display:false } }
-    },
-    plugins:[centerTextPlugin]
-  });
-}
-
-/* ===== PERFORMANCE CHART ===== */
-function handleHistory(data) {
-  const dates = data.map(r => {
-    const d = new Date(r["Date"]);
-    return d.toLocaleDateString("en-AU", { day:"numeric", month:"short" });
-  });
-
-  const totals = data.map(r => parseFloat(r["Total"]) || 0);
-
-  if (performanceChart) performanceChart.destroy();
-
-  performanceChart = new Chart(document.getElementById("performanceChart"), {
-    type: "line",
-    data: {
-      labels: dates,
-      datasets: [{
-  data: totals,
-  borderColor: "#3b82f6",
-  borderWidth: 2,
-  tension: 0.35,
-
-  // 🌈 GRADIENT BACK
-  backgroundColor: (ctx) => {
-    const chart = ctx.chart;
-    const { ctx: c, chartArea } = chart;
-
-    if (!chartArea) return null;
-
-    const gradient = c.createLinearGradient(
-      0, chartArea.top,
-      0, chartArea.bottom
-    );
-
-    gradient.addColorStop(0, "rgba(59,130,246,0.25)");
-    gradient.addColorStop(1, "rgba(59,130,246,0)");
-
-    return gradient;
-  },
-
-  fill: true,
-  pointRadius: 0,
-  pointHoverRadius: 5
-}]
-    },
-    options: {
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } }
-    }
-  });
-}
-
-/* ===== TABLE ===== */
-function handleData(data) {
-  const headersRow = document.getElementById("headers");
-  const tbody = document.querySelector("#stocks tbody");
-  const totalDisplay = document.getElementById("totalValue");
-
-  headersRow.innerHTML = "";
-  tbody.innerHTML = "";
-
-  Object.keys(data[0]).forEach(key=>{
-    const th=document.createElement("th");
-    th.textContent=key;
-    headersRow.appendChild(th);
-  });
-
-  let total=0;
-
-  data.forEach(row=>{
-    const tr=document.createElement("tr");
-
-    Object.entries(row).forEach(([k,v])=>{
-      const td=document.createElement("td");
-      const num=parseFloat(v);
-
-      td.textContent = (!isNaN(num) && k.toLowerCase().includes("total"))
-        ? "$"+num.toFixed(2)
-        : v;
-
-      if(k.toLowerCase().includes("change") && !isNaN(num)){
-        td.classList.add(num>=0?"positive":"negative");
-      }
-
-      if(k.toLowerCase().includes("total") && !isNaN(num)) total+=num;
-
-      tr.appendChild(td);
-    });
-
-    tbody.appendChild(tr);
-  });
-
-  totalDisplay.textContent="$"+total.toLocaleString();
-  buildCharts(data);
-}
-
-/* ===== LOADERS ===== */
-function loadData(){
-  const s=document.createElement("script");
-  s.src=sheetURL+"?callback=handleData";
-  document.body.appendChild(s);
-}
-
-function loadHistory(){
-  const s=document.createElement("script");
-  s.src=sheetURL+"?sheet=History&callback=handleHistory";
-  document.body.appendChild(s);
-}
-
-loadData();
-loadHistory();
-setInterval(loadData,10000);
-</script>
-<body>
-
-  <!-- NAVBAR -->
-  <div id="navbar"></div>
-
-  <!-- TABS -->
-  <div class="tabs">
-    <button class="tab active" data-tab="stocks">Stocks</button>
-    <button class="tab" data-tab="crypto">Crypto</button>
-  </div>
-
-  <!-- CONTENT -->
-  <div id="stocks" class="tab-content active">
-    <!-- stocks table -->
-  </div>
-
-  <div id="crypto" class="tab-content">
-    <!-- crypto table -->
-  </div>
-
-
-  <!-- ✅ STEP 3 GOES HERE -->
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-
-    document.querySelectorAll(".tab").forEach(button => {
-      button.addEventListener("click", () => {
-        
-        document.querySelectorAll(".tab").forEach(btn => btn.classList.remove("active"));
-        document.querySelectorAll(".tab-content").forEach(content => content.classList.remove("active"));
-
-        button.classList.add("active");
-
-        const tabName = button.getAttribute("data-tab");
-        document.getElementById(tabName).classList.add("active");
-      });
-    });
-
-  });
-  </script>
-<script src="js/app.js"></script>
-</body>
 </body>
 </html>

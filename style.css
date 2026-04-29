@@ -286,7 +286,7 @@ tr:hover {
 .positive { color: #22c55e; }
 .negative { color: #ef4444; }
 
-/* ===== TOTAL CARD ===== */
+
 /* ===== TOTAL GRID (NEW LAYOUT) ===== */
 .total-grid {
   display: grid;
@@ -312,6 +312,7 @@ tr:hover {
 /* colours */
 .positive { color: #22c55e; }
 .negative { color: #ef4444; }
+
 /* ===== CHARTS GRID ===== */
 .charts {
   display: grid;
@@ -319,12 +320,14 @@ tr:hover {
   gap: var(--gap);
 }
 /* ===== SIDE % TYPOGRAPHY ===== */
+
 #dailyChange,
 #totalOverall {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Source Serif 4', serif;
   font-size: 20px;
   font-weight: 600;
 }
+
 /* ===== PERFORMANCE ROW (FULL WIDTH) ===== */
 .performance-row {
   display: grid;

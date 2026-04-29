@@ -137,7 +137,8 @@ let percentChange = 0;
 if (first > 0) {
   percentChange = ((last - first) / first) * 100;
 }
-  
+
+
   if (performanceChart) performanceChart.destroy();
 
   performanceChart = new Chart(document.getElementById("performanceChart"), {

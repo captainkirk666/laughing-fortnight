@@ -373,7 +373,7 @@ tr:hover {
 /* ===== CANVAS FIX (PREVENT GROWTH BUG) ===== */
 .chart-box canvas {
   width: 100% !important;
-  height: auto !important;
+  height: 240px !important;
 }
 
 /* ===== PERFORMANCE CHART (SPECIAL CASE) ===== */

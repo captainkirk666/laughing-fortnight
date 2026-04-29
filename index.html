@@ -149,19 +149,23 @@ function handleHistory(data) {
   }
 
   // ===== DISPLAY =====
-  const changeEl = document.getElementById("totalChange");
+  // ===== DAILY % =====
+const dailyEl = document.getElementById("dailyChange");
 
-  if (changeEl) {
-    const dailySign = dailyChange >= 0 ? "+" : "";
-    const overallSign = overallChange >= 0 ? "+" : "";
+if (dailyEl) {
+  const sign = dailyChange >= 0 ? "+" : "";
+  dailyEl.textContent = `${sign}${dailyChange.toFixed(2)}%`;
+  dailyEl.className = dailyChange >= 0 ? "positive" : "negative";
+}
 
-    changeEl.innerHTML = `
-      Daily: ${dailySign}${dailyChange.toFixed(2)}%<br>
-      Total: ${overallSign}${overallChange.toFixed(2)}%
-    `;
+// ===== TOTAL % =====
+const totalEl = document.getElementById("totalOverall");
 
-    changeEl.className = overallChange >= 0 ? "positive" : "negative";
-  }
+if (totalEl) {
+  const sign = overallChange >= 0 ? "+" : "";
+  totalEl.textContent = `${sign}${overallChange.toFixed(2)}%`;
+  totalEl.className = overallChange >= 0 ? "positive" : "negative";
+}
 
   // ===== CHART =====
   if (performanceChart) performanceChart.destroy();

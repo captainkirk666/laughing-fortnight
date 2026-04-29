@@ -308,12 +308,6 @@ tr:hover {
   letter-spacing: 2px;
 }
 
-/* side values */
-#dailyChange,
-#totalOverall {
-  font-size: 20px;
-  font-weight: 500;
-}
 
 /* colours */
 .positive { color: #22c55e; }
@@ -324,7 +318,13 @@ tr:hover {
   grid-template-columns: repeat(3, 1fr);
   gap: var(--gap);
 }
-
+/* ===== SIDE % TYPOGRAPHY ===== */
+#dailyChange,
+#totalOverall {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+}
 /* ===== PERFORMANCE ROW (FULL WIDTH) ===== */
 .performance-row {
   display: grid;

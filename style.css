@@ -378,7 +378,9 @@ tr:hover {
 }
 
 .performance-box canvas {
-  height: 360px !important;
+  {
+  flex: none;
+  height: 320px !important;
 }
 
 /* ===== PERFORMANCE ROW (FULL WIDTH) ===== */

@@ -333,6 +333,8 @@ tr:hover {
 .performance-row {
   display: grid;
   grid-template-columns: 1fr;
+  margin-top: 20px;
+}
 }
 
 /* ===== CHART CARDS (FIXED) ===== */

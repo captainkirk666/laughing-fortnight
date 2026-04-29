@@ -375,7 +375,8 @@ tr:hover {
 }
 
 /* ===== PERFORMANCE CHART ===== */
-.performance-box {
+.performance-box .chart-title {
+  margin-bottom: 14px;
   height: auto;
   padding: 20px;
 }

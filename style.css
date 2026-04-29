@@ -303,7 +303,7 @@ tr:hover {
 
 .total-item.center #totalValue {
   font-family: 'Source Serif 4', serif;
-  font-size: 56px;
+  font-size: 40px;
   font-weight: 600;
   letter-spacing: 2px;
 }
@@ -324,7 +324,7 @@ tr:hover {
 #dailyChange,
 #totalOverall {
   font-family: 'Source Serif 4', serif;
-  font-size: 20px;
+  font-size: 40px;
   font-weight: 600;
 }
 
@@ -366,10 +366,10 @@ tr:hover {
 
   #dailyChange,
 #totalOverall {
-  font-family: 'Inter', sans-serif;
-  font-size: 20px;
+   font-family: 'Source Serif 4', serif;
+  font-size: 18px;
   font-weight: 600;
-}
+  color: var(--text-muted);
 
   text-align: center;
   width: 100%;

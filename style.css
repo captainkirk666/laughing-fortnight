@@ -310,6 +310,20 @@ tr:hover {
   letter-spacing: 2px;
 }
 
+#totalChange {
+  font-size: 18px;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.positive {
+  color: #22c55e;
+}
+
+.negative {
+  color: #ef4444;
+}
+
 /* ===== CHARTS GRID ===== */
 .charts {
   display: grid;

@@ -326,6 +326,7 @@ tr:hover {
   font-family: 'Source Serif 4', serif;
   font-size: 40px;
   font-weight: 600;
+    margin-bottom: 8px;
 }
 
 /* ===== PERFORMANCE ROW (FULL WIDTH) ===== */

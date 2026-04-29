@@ -129,29 +129,46 @@ function handleHistory(data) {
 
   const totals = data.map(r => parseFloat(r["Total"]) || 0);
 
-  // ✅ CALCULATE % CHANGE
-  const first = totals[0];
-  const last = totals[totals.length - 1];
+  // ===== DAILY % CHANGE =====
+  let dailyChange = 0;
 
-  let percentChange = 0;
+  if (totals.length > 1) {
+    const prev = totals[totals.length - 2];
+    const last = totals[totals.length - 1];
 
-  if (first > 0) {
-    percentChange = ((last - first) / first) * 100;
+    if (prev > 0) {
+      dailyChange = ((last - prev) / prev) * 100;
+    }
   }
 
-  // ✅ DISPLAY % CHANGE
+  // ===== OVERALL % FROM 100,000 =====
+  const startingValue = 100000;
+  const latestValue = totals[totals.length - 1];
+
+  let overallChange = 0;
+
+  if (startingValue > 0) {
+    overallChange = ((latestValue - startingValue) / startingValue) * 100;
+  }
+
+  // ===== DISPLAY =====
   const changeEl = document.getElementById("totalChange");
 
   if (changeEl) {
-    const sign = percentChange >= 0 ? "+" : "";
-    changeEl.textContent = `${sign}${percentChange.toFixed(2)}%`;
-    changeEl.className = percentChange >= 0 ? "positive" : "negative";
+    const dailySign = dailyChange >= 0 ? "+" : "";
+    const overallSign = overallChange >= 0 ? "+" : "";
+
+    changeEl.innerHTML = `
+      Daily: ${dailySign}${dailyChange.toFixed(2)}%<br>
+      Total: ${overallSign}${overallChange.toFixed(2)}%
+    `;
+
+    changeEl.className = overallChange >= 0 ? "positive" : "negative";
   }
 
-  // ✅ DESTROY OLD CHART
+  // ===== CHART =====
   if (performanceChart) performanceChart.destroy();
 
-  // ✅ BUILD CHART
   performanceChart = new Chart(document.getElementById("performanceChart"), {
     type: "line",
     data: {
@@ -162,7 +179,6 @@ function handleHistory(data) {
         borderWidth: 2,
         tension: 0.35,
 
-        // 🌈 GRADIENT
         backgroundColor: (ctx) => {
           const chart = ctx.chart;
           const { ctx: c, chartArea } = chart;
@@ -181,8 +197,7 @@ function handleHistory(data) {
         },
 
         fill: true,
-        pointRadius: 0,
-        pointHoverRadius: 5
+        pointRadius: 0
       }]
     },
     options: {

@@ -121,26 +121,37 @@ function buildCharts(data) {
 }
 
 /* ===== PERFORMANCE CHART (RESTORED) ===== */
-/* ===== PERFORMANCE CHART ===== */
 function handleHistory(data) {
   const dates = data.map(r => {
     const d = new Date(r["Date"]);
-    return d.toLocaleDateString("en-AU", { day:"numeric", month:"short" });
+    return d.toLocaleDateString("en-AU", { day: "numeric", month: "short" });
   });
 
   const totals = data.map(r => parseFloat(r["Total"]) || 0);
-const first = totals[0];
-const last = totals[totals.length - 1];
 
-let percentChange = 0;
+  // ✅ CALCULATE % CHANGE
+  const first = totals[0];
+  const last = totals[totals.length - 1];
 
-if (first > 0) {
-  percentChange = ((last - first) / first) * 100;
-}
+  let percentChange = 0;
 
+  if (first > 0) {
+    percentChange = ((last - first) / first) * 100;
+  }
 
+  // ✅ DISPLAY % CHANGE
+  const changeEl = document.getElementById("totalChange");
+
+  if (changeEl) {
+    const sign = percentChange >= 0 ? "+" : "";
+    changeEl.textContent = `${sign}${percentChange.toFixed(2)}%`;
+    changeEl.className = percentChange >= 0 ? "positive" : "negative";
+  }
+
+  // ✅ DESTROY OLD CHART
   if (performanceChart) performanceChart.destroy();
 
+  // ✅ BUILD CHART
   performanceChart = new Chart(document.getElementById("performanceChart"), {
     type: "line",
     data: {
@@ -150,14 +161,6 @@ if (first > 0) {
         borderColor: "#3b82f6",
         borderWidth: 2,
         tension: 0.35,
-
-        const changeEl = document.getElementById("totalChange");
-
-if (changeEl) {
-  const sign = percentChange >= 0 ? "+" : "";
-  changeEl.textContent = `${sign}${percentChange.toFixed(2)}%`;
-  changeEl.className = percentChange >= 0 ? "positive" : "negative";
-}
 
         // 🌈 GRADIENT
         backgroundColor: (ctx) => {

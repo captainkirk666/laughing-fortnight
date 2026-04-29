@@ -329,13 +329,6 @@ tr:hover {
     margin-bottom: 8px;
 }
 
-/* ===== PERFORMANCE ROW (FULL WIDTH) ===== */
-.performance-row {
-  display: grid;
-  grid-template-columns: 1fr;
-  margin-top: 20px;
-}
-}
 
 /* ===== CHART CARDS (FIXED) ===== */
 .chart-box {
@@ -371,14 +364,22 @@ tr:hover {
   width: 100% !important;
 }
 
-/* ===== PERFORMANCE CHART (SPECIAL CASE) ===== */
+/* ===== PERFORMANCE ROW ===== */
+.performance-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-top: 20px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+/* ===== PERFORMANCE CHART ===== */
 .performance-box {
-  height: auto;   /* 👈 allow full expansion */
+  height: auto;
   padding: 16px;
 }
 
 .performance-box canvas {
-  {
   flex: none;
   height: 320px !important;
 }

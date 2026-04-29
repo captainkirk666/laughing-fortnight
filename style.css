@@ -366,6 +366,7 @@ tr:hover {
 
 /* ===== PERFORMANCE ROW ===== */
 .performance-row {
+   margin-top: 24px;
   display: grid;
   grid-template-columns: 1fr;
   margin-top: 20px;
@@ -376,7 +377,7 @@ tr:hover {
 /* ===== PERFORMANCE CHART ===== */
 .performance-box {
   height: auto;
-  padding: 16px;
+  padding: 20px;
 }
 
 .performance-box canvas {

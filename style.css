@@ -374,7 +374,7 @@ tr:hover {
   text-align: center;
   width: 100%;
 
-  margin-bottom: 8px;   /* 👈 tighter spacing */
+  margin-bottom: 22px;   /* 👈 tighter spacing */
 }
 
 /* ===== CANVAS FIX (PREVENT GROWTH BUG) ===== */

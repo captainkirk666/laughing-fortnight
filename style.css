@@ -194,9 +194,14 @@ header {
 
 h2 {
   font-family: 'Roboto', sans-serif;
-    background: var(--bg-panel);
-    padding: 0px 0 14px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  background: var(--bg-panel);
+  padding: 18px 0 14px;
+  text-align: center;
+  font-size: 32px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+
   font-size: 40px;
   font-weight: 600;
   letter-spacing: 13px;
@@ -204,6 +209,8 @@ h2 {
   text-align: center;
   line-height: 1.6;
 }
+
+
 
 /* ===== INFO TEXT ===== */
 .info-text {

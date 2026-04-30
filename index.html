@@ -115,66 +115,68 @@ function buildCharts(data) {
 
   [changeChart, holdingChart, pieChart].forEach(c => c && c.destroy());
 
-
+  // ===== CHANGE CHART =====
   changeChart = new Chart(document.getElementById("changeChart"), {
     type: "bar",
-    data: { labels, datasets: [{ data: change, backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444") }] },
-  options: {
-  maintainAspectRatio: false,
-
-  layout: {
-    padding: 10
-  },
-
-  plugins: {
-    legend: { display: false }
-  },
-
-  scales: {
-    x: {
-      ticks: { font: { size: 10 } }
+    data: {
+      labels,
+      datasets: [{
+        data: change,
+        backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444")
+      }]
     },
-    y: {
-      ticks: { font: { size: 10 } },
-      grid: { color: "rgba(148,163,184,0.1)" }
+    options: {
+      maintainAspectRatio: false,
+      layout: { padding: 10 },
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { font: { size: 10 } } },
+        y: {
+          ticks: { font: { size: 10 } },
+          grid: { color: "rgba(148,163,184,0.1)" }
+        }
+      }
     }
-  }
-}
+  }); // ✅ THIS WAS MISSING
 
+  // ===== HOLDINGS CHART =====
   holdingChart = new Chart(document.getElementById("holdingChart"), {
     type: "bar",
-    data: { labels, datasets: [{ data: totals, backgroundColor: "#3b82f6" }] },
-   options: {
-  maintainAspectRatio: false,
-
-  layout: {
-    padding: 10
-  },
-
-  plugins: {
-    legend: { display: false }
-  },
-
-  scales: {
-    x: {
-      ticks: { font: { size: 10 } }
+    data: {
+      labels,
+      datasets: [{
+        data: totals,
+        backgroundColor: "#3b82f6"
+      }]
     },
-    y: {
-      ticks: { font: { size: 10 } },
-      grid: { color: "rgba(148,163,184,0.1)" }
+    options: {
+      maintainAspectRatio: false,
+      layout: { padding: 10 },
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { font: { size: 10 } } },
+        y: {
+          ticks: { font: { size: 10 } },
+          grid: { color: "rgba(148,163,184,0.1)" }
+        }
+      }
     }
-  }
-}
+  }); // ✅ THIS WAS MISSING
 
+  // ===== PIE CHART =====
   pieChart = new Chart(document.getElementById("pieChart"), {
     type: "doughnut",
-    data: { labels, datasets: [{ data: totals }] },
-     options: {
-  maintainAspectRatio: false,
-  cutout: "75%",
-  layout: { padding: 20 },
-  plugins: { legend: { display: false } }
-}
+    data: {
+      labels,
+      datasets: [{ data: totals }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      cutout: "75%",
+      layout: { padding: 20 },
+      plugins: { legend: { display: false } }
+    }
+  }); // ✅ THIS WAS MISSING
 }
 
 /* ===== PERFORMANCE CHART (RESTORED) ===== */

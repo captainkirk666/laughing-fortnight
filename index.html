@@ -119,20 +119,62 @@ function buildCharts(data) {
   changeChart = new Chart(document.getElementById("changeChart"), {
     type: "bar",
     data: { labels, datasets: [{ data: change, backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444") }] },
-    options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
-  });
+  options: {
+  maintainAspectRatio: false,
+
+  layout: {
+    padding: 10
+  },
+
+  plugins: {
+    legend: { display: false }
+  },
+
+  scales: {
+    x: {
+      ticks: { font: { size: 10 } }
+    },
+    y: {
+      ticks: { font: { size: 10 } },
+      grid: { color: "rgba(148,163,184,0.1)" }
+    }
+  }
+}
 
   holdingChart = new Chart(document.getElementById("holdingChart"), {
     type: "bar",
     data: { labels, datasets: [{ data: totals, backgroundColor: "#3b82f6" }] },
-    options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
-  });
+   options: {
+  maintainAspectRatio: false,
+
+  layout: {
+    padding: 10
+  },
+
+  plugins: {
+    legend: { display: false }
+  },
+
+  scales: {
+    x: {
+      ticks: { font: { size: 10 } }
+    },
+    y: {
+      ticks: { font: { size: 10 } },
+      grid: { color: "rgba(148,163,184,0.1)" }
+    }
+  }
+}
 
   pieChart = new Chart(document.getElementById("pieChart"), {
     type: "doughnut",
     data: { labels, datasets: [{ data: totals }] },
-    options: { maintainAspectRatio:false, cutout:"70%", plugins:{ legend:{ display:false } } }
-  });
+     options: {
+  maintainAspectRatio: false,
+  cutout: "75%",
+  layout: { padding: 20 },
+  plugins: { legend: { display: false } }
+}
 }
 
 /* ===== PERFORMANCE CHART (RESTORED) ===== */

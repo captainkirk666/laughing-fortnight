@@ -377,7 +377,7 @@ tr:hover {
 
 /* ===== PERFORMANCE BOX (inherits chart-box) ===== */
 .performance-box {
-  padding: 20px;
+  padding: 18px;
   height: auto;
 }
 

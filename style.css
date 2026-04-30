@@ -335,7 +335,8 @@ tr:hover {
   background: var(--bg-panel);
   border: 1px solid var(--border);
   border-radius: var(--radius);
- justify-content: space-between;
+  justify-content: flex-start;
+  
   display: flex;
   flex-direction: column;
 
@@ -355,7 +356,7 @@ tr:hover {
 
   text-align: center;
   width: 100%;
-  margin-bottom: 1px;
+  
 }
 
 /* ===== CANVAS FIX (PREVENT GROWTH BUG) ===== */
@@ -395,6 +396,7 @@ tr:hover {
 @media (max-width: 900px) {
   .charts {
     grid-template-columns: 1fr;
+     margin-top: 16px;
   }
 }
 /* ===== Daily CHANGE ===== */

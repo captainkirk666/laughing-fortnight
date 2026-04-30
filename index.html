@@ -131,16 +131,6 @@ function buildCharts(data) {
   pieChart = new Chart(document.getElementById("pieChart"), {
     type: "doughnut",
     data: { labels, datasets: [{ data: totals }] },
-    options: {
-  maintainAspectRatio: false,
-  cutout: "75%",   // was 70%
-  layout: {
-    padding: 20
-  },
-  plugins: {
-    legend: { display: false }
-  }
-}
     options: { maintainAspectRatio:false, cutout:"70%", plugins:{ legend:{ display:false } } }
   });
 }

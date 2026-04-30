@@ -151,9 +151,28 @@ function buildCharts(data) {
           grid: { display: false }
         },
         y: {
-          ticks: { font: { size: 9 } },
-          grid: { color: "rgba(148,163,184,0.08)" }
-        }
+  beginAtZero: true,
+
+  ticks: {
+    font: { size: 9 }
+  },
+
+  grid: {
+    color: (ctx) => {
+      if (ctx.tick.value === 0) {
+        return "#cbd5e1";   // 👈 bright zero line
+      }
+      return "rgba(148,163,184,0.08)";
+    },
+
+    lineWidth: (ctx) => {
+      if (ctx.tick.value === 0) {
+        return 2;          // 👈 thicker line
+      }
+      return 1;
+    }
+  }
+}
       }
     }
   });

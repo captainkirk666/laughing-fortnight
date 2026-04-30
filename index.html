@@ -122,22 +122,41 @@ function buildCharts(data) {
       labels,
       datasets: [{
         data: change,
-        backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444")
+        backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444"),
+        barPercentage: 0.35,
+        categoryPercentage: 0.4,
+        maxBarThickness: 14,
+        borderRadius: 6
       }]
     },
     options: {
       maintainAspectRatio: false,
-      layout: { padding: 10 },
-      plugins: { legend: { display: false } },
+
+      layout: {
+        padding: {
+          top: 20,
+          bottom: 20,
+          left: 20,
+          right: 20
+        }
+      },
+
+      plugins: {
+        legend: { display: false }
+      },
+
       scales: {
-        x: { ticks: { font: { size: 10 } } },
+        x: {
+          ticks: { font: { size: 9 } },
+          grid: { display: false }
+        },
         y: {
-          ticks: { font: { size: 10 } },
-          grid: { color: "rgba(148,163,184,0.1)" }
+          ticks: { font: { size: 9 } },
+          grid: { color: "rgba(148,163,184,0.08)" }
         }
       }
     }
-  }); // ✅ THIS WAS MISSING
+  });
 
   // ===== HOLDINGS CHART =====
   holdingChart = new Chart(document.getElementById("holdingChart"), {
@@ -146,22 +165,41 @@ function buildCharts(data) {
       labels,
       datasets: [{
         data: totals,
-        backgroundColor: "#3b82f6"
+        backgroundColor: "#3b82f6",
+        barPercentage: 0.35,
+        categoryPercentage: 0.4,
+        maxBarThickness: 14,
+        borderRadius: 6
       }]
     },
     options: {
       maintainAspectRatio: false,
-      layout: { padding: 10 },
-      plugins: { legend: { display: false } },
+
+      layout: {
+        padding: {
+          top: 20,
+          bottom: 20,
+          left: 20,
+          right: 20
+        }
+      },
+
+      plugins: {
+        legend: { display: false }
+      },
+
       scales: {
-        x: { ticks: { font: { size: 10 } } },
+        x: {
+          ticks: { font: { size: 9 } },
+          grid: { display: false }
+        },
         y: {
-          ticks: { font: { size: 10 } },
-          grid: { color: "rgba(148,163,184,0.1)" }
+          ticks: { font: { size: 9 } },
+          grid: { color: "rgba(148,163,184,0.08)" }
         }
       }
     }
-  }); // ✅ THIS WAS MISSING
+  });
 
   // ===== PIE CHART =====
   pieChart = new Chart(document.getElementById("pieChart"), {
@@ -172,11 +210,18 @@ function buildCharts(data) {
     },
     options: {
       maintainAspectRatio: false,
-      cutout: "75%",
-      layout: { padding: 20 },
-      plugins: { legend: { display: false } }
+      cutout: "82%",
+      radius: "75%",
+
+      layout: {
+        padding: 30
+      },
+
+      plugins: {
+        legend: { display: false }
+      }
     }
-  }); // ✅ THIS WAS MISSING
+  });
 }
 
 /* ===== PERFORMANCE CHART (RESTORED) ===== */

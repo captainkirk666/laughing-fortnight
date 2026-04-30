@@ -200,7 +200,7 @@ h2 {
   font-weight: 600;
   letter-spacing: 14px;
 
-  padding: 24px 0;              /* 👈 makes the box taller */
+  padding: 18px 0;              /* 👈 makes the box taller */
   line-height: 1.4;             /* 👈 FIXES squashing */
   margin-top: 0;
 

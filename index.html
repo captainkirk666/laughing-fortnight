@@ -115,6 +115,18 @@ function buildCharts(data) {
 
   [changeChart, holdingChart, pieChart].forEach(c => c && c.destroy());
 
+
+  options: {
+  maintainAspectRatio: false,
+  cutout: "75%",   // was 70%
+  layout: {
+    padding: 20
+  },
+  plugins: {
+    legend: { display: false }
+  }
+}
+
   changeChart = new Chart(document.getElementById("changeChart"), {
     type: "bar",
     data: { labels, datasets: [{ data: change, backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444") }] },

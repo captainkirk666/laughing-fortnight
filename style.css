@@ -370,7 +370,7 @@ tr:hover {
 .performance-row {
   display: grid;
   grid-template-columns: 1fr;
-  margin-top: 44px;
+  margin-top: 20px;
   margin-bottom: 44px;
   padding-left: 12px;
   padding-right: 12px;

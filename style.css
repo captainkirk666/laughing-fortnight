@@ -360,8 +360,9 @@ tr:hover {
 
 /* ===== CANVAS FIX (PREVENT GROWTH BUG) ===== */
 .chart-box canvas {
-  flex: 1;
+   flex: 1;
   width: 100% !important;
+  margin-top: 4px;
 }
 
 /* ===== PERFORMANCE ROW ===== */

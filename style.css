@@ -366,32 +366,28 @@ tr:hover {
 
 /* ===== PERFORMANCE ROW ===== */
 .performance-row {
-   margin-top: 24px;
   display: grid;
   grid-template-columns: 1fr;
-  margin-top: 20px;
+  margin-top: 24px;
   padding-left: 12px;
   padding-right: 12px;
 }
 
-/* ===== PERFORMANCE CHART ===== */
-.performance-box .chart-title {
-  margin-bottom: 14px;
-  height: auto;
+/* ===== PERFORMANCE BOX (inherits chart-box) ===== */
+.performance-box {
   padding: 20px;
+  height: auto;
 }
 
+/* ===== PERFORMANCE TITLE ===== */
+.performance-box .chart-title {
+  margin-bottom: 14px;
+}
+
+/* ===== PERFORMANCE CANVAS ===== */
 .performance-box canvas {
   flex: none;
   height: 320px !important;
-}
-
-/* ===== PERFORMANCE ROW (FULL WIDTH) ===== */
-.performance-row {
-  display: grid;
-  grid-template-columns: 1fr;
-  padding-left: 12px;
-  padding-right: 12px;
 }
 
 /* ===== MOBILE ===== */

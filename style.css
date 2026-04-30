@@ -202,6 +202,7 @@ h2 {
 
   padding: 24px 0;              /* 👈 makes the box taller */
   line-height: 1.4;             /* 👈 FIXES squashing */
+  margin-top: 0;
 
   text-align: center;
   color: #94a3b8;

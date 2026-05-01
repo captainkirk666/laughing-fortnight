@@ -125,7 +125,7 @@ function buildCharts(data) {
         barPercentage: 0.6,
         categoryPercentage: 0.7,
         maxBarThickness: 20,
-        borderRadius: 6
+        borderRadius: 0
       }]
     },
     options: {
@@ -183,11 +183,25 @@ function buildCharts(data) {
       labels,
       datasets: [{
         data: totals,
-        backgroundColor: "#3b82f6",
+
+backgroundColor: (ctx) => {
+  const chart = ctx.chart;
+  const { ctx: canvas, chartArea } = chart;
+
+  if (!chartArea) return "#3b82f6"; // fallback
+
+  const gradient = canvas.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+
+  gradient.addColorStop(0, "#60a5fa");  // lighter top
+  gradient.addColorStop(1, "#1e3a8a");  // darker bottom
+
+  return gradient;
+}
+        
         barPercentage: 0.6,
         categoryPercentage: 0.7,
         maxBarThickness: 20,
-        borderRadius: 6
+        borderRadius: 0
       }]
     },
     options: {

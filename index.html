@@ -106,133 +106,64 @@ const sheetURL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxS
 
 let changeChart, holdingChart, pieChart, performanceChart;
 
-/* ===== MAIN CHARTS ===== */
-function buildCharts(data) {
-  const labels = data.map(r => r["Ticker"]);
-  const change = data.map(r => parseFloat(r["Change %"]) || 0);
-  const totals = data.map(r => parseFloat(r["TOTAL $"]) || 0);
+// ===== HOLDINGS CHART =====
+holdingChart = new Chart(document.getElementById("holdingChart"), {
+  type: "bar",
+  data: {
+    labels,
+    datasets: [{
+      data: totals,
 
-  [changeChart, holdingChart, pieChart].forEach(c => c && c.destroy());
+      // 👇 MOVE IT HERE
+      backgroundColor: (ctx) => {
+        const chart = ctx.chart;
+        const { ctx: canvas, chartArea } = chart;
 
-  // ===== CHANGE CHART =====
-  changeChart = new Chart(document.getElementById("changeChart"), {
-    type: "bar",
-    data: {
-      labels,
-      datasets: [{
-        data: change,
-        backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444"),
-        barPercentage: 0.6,
-        categoryPercentage: 0.7,
-        maxBarThickness: 20,
-        borderRadius: 0
-      }]
-    },
-    options: {
-      maintainAspectRatio: false,
+        if (!chartArea) return "#3b82f6";
 
-      layout: {
-        padding: {
-          top: 20,
-          bottom: 20,
-          left: 20,
-          right: 20
-        }
+        const gradient = canvas.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+
+        gradient.addColorStop(0, "#60a5fa");
+        gradient.addColorStop(1, "#1e3a8a");
+
+        return gradient;
       },
 
-      plugins: {
-        legend: { display: false }
-      },
-
-      scales: {
-        x: {
-          ticks: { font: { size: 9 } },
-          grid: { display: false }
-        },
-        y: {
-  beginAtZero: true,
-
-  ticks: {
-    font: { size: 9 }
+      barPercentage: 0.6,
+      categoryPercentage: 0.7,
+      maxBarThickness: 20,
+      borderRadius: 0
+    }]
   },
 
-  grid: {
-    color: (ctx) => {
-      if (ctx.tick.value === 0) {
-        return "#94A3B8";   // 👈 bright zero line
+  options: {
+    maintainAspectRatio: false,
+
+    layout: {
+      padding: {
+        top: 20,
+        bottom: 20,
+        left: 20,
+        right: 20
       }
-      return "rgba(148,163,184,0.08)";
     },
 
-    lineWidth: (ctx) => {
-      if (ctx.tick.value === 0) {
-        return 1;          // 👈 thicker line
+    plugins: {
+      legend: { display: false }
+    },
+
+    scales: {
+      x: {
+        ticks: { font: { size: 9 } },
+        grid: { display: false }
+      },
+      y: {
+        ticks: { font: { size: 9 } },
+        grid: { color: "rgba(148,163,184,0.08)" }
       }
-      return 1;
     }
   }
-}
-      }
-    }
-  });
-
-  // ===== HOLDINGS CHART =====
-  holdingChart = new Chart(document.getElementById("holdingChart"), {
-    type: "bar",
-    data: {
-      labels,
-      datasets: [{
-        data: totals,        
-        barPercentage: 0.6,
-        categoryPercentage: 0.7,
-        maxBarThickness: 20,
-        borderRadius: 0
-      }]
-
-backgroundColor: (ctx) => {
-  const chart = ctx.chart;
-  const { ctx: canvas, chartArea } = chart;
-
-  if (!chartArea) return "#3b82f6"; // fallback
-
-  const gradient = canvas.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-
-  gradient.addColorStop(0, "#60a5fa");  // lighter top
-  gradient.addColorStop(1, "#1e3a8a");  // darker bottom
-
-  return gradient;
-}
-
-      
-    },
-    options: {
-      maintainAspectRatio: false,
-
-      layout: {
-        padding: {
-          top: 20,
-          bottom: 20,
-          left: 20,
-          right: 20
-        }
-      },
-
-      plugins: {
-        legend: { display: false }
-      },
-
-      scales: {
-        x: {
-          ticks: { font: { size: 9 } },
-          grid: { display: false }
-        },
-        y: {
-          ticks: { font: { size: 9 } },
-          grid: { color: "rgba(148,163,184,0.08)" }
-        }
-      }
-    }
-  });
+});
 
   // ===== PIE CHART =====
   pieChart = new Chart(document.getElementById("pieChart"), {

@@ -182,7 +182,12 @@ function buildCharts(data) {
     data: {
       labels,
       datasets: [{
-        data: totals,
+        data: totals,        
+        barPercentage: 0.6,
+        categoryPercentage: 0.7,
+        maxBarThickness: 20,
+        borderRadius: 0
+      }]
 
 backgroundColor: (ctx) => {
   const chart = ctx.chart;
@@ -197,12 +202,8 @@ backgroundColor: (ctx) => {
 
   return gradient;
 }
-        
-        barPercentage: 0.6,
-        categoryPercentage: 0.7,
-        maxBarThickness: 20,
-        borderRadius: 0
-      }]
+
+      
     },
     options: {
       maintainAspectRatio: false,

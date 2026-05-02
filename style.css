@@ -376,9 +376,9 @@ tr:hover {
 /* ===== CANVAS FIX (PREVENT GROWTH BUG) ===== */
 .chart-box canvas {
   width: 100% !important;
-  height: 100% !important;   /* 👈 THIS is the key fix */
+  height: 75% !important;   /* 👈 shrink chart */
   display: block;
-  margin-top: 4px;
+  margin: 0 auto;           /* center it */
 }
 
 /* ===== PERFORMANCE ROW ===== */

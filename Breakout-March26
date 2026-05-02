@@ -14,14 +14,22 @@
 <div id="navbar"></div>
 
 <script>
-fetch("navbar.html")
+fetch("./navbar.html")
   .then(res => res.text())
   .then(data => {
     document.getElementById("navbar").innerHTML = data;
+
+    // 👇 Step 3 goes HERE (inside fetch)
+    const links = document.querySelectorAll(".nav-tab");
+    const current = window.location.pathname.split("/").pop();
+
+    links.forEach(link => {
+      if (link.getAttribute("href") === current) {
+        link.classList.add("active");
+      }
+    });
   });
 </script>
-
-<div class="page">
 
 <h2>BREAKOUT STOCKS</h2>
 

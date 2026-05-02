@@ -114,54 +114,51 @@ function buildCharts(data) {
   const change = data.map(r => parseFloat(r["Change %"]) || 0);
   const totals = data.map(r => parseFloat(r["TOTAL $"]) || 0);
 
-  [changeChart, holdingChart, pieChart].forEach(c => c && c.destroy());
-
-  changeChart = new Chart(document.getElementById("changeChart"), {
-    type: "bar",
-    data: {
-      labels,
-      datasets: [{
-        data: change,
-        backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444"),
-        barPercentage: 0.6,
-        categoryPercentage: 0.7,
-        maxBarThickness: 20,
-        borderRadius: 0
-
-
-y: {
-  beginAtZero: true,
-
-  ticks: {
-    font: { size: 9 }
+changeChart = new Chart(document.getElementById("changeChart"), {
+  type: "bar",
+  data: {
+    labels,
+    datasets: [{
+      data: change,
+      backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444"),
+      barPercentage: 0.6,
+      categoryPercentage: 0.7,
+      maxBarThickness: 20,
+      borderRadius: 0
+    }]
   },
 
-  grid: {
-    color: (ctx) => {
-      if (ctx.tick.value === 0) {
-        return "#cbd5e1";   // 👈 light grey zero line
-      }
-      return "rgba(148,163,184,0.08)";
-    },
+  options: {
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
 
-    lineWidth: (ctx) => {
-      if (ctx.tick.value === 0) {
-        return 1.5;        // 👈 slightly thicker
+    scales: {   // 👈 MUST be here
+      y: {
+        beginAtZero: true,
+
+        ticks: {
+          font: { size: 9 }
+        },
+
+        grid: {
+          color: (ctx) => {
+            if (ctx.tick.value === 0) {
+              return "#cbd5e1";   // zero line
+            }
+            return "rgba(148,163,184,0.08)";
+          },
+
+          lineWidth: (ctx) => {
+            if (ctx.tick.value === 0) {
+              return 1.5;
+            }
+            return 1;
+          }
+        }
       }
-      return 1;
     }
   }
-}
-
-
-        
-      }]
-    },
-    options: {
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } }
-    }
-  });
+});
 
   holdingChart = new Chart(document.getElementById("holdingChart"), {
     type: "bar",

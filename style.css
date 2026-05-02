@@ -386,17 +386,14 @@ tr:hover {
 }
 
 .pie-box {
-  height: 300px;              /* 👈 match other charts */
-  aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;           /* 👈 prevents spill */
 }
 
 .pie-box canvas {
-  width: 100% !important;
-  height: 100% !important;
+  width: 85% !important;
+  height: 85% !important;
 }
 
 /* ===== PERFORMANCE ROW ===== */

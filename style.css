@@ -254,7 +254,7 @@ h2 {
   border-radius: var(--radius);
   overflow: hidden;
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   box-shadow: 0 12px 30px rgba(0,0,0,0.35);
 }
 
@@ -369,7 +369,7 @@ tr:hover {
   font-size: 18px;
   font-weight: 600;
   color: var(--text-muted);
-  margin-bottom: 8px;
+  margin-bottom: 2px;
 
   text-align: center;
   width: 100%;

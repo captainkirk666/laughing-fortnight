@@ -160,61 +160,71 @@ changeChart = new Chart(document.getElementById("changeChart"), {
   }
 });
 
-  holdingChart = new Chart(document.getElementById("holdingChart"), {
-    type: "bar",
-    data: {
-      labels,
-      datasets: [{
-        data: totals,
-        backgroundColor: (ctx) => {
-          const chart = ctx.chart;
-          const { ctx: canvas, chartArea } = chart;
+holdingChart = new Chart(document.getElementById("holdingChart"), {
+  type: "bar",
+  data: {
+    labels,
+    datasets: [{
+      data: totals,
 
-          if (!chartArea) return "#3b82f6";
+      backgroundColor: (ctx) => {
+        const chart = ctx.chart;
+        const { ctx: canvas, chartArea, scales } = chart;
 
-          const gradient = canvas.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-          gradient.addColorStop(0, "#60a5fa");
-          gradient.addColorStop(1, "#1e3a8a");
+        if (!chartArea) return "#3b82f6";
 
-          return gradient;
-        },
-        barPercentage: 0.6,
-        categoryPercentage: 0.7,
-        maxBarThickness: 20,
-        borderRadius: 0
-      }]
-    },
-    options: {
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } }
-scales: {
-  y: {
-    beginAtZero: true,
+        const yScale = scales.y;
 
-    ticks: {
-      font: { size: 9 }
-    },
+        // 👇 position of 10,000
+        const yTop = yScale.getPixelForValue(10000);
+        const yBottom = chartArea.bottom;
 
-    grid: {
-      color: (ctx) => {
-        if (ctx.tick.value === 0) {
-          return "#cbd5e1";   // 👈 same grey line
-        }
-        return "rgba(148,163,184,0.08)";
+        const gradient = canvas.createLinearGradient(0, yTop, 0, yBottom);
+
+        gradient.addColorStop(0, "#60a5fa"); // lighter
+        gradient.addColorStop(1, "#1e3a8a"); // darker
+
+        return gradient;
       },
 
-      lineWidth: (ctx) => {
-        if (ctx.tick.value === 0) {
-          return 1.5;
+      barPercentage: 0.6,
+      categoryPercentage: 0.7,
+      maxBarThickness: 20,
+      borderRadius: 0
+    }]
+  },
+
+  options: {
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },   // 👈 comma fixed
+
+    scales: {
+      y: {
+        beginAtZero: true,
+
+        ticks: {
+          font: { size: 9 }
+        },
+
+        grid: {
+          color: (ctx) => {
+            if (ctx.tick.value === 0) {
+              return "#cbd5e1";
+            }
+            return "rgba(148,163,184,0.08)";
+          },
+
+          lineWidth: (ctx) => {
+            if (ctx.tick.value === 0) {
+              return 1.5;
+            }
+            return 1;
+          }
         }
-        return 1;
       }
     }
   }
-}
-      
-    }
-  });
+});
 
   pieChart = new Chart(document.getElementById("pieChart"), {
     type: "doughnut",

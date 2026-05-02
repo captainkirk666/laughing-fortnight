@@ -45,8 +45,6 @@ header,
   padding-right: 12px;
 }
 
-/* ===== NAV ===== */
-
 /* ===== NAVBAR ===== */
 
 .navbar {
@@ -59,6 +57,16 @@ header,
 
   backdrop-filter: blur(8px);
 }
+
+
+
+.dropdown {
+  display: flex;
+  align-items: center;
+}
+
+
+
 
 /* INNER LAYOUT */
 .nav-container {
@@ -82,24 +90,35 @@ header,
 /* NAV TABS (REPLACES OLD .tab SYSTEM) */
 .nav-links {
   display: flex;
+  align-items: center;   /* 👈 THIS is the key */
   gap: 12px;
 }
 
 /* TAB BUTTONS */
+
 .nav-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 40px;              /* consistent height */
+  padding: 0 16px;           /* horizontal spacing */
+
   background: transparent;
   border: 1px solid rgba(255,255,255,0.1);
-  color: var(--text-muted);
-
-  padding: 8px 16px;
   border-radius: 10px;
 
+  color: var(--text-muted);
   font-size: 14px;
   font-weight: 500;
 
+  text-decoration: none;     /* 👈 important for <a> links */
   cursor: pointer;
+
   transition: all 0.2s ease;
 }
+
+
 
 /* HOVER */
 .nav-tab:hover {

@@ -107,9 +107,85 @@ const sheetURL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxS
 
 let changeChart, holdingChart, pieChart, performanceChart;
 
-function handleHistory(data)
 
-  
+/* ===== MAIN CHARTS ===== */
+function buildCharts(data) {
+  // /* ===== MAIN CHARTS ===== */
+function buildCharts(data) {
+  const labels = data.map(r => r["Ticker"]);
+  const change = data.map(r => parseFloat(r["Change %"]) || 0);
+  const totals = data.map(r => parseFloat(r["TOTAL $"]) || 0);
+
+  [changeChart, holdingChart, pieChart].forEach(c => c && c.destroy());
+
+  // CHANGE CHART
+  changeChart = new Chart(document.getElementById("changeChart"), {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [{
+        data: change,
+        backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444"),
+        barPercentage: 0.6,
+        categoryPercentage: 0.7,
+        maxBarThickness: 20,
+        borderRadius: 0
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  // HOLDINGS CHART (gradient)
+  holdingChart = new Chart(document.getElementById("holdingChart"), {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [{
+        data: totals,
+        backgroundColor: (ctx) => {
+          const chart = ctx.chart;
+          const { ctx: canvas, chartArea } = chart;
+
+          if (!chartArea) return "#3b82f6";
+
+          const gradient = canvas.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+          gradient.addColorStop(0, "#60a5fa");
+          gradient.addColorStop(1, "#1e3a8a");
+
+          return gradient;
+        },
+        barPercentage: 0.6,
+        categoryPercentage: 0.7,
+        maxBarThickness: 20,
+        borderRadius: 0
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  // PIE CHART
+  pieChart = new Chart(document.getElementById("pieChart"), {
+    type: "doughnut",
+    data: {
+      labels,
+      datasets: [{ data: totals }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      cutout: "70%",
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+}
+
+
 /* ===== PERFORMANCE CHART (RESTORED) ===== */
 function handleHistory(data) {
   const dates = data.map(r => {

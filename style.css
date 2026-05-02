@@ -253,6 +253,8 @@ h2 {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
+  margin-top: 20px;
+  margin-bottom: 20px;
   box-shadow: 0 12px 30px rgba(0,0,0,0.35);
 }
 
@@ -356,7 +358,7 @@ tr:hover {
 
   height: 300px;
   padding: 12px;
-    margin-top: 40px;
+    margin-top: 20px;
 
   box-shadow: 0 12px 30px rgba(0,0,0,0.35);
 }

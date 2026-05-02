@@ -357,7 +357,7 @@ tr:hover {
   flex-direction: column;
 
   height: 300px;
-  padding: 12px;
+  padding: 22px;
     margin-top: 20px;
 
   box-shadow: 0 12px 30px rgba(0,0,0,0.35);
@@ -405,8 +405,8 @@ tr:hover {
   grid-template-columns: 1fr;
   margin-top: 20px;
   margin-bottom: 44px;
-  padding-left: 22px;
-  padding-right: 22px;
+  padding-left: 12px;
+  padding-right: 12px;
   
 }
 

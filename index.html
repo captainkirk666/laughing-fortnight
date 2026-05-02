@@ -110,15 +110,12 @@ let changeChart, holdingChart, pieChart, performanceChart;
 
 /* ===== MAIN CHARTS ===== */
 function buildCharts(data) {
-  // /* ===== MAIN CHARTS ===== */
-function buildCharts(data) {
   const labels = data.map(r => r["Ticker"]);
   const change = data.map(r => parseFloat(r["Change %"]) || 0);
   const totals = data.map(r => parseFloat(r["TOTAL $"]) || 0);
 
   [changeChart, holdingChart, pieChart].forEach(c => c && c.destroy());
 
-  // CHANGE CHART
   changeChart = new Chart(document.getElementById("changeChart"), {
     type: "bar",
     data: {
@@ -138,7 +135,6 @@ function buildCharts(data) {
     }
   });
 
-  // HOLDINGS CHART (gradient)
   holdingChart = new Chart(document.getElementById("holdingChart"), {
     type: "bar",
     data: {
@@ -169,7 +165,6 @@ function buildCharts(data) {
     }
   });
 
-  // PIE CHART
   pieChart = new Chart(document.getElementById("pieChart"), {
     type: "doughnut",
     data: {
@@ -182,7 +177,6 @@ function buildCharts(data) {
       plugins: { legend: { display: false } }
     }
   });
-}
 }
 
 
@@ -299,7 +293,6 @@ function handleData(data) {
     tbody.appendChild(tr);
   });
 
-  function handleHistory(data)
   totalDisplay.textContent="$"+total.toLocaleString();
   buildCharts(data);
 }

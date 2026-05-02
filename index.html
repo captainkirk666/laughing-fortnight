@@ -233,10 +233,11 @@ holdingChart = new Chart(document.getElementById("holdingChart"), {
       datasets: [{ data: totals }]
     },
     options: {
-      maintainAspectRatio: false,
-      cutout: "70%",
-      plugins: { legend: { display: false } }
-    }
+  maintainAspectRatio: true,   // 👈 key change
+  aspectRatio: 1,              // 👈 forces perfect circle
+  cutout: "70%",
+  plugins: { legend: { display: false } }
+}
   });
 }
 

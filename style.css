@@ -375,8 +375,9 @@ tr:hover {
 
 /* ===== CANVAS FIX (PREVENT GROWTH BUG) ===== */
 .chart-box canvas {
-   flex: 1;
   width: 100% !important;
+  height: 100% !important;   /* 👈 THIS is the key fix */
+  display: block;
   margin-top: 4px;
 }
 

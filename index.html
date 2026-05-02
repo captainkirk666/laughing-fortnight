@@ -127,6 +127,34 @@ function buildCharts(data) {
         categoryPercentage: 0.7,
         maxBarThickness: 20,
         borderRadius: 0
+
+
+y: {
+  beginAtZero: true,
+
+  ticks: {
+    font: { size: 9 }
+  },
+
+  grid: {
+    color: (ctx) => {
+      if (ctx.tick.value === 0) {
+        return "#cbd5e1";   // 👈 light grey zero line
+      }
+      return "rgba(148,163,184,0.08)";
+    },
+
+    lineWidth: (ctx) => {
+      if (ctx.tick.value === 0) {
+        return 1.5;        // 👈 slightly thicker
+      }
+      return 1;
+    }
+  }
+}
+
+
+        
       }]
     },
     options: {

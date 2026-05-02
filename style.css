@@ -141,6 +141,18 @@ header,
   gap: 4px;
 }
 
+.dropdown-item {
+  display: block;
+  padding: 10px 14px;
+  color: #cbd5e1;
+  text-decoration: none;
+}
+
+.dropdown-item:hover {
+  background: rgba(56,189,248,0.1);
+  color: #38bdf8;
+}
+
 /* MENU */
 .dropdown-menu {
   position: absolute;

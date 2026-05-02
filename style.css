@@ -108,10 +108,16 @@ header,
 }
 
 /* ACTIVE TAB */
+.nav-tab {
+  transition: all 0.2s ease;
+}
+
+/* ACTIVE STATE */
 .nav-tab.active {
-  background: rgba(56,189,248,0.1);
-  border-color: #38bdf8;
+  border: 1px solid #38bdf8;
   color: #38bdf8;
+  background: rgba(56,189,248,0.08);
+  box-shadow: 0 0 0 1px rgba(56,189,248,0.3);
 }
 
 /* ===== TAB CONTENT CONTROL (KEEP THIS) ===== */

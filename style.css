@@ -375,8 +375,8 @@ tr:hover {
 
 /* ===== CANVAS FIX (PREVENT GROWTH BUG) ===== */
 .chart-box canvas {
-  width: 90% !important;
-  height: 90% !important;   /* 👈 shrink chart */
+  width: 100% !important;
+  height: 75% !important;   /* 👈 shrink chart */
   display: block;
   margin: 0 auto;           /* center it */
 }

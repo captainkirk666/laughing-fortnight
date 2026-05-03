@@ -385,8 +385,8 @@ function loadHistory(){
 
 /* ===== INIT ===== */
 loadData();
+loadHistory();   // 👈 ADD THIS BACK
 
-// refresh ONLY live data (not history)
 setInterval(loadData, 10000);
 </body>
 </html>

@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="style.css?v=15">
 </head>
 
+
 <body>
 
 <!-- ✅ NAVBAR -->
@@ -121,7 +122,10 @@ fetch("./components/navbar.html")
 
 <!-- DATA + CHARTS -->
 <script>
-const sheetURL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
+const BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
+
+const SHEET = "Darvas Oct 25";
+const HISTORY_SHEET = "Darvas Oct 25 History";
 
 let changeChart, holdingChart, pieChart, performanceChart;
 

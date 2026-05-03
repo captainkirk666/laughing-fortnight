@@ -29,6 +29,13 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       });
 
+      // 🔥 ADD THIS BLOCK (right here)
+      document.querySelectorAll('.dropdown > .nav-tab').forEach(el => {
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+        });
+      });
+
     });
 
 });

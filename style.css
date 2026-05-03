@@ -486,6 +486,11 @@ tr:hover {
      margin-top: 16px;
   }
 }
+@media (max-width: 768px) {
+  .chart-box {
+    height: 220px;
+  }
+}
 /* ===== Daily CHANGE ===== */
 
 #dailyChange,

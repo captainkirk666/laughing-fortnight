@@ -264,25 +264,62 @@ holdingChart = new Chart(document.getElementById("holdingChart"), {
 
 
 /* ===== PERFORMANCE CHART (RESTORED) ===== */
-function handleHistory(data) {
-  const dates = data.map(r => {
-    const d = new Date(r["Date"]);
-    return d.toLocaleDateString("en-AU", { day: "numeric", month: "short" });
+function handleData(data) {
+
+  console.log("DATA RECEIVED:", data);
+
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    console.error("Invalid or empty data");
+    return;
+  }
+
+  const headersRow = document.getElementById("headers");
+  const tbody = document.querySelector("#stocks tbody");
+  const totalDisplay = document.getElementById("totalValue");
+
+  if (!headersRow || !tbody || !totalDisplay) {
+    console.error("Missing DOM elements");
+    return;
+  }
+
+  headersRow.innerHTML = "";
+  tbody.innerHTML = "";
+
+  Object.keys(data[0]).forEach(key=>{
+    const th=document.createElement("th");
+    th.textContent=key;
+    headersRow.appendChild(th);
   });
 
-  const totals = data.map(r => parseFloat(r["Total"]) || 0);
+  let total=0;
 
-  // ===== DAILY % CHANGE =====
-  let dailyChange = 0;
+  data.forEach(row=>{
+    const tr=document.createElement("tr");
 
-  if (totals.length > 1) {
-    const prev = totals[totals.length - 2];
-    const last = totals[totals.length - 1];
+    Object.entries(row).forEach(([k,v])=>{
+      const td=document.createElement("td");
+      const num=parseFloat(v);
 
-    if (prev > 0) {
-      dailyChange = ((last - prev) / prev) * 100;
-    }
-  }
+      td.textContent = (!isNaN(num) && k.toLowerCase().includes("total"))
+        ? "$"+num.toFixed(2)
+        : v;
+
+      if(k.toLowerCase().includes("change") && !isNaN(num)){
+        td.classList.add(num>=0?"positive":"negative");
+      }
+
+      if(k.toLowerCase().includes("total") && !isNaN(num)) total+=num;
+
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+
+  totalDisplay.textContent="$"+total.toLocaleString();
+
+  buildCharts(data);
+}
 
   // ===== OVERALL % FROM 100,000 =====
   const startingValue = 100000;

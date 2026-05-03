@@ -508,3 +508,15 @@ tr:hover {
   font-size: 40px;
   font-weight: 600;
 }
+
+
+/* ===== DASHBOARD HOMEPAGE ===== */
+.dashboard-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.card canvas {
+  height: 80px;
+  margin-top: 10px;
+}

@@ -483,14 +483,14 @@ tr:hover {
 @media (max-width: 900px) {
   .charts {
     grid-template-columns: 1fr;
-     margin-top: 16px;
+    margin-top: 16px;
   }
 }
+
 @media (max-width: 768px) {
   .chart-box {
     height: 220px;
   }
-}
 
   .chart-box canvas {
     height: 100% !important;

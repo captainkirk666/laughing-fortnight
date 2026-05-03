@@ -480,6 +480,7 @@ tr:hover {
 }
 
 /* ===== MOBILE ===== */
+/* ===== MOBILE ===== */
 @media (max-width: 900px) {
   .charts {
     grid-template-columns: 1fr;
@@ -489,18 +490,15 @@ tr:hover {
 
 @media (max-width: 768px) {
 
-  /* Chart containers */
   .chart-box {
-    aspect-ratio: 2 / 1;   /* 👈 keeps charts nicely proportioned */
+    aspect-ratio: 2 / 1;
     margin-bottom: 12px;
   }
 
-  /* Bigger main performance chart */
   .performance-box {
     aspect-ratio: 2.5 / 1;
   }
 
-  /* Force canvas to behave */
   .chart-box canvas {
     width: 100% !important;
     height: 100% !important;

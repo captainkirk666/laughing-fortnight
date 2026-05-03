@@ -491,10 +491,10 @@ tr:hover {
   .chart-box {
     height: 220px;
   }
+}
 
   .chart-box canvas {
     height: 100% !important;
-  }
 }
 /* ===== Daily CHANGE ===== */
 

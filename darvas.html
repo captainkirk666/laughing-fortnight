@@ -402,16 +402,15 @@ function handleData(data) {
   buildCharts(data);
 }
 
-/* ===== LOADERS ===== */
 function loadData(){
-  const s=document.createElement("script");
-  s.src=sheetURL+"?callback=handleData";
+  const s = document.createElement("script");
+  s.src = `${BASE_URL}?sheet=${encodeURIComponent(SHEET)}&callback=handleData`;
   document.body.appendChild(s);
 }
 
 function loadHistory(){
-  const s=document.createElement("script");
-  s.src=sheetURL+"?sheet=History&callback=handleHistory";
+  const s = document.createElement("script");
+  s.src = `${BASE_URL}?sheet=${encodeURIComponent(HISTORY_SHEET)}&callback=handleHistory`;
   document.body.appendChild(s);
 }
 

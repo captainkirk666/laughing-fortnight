@@ -398,6 +398,13 @@ function handleData(data) {
   buildCharts(data);
 }
 
+/* ===== CONFIG ===== */
+const BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
+
+const SHEET = "Darvas Oct 25";                 // main table
+const HISTORY_SHEET = "Darvas Oct 25 History"; // history sheet
+
+
 /* ===== LOADERS ===== */
 function loadData(){
   const s = document.createElement("script");
@@ -407,13 +414,16 @@ function loadData(){
 
 function loadHistory(){
   const s = document.createElement("script");
-  s.src = `${BASE_URL}?sheet=History&callback=handleHistory`;
+  s.src = `${BASE_URL}?sheet=${encodeURIComponent(HISTORY_SHEET)}&callback=handleHistory`;
   document.body.appendChild(s);
 }
 
+
+/* ===== INIT ===== */
 loadData();
 loadHistory();
-setInterval(loadData,10000);
-</script>
+
+// refresh ONLY live data (not history)
+setInterval(loadData, 10000);
 </body>
 </html>

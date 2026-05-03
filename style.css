@@ -479,24 +479,15 @@ tr:hover {
   height: 320px !important;
 }
 
-/* ===== MOBILE ===== */
-/* ===== MOBILE ===== */
-@media (max-width: 900px) {
-  .charts {
-    grid-template-columns: 1fr;
-    margin-top: 16px;
-  }
-}
-
 @media (max-width: 768px) {
 
   .chart-box {
-    aspect-ratio: 2 / 1;
+    height: 180px;   /* 👈 bring this back */
     margin-bottom: 12px;
   }
 
   .performance-box {
-    aspect-ratio: 2.5 / 1;
+    height: 220px;
   }
 
   .chart-box canvas {

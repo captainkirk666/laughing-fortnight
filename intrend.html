@@ -134,9 +134,10 @@ let changeChart, holdingChart, pieChart, performanceChart;
 function buildCharts(data) {
   const labels = data.map(r => r["Ticker"]);
   const change = data.map(r => parseFloat(r["Change %"]) || 0);
-const totals = data
-  .map(r => parseFloat(r["Total"]))
-  .filter(v => !isNaN(v) && v > 0);
+const totals = data.map(r => {
+  const val = parseFloat(r["Total"]);
+  return (!isNaN(val) && val > 0) ? val : null;
+});
 
   
 changeChart = new Chart(document.getElementById("changeChart"), {

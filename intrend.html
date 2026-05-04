@@ -34,14 +34,14 @@ fetch("./components/navbar.html")
 
 <div class="page">
 
-<h2>IN TREND</h2>
+<h2>DIN TREND</h2>
 
 <div class="info-text">
   <p>This is a sample portfolio created to test the effectiveness of different trading strategies. </p>It is not intended as a buy recommendation, as many of the stocks featured are highly volatile and can experience significant daily gains and losses.</p>
   <p>The purpose of this site is to identify stocks that are trending and evaluate their potential as buy opportunities.</p>
 </div>
 
-<header>Starting Capital: $100,000 — May 2026</header>
+<header>Starting Capital: $100,000 — Oct 2025</header>
 
 <!-- TABLE -->
 <div class="container">
@@ -122,10 +122,10 @@ fetch("./components/navbar.html")
 
 <!-- DATA + CHARTS -->
 <script>
- BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
+const BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
 
- SHEET = "InTrend May 1";
- HISTORY_SHEET = "InTrend History";
+const SHEET = "InTrend May 1";
+const HISTORY_SHEET = "InTrend History";
 
 let changeChart, holdingChart, pieChart, performanceChart;
 
@@ -134,12 +134,8 @@ let changeChart, holdingChart, pieChart, performanceChart;
 function buildCharts(data) {
   const labels = data.map(r => r["Ticker"]);
   const change = data.map(r => parseFloat(r["Change %"]) || 0);
-const totals = data.map(r => {
-  const val = parseFloat(r["Total"]);
-  return (!isNaN(val) && val > 0) ? val : null;
-});
+  const totals = data.map(r => parseFloat(r["TOTAL $"]) || 0);
 
-  
 changeChart = new Chart(document.getElementById("changeChart"), {
   type: "bar",
   data: {
@@ -275,9 +271,7 @@ function handleHistory(data) {
     return d.toLocaleDateString("en-AU", { day: "numeric", month: "short" });
   });
 
-  const totals = data
-  .map(r => parseFloat(r["Total"]))
-  .filter(v => !isNaN(v) && v > 0);
+  const totals = data.map(r => parseFloat(r["Total"]) || 0);
 
   // ===== DAILY % CHANGE =====
   let dailyChange = 0;
@@ -292,16 +286,14 @@ function handleHistory(data) {
   }
 
   // ===== OVERALL % FROM 100,000 =====
-const firstValue = totals[0];
-const latestValue = totals[totals.length - 1];
+  const startingValue = 100000;
+  const latestValue = totals[totals.length - 1];
 
-let overallChange = 0;
+  let overallChange = 0;
 
-if (firstValue > 0 && latestValue > 0) {
-  overallChange = ((latestValue - firstValue) / firstValue) * 100;
-}
-
-
+  if (startingValue > 0) {
+    overallChange = ((latestValue - startingValue) / startingValue) * 100;
+  }
 
   // ===== DISPLAY =====
   // ===== DAILY % =====

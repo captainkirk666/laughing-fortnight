@@ -271,8 +271,11 @@ function handleHistory(data) {
     return d.toLocaleDateString("en-AU", { day: "numeric", month: "short" });
   });
 
-  const totals = data.map(r => parseFloat(r["Total"]) || 0);
+const totals = data
+  .map(r => parseFloat(r["Total"]))
+  .filter(v => !isNaN(v) && v > 0);
 
+  
   // ===== DAILY % CHANGE =====
   let dailyChange = 0;
 

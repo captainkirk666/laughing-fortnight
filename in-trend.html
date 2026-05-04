@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="style.css?v=15">
 </head>
 
+
 <body>
 
 <!-- ✅ NAVBAR -->
@@ -33,14 +34,14 @@ fetch("./components/navbar.html")
 
 <div class="page">
 
-<h2>IN TREND</h2>
+<h2>DIN TREND</h2>
 
 <div class="info-text">
   <p>This is a sample portfolio created to test the effectiveness of different trading strategies. </p>It is not intended as a buy recommendation, as many of the stocks featured are highly volatile and can experience significant daily gains and losses.</p>
   <p>The purpose of this site is to identify stocks that are trending and evaluate their potential as buy opportunities.</p>
 </div>
 
-<header>$100,000 XXXXXXXX</header>
+<header>Starting Capital: $100,000 — Oct 2025</header>
 
 <!-- TABLE -->
 <div class="container">
@@ -121,7 +122,10 @@ fetch("./components/navbar.html")
 
 <!-- DATA + CHARTS -->
 <script>
-const sheetURL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
+const BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
+
+const SHEET = "InTrend May 1";
+const HISTORY_SHEET = "InTrend History";
 
 let changeChart, holdingChart, pieChart, performanceChart;
 
@@ -398,16 +402,23 @@ function handleData(data) {
   buildCharts(data);
 }
 
-/* ===== LOADERS ===== */
 function loadData(){
-  const s=document.createElement("script");
-  s.src=sheetURL+"?callback=handleData";
+  const existing = document.getElementById("dataScript");
+  if (existing) existing.remove();
+
+  const s = document.createElement("script");
+  s.id = "dataScript";
+  s.src = `${BASE_URL}?sheet=${encodeURIComponent(SHEET)}&callback=handleData`;
   document.body.appendChild(s);
 }
 
 function loadHistory(){
-  const s=document.createElement("script");
-  s.src=sheetURL+"?sheet=History&callback=handleHistory";
+  const existing = document.getElementById("historyScript");
+  if (existing) existing.remove();
+
+  const s = document.createElement("script");
+  s.id = "historyScript";
+  s.src = `${BASE_URL}?sheet=${encodeURIComponent(HISTORY_SHEET)}&callback=handleHistory`;
   document.body.appendChild(s);
 }
 

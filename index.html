@@ -35,9 +35,15 @@ fetch("./components/navbar.html")
 
 <h2>DASHBOARD</h2>
 
+  
 <div class="info-text">
-  <p>This is a sample portfolio created to test the effectiveness of different trading strategies. </p>It is not intended as a buy recommendation, as many of the stocks featured are highly volatile and can experience significant daily gains and losses.</p>
-  <p>The purpose of this site is to identify stocks that are trending and evaluate their potential as buy opportunities.</p>
+  <p>
+    This is a sample portfolio created to test the effectiveness of different trading strategies.
+    It is not intended as a buy recommendation, as many of the stocks featured are highly volatile and can experience significant daily gains and losses.
+  </p>
+  <p>
+    The purpose of this site is to identify stocks that are trending and evaluate their potential as buy opportunities.
+  </p>
 </div>
 
 <header>Strategies</header>
@@ -80,9 +86,8 @@ fetch("./components/navbar.html")
 
 
 
-
-
- const BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
+<script>
+const BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
 
 /* ===== DARVAS CARD ===== */
 function loadDarvas() {
@@ -100,7 +105,6 @@ function handleDarvas(data) {
 
   const pct = ((latest - first) / first) * 100;
 
-  // numbers
   document.getElementById("darvas-total").textContent =
     "$" + latest.toLocaleString(undefined, {minimumFractionDigits:2});
 
@@ -110,7 +114,6 @@ function handleDarvas(data) {
 
   changeEl.style.color = pct >= 0 ? "#22c55e" : "#ef4444";
 
-  // mini chart
   new Chart(document.getElementById("darvas-mini"), {
     type: "line",
     data: {
@@ -134,8 +137,10 @@ function handleDarvas(data) {
   });
 }
 
-// 🚀 run ONLY this
 loadDarvas();
+</script>
+
+
 </script>
 </body>
 </html>

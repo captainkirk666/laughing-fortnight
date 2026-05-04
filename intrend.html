@@ -443,21 +443,13 @@ function handleData(data) {
 }
 
 function loadData(){
-  const existing = document.getElementById("dataScript");
-  if (existing) existing.remove();
-
   const s = document.createElement("script");
-  s.id = "dataScript";
   s.src = `${BASE_URL}?sheet=${encodeURIComponent(SHEET)}&callback=handleData`;
   document.body.appendChild(s);
 }
 
 function loadHistory(){
-  const existing = document.getElementById("historyScript");
-  if (existing) existing.remove();
-
   const s = document.createElement("script");
-  s.id = "historyScript";
   s.src = `${BASE_URL}?sheet=${encodeURIComponent(HISTORY_SHEET)}&callback=handleHistory`;
   document.body.appendChild(s);
 }

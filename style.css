@@ -45,69 +45,92 @@ header,
   padding-right: 12px;
 }
 
-/* ===== HOMEPAGE DASHBOARD ===== */
-.homepage {
-  margin-top: 30px;
-}
+/* ===== HOMEPAGE HERO CARDS ===== */
 
-/* grid */
-.homepage-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
-}
-
-/* card */
 .homepage-card {
-  background: linear-gradient(180deg, #0f172a, #020617);
-  border-radius: 16px;
-  padding: 18px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  background: #000;
+  border-radius: 28px;
+  padding: 24px 22px;
+  overflow: hidden;
+  position: relative;
 
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  justify-content: space-between;
 
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 320px;
+
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
 }
 
-.homepage-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 40px rgba(0,0,0,0.5);
-}
-
-/* title */
-.homepage-card h3 {
-  font-family: 'Source Serif 4', serif;
+/* header */
+.homepage-header h3 {
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  letter-spacing: 6px;
   text-align: center;
-  font-size: 22px;
+  margin-bottom: 8px;
+  color: #e2e8f0;
 }
 
-/* meta */
 .homepage-meta {
-  font-size: 12px;
+  font-family: "Roboto", sans-serif;
+  font-size: 13px;
+  text-align: center;
   color: #94a3b8;
 }
 
-/* value */
-.homepage-value {
-  font-size: 24px;
-  font-weight: 700;
-  margin-top: 6px;
-}
-
-/* change */
-.homepage-change {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-/* mini chart */
-.homepage-card canvas {
-  height: 70px !important;
+/* value block */
+.homepage-body {
+  text-align: center;
   margin-top: 10px;
 }
 
+.homepage-value {
+  font-family: "Source Serif 4", serif;
+  font-size: 48px;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.homepage-change {
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+/* chart area */
+.homepage-chart {
+  position: relative;
+  height: 120px;
+  margin-top: 10px;
+}
+
+.homepage-chart canvas {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* subtle fade at bottom (like your image) */
+.homepage-chart::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,0.8) 100%
+  );
+  pointer-events: none;
+}
 
 /* ===== NAVBAR ===== */
 

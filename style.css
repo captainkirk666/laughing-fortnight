@@ -51,11 +51,26 @@ header,
   margin-top: 30px;
 }
 
-/* grid layout */
+/* ===== HOMEPAGE GRID ===== */
 .homepage-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 22px;
+  margin-top: 20px;
+}
+
+/* tablet */
+@media (max-width: 1000px) {
+  .homepage-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* mobile */
+@media (max-width: 600px) {
+  .homepage-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* card container */

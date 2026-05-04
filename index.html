@@ -200,6 +200,208 @@ function handleDarvas(data) {
   });
 }
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Portfolio Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=15">
+</head>
+
+<body>
+
+<!-- ✅ NAVBAR -->
+<div id="navbar"></div>
+
+<script>
+fetch("./components/navbar.html")
+  .then(res => res.text())
+  .then(data => {
+    document.getElementById("navbar").innerHTML = data;
+
+    // 👇 Step 3 goes HERE (inside fetch)
+    const links = document.querySelectorAll(".nav-tab");
+    const current = window.location.pathname.split("/").pop();
+
+    links.forEach(link => {
+      if (link.getAttribute("href") === current) {
+        link.classList.add("active");
+      }
+    });
+  });
+</script>
+
+<div class="page">
+
+<h2>DASHBOARD</h2>
+
+  
+<div class="info-text">
+  <p>
+    This is a sample portfolio created to test the effectiveness of different trading strategies.
+    It is not intended as a buy recommendation, as many of the stocks featured are highly volatile and can experience significant daily gains and losses.
+  </p>
+  <p>
+    The purpose of this site is to identify stocks that are trending and evaluate their potential as buy opportunities.
+  </p>
+</div>
+
+<header>Strategies</header>
+
+<div class="homepage">
+  <div class="homepage-grid">
+
+    <!-- DARVAS -->
+    <div class="homepage-card">
+      <div class="homepage-header">
+        <h3>Darvas</h3>
+        <p class="homepage-meta">Starting capital: $100,000 - Oct 2025</p>
+      </div>
+
+      <div class="homepage-body">
+        <div class="homepage-value" id="darvas-total">$--</div>
+        <div class="homepage-change" id="darvas-change">--%</div>
+      </div>
+
+      <div class="homepage-chart">
+        <canvas id="darvas-mini"></canvas>
+      </div>
+    </div>
+
+    <!-- INTREND -->
+    <div class="homepage-card">
+      <div class="homepage-header">
+        <h3>InTrend</h3>
+        <p class="homepage-meta">Starting capital: $100,000 - May 2026</p>
+      </div>
+
+      <div class="homepage-body">
+        <div class="homepage-value" id="intrend-total">$--</div>
+        <div class="homepage-change" id="intrend-change">--%</div>
+      </div>
+
+      <div class="homepage-chart">
+        <canvas id="intrend-mini"></canvas>
+      </div>
+    </div>
+
+    <!-- BREAKOUT -->
+    <div class="homepage-card">
+      <div class="homepage-header">
+        <h3>Breakouts</h3>
+        <p class="homepage-meta">Starting capital: $100,000 - May 2026</p>
+      </div>
+
+      <div class="homepage-body">
+        <div class="homepage-value" id="breakout-total">$--</div>
+        <div class="homepage-change" id="breakout-change">--%</div>
+      </div>
+
+      <div class="homepage-chart">
+        <canvas id="breakout-mini"></canvas>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- DISCLAIMER (ORIGINAL KEPT) -->
+<div class="disclaimer">
+  <p>
+    The portfolio presented is a market simulation designed to test and evaluate different trading strategies. No real capital has been invested, and all totals are indicative only, serving as a guide to measure the effectiveness of each approach. Strategies are explored using market analysis tools such as TradingView. This site is intended for development and educational purposes only and should not be considered financial or investment advice. Always conduct your own research and seek professional advice before making financial decisions.
+  </p>
+  <p>
+    And finally — don’t blindly trust a website run by a graphic designer.
+  </p>
+</div>
+
+</div>
+
+<!-- LIB -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- NAV LOGIC -->
+<script src="js/app.js"></script>
+
+
+
+
+<script>
+const BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
+
+/* ===== DARVAS CARD ===== */
+function loadDarvas() {
+  const s = document.createElement("script");
+  s.src = `${BASE_URL}?sheet=${encodeURIComponent("Darvas Oct 25 History")}&callback=handleDarvas`;
+  document.body.appendChild(s);
+}
+
+function handleDarvas(data) {
+
+  const totals = data
+  .map(r => parseFloat(r["Total"]))
+  .filter(v => !isNaN(v) && v > 0);
+
+  const latest = totals[totals.length - 1];
+  const first = totals[0];
+
+  const pct = ((latest - first) / first) * 100;
+
+  document.getElementById("darvas-total").textContent =
+    "$" + latest.toLocaleString(undefined, { minimumFractionDigits: 2 });
+
+  const changeEl = document.getElementById("darvas-change");
+  changeEl.textContent =
+    (pct >= 0 ? "+" : "") + pct.toFixed(2) + "%";
+
+  changeEl.style.color = pct >= 0 ? "#22c55e" : "#ef4444";
+
+  new Chart(document.getElementById("darvas-mini"), {
+    type: "line",
+    data: {
+      labels: totals.map((_, i) => i),
+      datasets: [{
+        data: totals,
+        borderColor: "#3b82f6",
+        borderWidth: 2.5,
+        tension: 0.4,
+        pointRadius: 0,
+        fill: true,
+
+        backgroundColor: (ctx) => {
+          const chart = ctx.chart;
+          const { ctx: canvas, chartArea } = chart;
+
+          if (!chartArea) return "rgba(59,130,246,0.2)";
+
+          const gradient = canvas.createLinearGradient(
+            0,
+            chartArea.top,
+            0,
+            chartArea.bottom
+          );
+
+          gradient.addColorStop(0, "rgba(59,130,246,0.35)");
+          gradient.addColorStop(1, "rgba(59,130,246,0.02)");
+
+          return gradient;
+        }
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { display: false },
+        y: { display: false }
+      }
+    }
+  });
+}
+
   /* ===== INTREND ===== */
 function loadInTrend() {
   const s = document.createElement("script");
@@ -243,6 +445,61 @@ const totals = data
   });
 }
 
+
+/* ===== BREAKOUT ===== */
+function loadBreakout() {
+  const s = document.createElement("script");
+  s.src = `${BASE_URL}?sheet=${encodeURIComponent("Breakout May 26 History")}&callback=handleBreakout`;
+  document.body.appendChild(s);
+}
+
+function handleBreakout(data) {
+  const totals = data
+  .map(r => parseFloat(r["Total"]))
+  .filter(v => !isNaN(v) && v > 0);
+
+  const latest = totals[totals.length - 1];
+  const first = totals[0];
+  const pct = ((latest - first) / first) * 100;
+
+  document.getElementById("breakout-total").textContent =
+    "$" + latest.toLocaleString(undefined, {minimumFractionDigits:2});
+
+  const el = document.getElementById("breakout-change");
+  el.textContent = (pct >= 0 ? "+" : "") + pct.toFixed(2) + "%";
+  el.style.color = pct >= 0 ? "#22c55e" : "#ef4444";
+
+  new Chart(document.getElementById("breakout-mini"), {
+    type: "line",
+    data: {
+      labels: totals.map((_, i) => i),
+      datasets: [{
+        data: totals,
+        borderColor: "#3b82f6",
+        borderWidth: 2,
+        tension: 0.4,
+        pointRadius: 0,
+        fill: true
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { x: { display: false }, y: { display: false } }
+    }
+  });
+}
+
+/* 🚀 run once */
+loadDarvas();
+loadInTrend();
+loadBreakout();
+</script>
+
+
+
+</body>
+</html>
 
 /* ===== BREAKOUT ===== */
 function loadBreakout() {

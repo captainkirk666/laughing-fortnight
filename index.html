@@ -139,7 +139,9 @@ function loadDarvas() {
 
 function handleDarvas(data) {
 
-  const totals = data.map(r => parseFloat(r["Total"]) || 0);
+  const totals = data
+  .map(r => parseFloat(r["Total"]))
+  .filter(v => !isNaN(v) && v > 0);
 
   const latest = totals[totals.length - 1];
   const first = totals[0];

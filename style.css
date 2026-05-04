@@ -81,9 +81,6 @@ header,
   font-family: 'Source Serif 4', serif;
   text-align: center;
   font-size: 22px;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
 /* meta */

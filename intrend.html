@@ -291,14 +291,16 @@ function handleHistory(data) {
   }
 
   // ===== OVERALL % FROM 100,000 =====
-  const startingValue = 100000;
-  const latestValue = totals[totals.length - 1];
+const firstValue = totals[0];
+const latestValue = totals[totals.length - 1];
 
-  let overallChange = 0;
+let overallChange = 0;
 
-  if (startingValue > 0) {
-    overallChange = ((latestValue - startingValue) / startingValue) * 100;
-  }
+if (firstValue > 0 && latestValue > 0) {
+  overallChange = ((latestValue - firstValue) / firstValue) * 100;
+}
+
+
 
   // ===== DISPLAY =====
   // ===== DAILY % =====

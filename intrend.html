@@ -265,15 +265,25 @@ holdingChart = new Chart(document.getElementById("holdingChart"), {
 
 
 /* ===== PERFORMANCE CHART (RESTORED) ===== */
-function handleHistory(data) {
-  const dates = data.map(r => {
-    const d = new Date(r["Date"]);
-    return d.toLocaleDateString("en-AU", { day: "numeric", month: "short" });
-  });
+const dates = data.map(r => {
+  const raw = r["Date"];
 
-const totals = data
-  .map(r => parseFloat(r["Total"]))
-  .filter(v => !isNaN(v) && v > 0);
+  // 🧠 handle Google Sheets date serial numbers
+  let d;
+
+  if (typeof raw === "number") {
+    d = new Date((raw - 25569) * 86400 * 1000);
+  } else {
+    d = new Date(raw);
+  }
+
+  if (isNaN(d)) return "";
+
+  return d.toLocaleDateString("en-AU", {
+    day: "numeric",
+    month: "short"
+  });
+});
 
   
   // ===== DAILY % CHANGE =====

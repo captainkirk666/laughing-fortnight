@@ -198,6 +198,95 @@ function handleDarvas(data) {
   });
 }
 
+  /* ===== INTREND ===== */
+function loadInTrend() {
+  const s = document.createElement("script");
+  s.src = `${BASE_URL}?sheet=${encodeURIComponent("InTrend History")}&callback=handleInTrend`;
+  document.body.appendChild(s);
+}
+
+function handleInTrend(data) {
+const totals = data
+  .map(r => parseFloat(r["Price"]))
+  .filter(v => !isNaN(v) && v > 0);
+
+  const latest = totals[totals.length - 1];
+  const first = totals[0];
+  const pct = ((latest - first) / first) * 100;
+
+  document.getElementById("intrend-total").textContent =
+    "$" + latest.toLocaleString(undefined, {minimumFractionDigits:2});
+
+  const el = document.getElementById("intrend-change");
+  el.textContent = (pct >= 0 ? "+" : "") + pct.toFixed(2) + "%";
+  el.style.color = pct >= 0 ? "#22c55e" : "#ef4444";
+
+  new Chart(document.getElementById("intrend-mini"), {
+    type: "line",
+    data: {
+      labels: totals.map((_, i) => i),
+      datasets: [{
+        data: totals,
+        borderColor: "#3b82f6",
+        borderWidth: 2,
+        tension: 0.4,
+        pointRadius: 0,
+        fill: true
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { x: { display: false }, y: { display: false } }
+    }
+  });
+}
+
+
+/* ===== BREAKOUT ===== */
+function loadBreakout() {
+  const s = document.createElement("script");
+  s.src = `${BASE_URL}?sheet=${encodeURIComponent("Breakout May 26 History")}&callback=handleBreakout`;
+  document.body.appendChild(s);
+}
+
+function handleBreakout(data) {
+  const totals = data
+  .map(r => parseFloat(r["Total"]))
+  .filter(v => !isNaN(v) && v > 0);
+
+  const latest = totals[totals.length - 1];
+  const first = totals[0];
+  const pct = ((latest - first) / first) * 100;
+
+  document.getElementById("breakout-total").textContent =
+    "$" + latest.toLocaleString(undefined, {minimumFractionDigits:2});
+
+  const el = document.getElementById("breakout-change");
+  el.textContent = (pct >= 0 ? "+" : "") + pct.toFixed(2) + "%";
+  el.style.color = pct >= 0 ? "#22c55e" : "#ef4444";
+
+  new Chart(document.getElementById("breakout-mini"), {
+    type: "line",
+    data: {
+      labels: totals.map((_, i) => i),
+      datasets: [{
+        data: totals,
+        borderColor: "#3b82f6",
+        borderWidth: 2,
+        tension: 0.4,
+        pointRadius: 0,
+        fill: true
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { x: { display: false }, y: { display: false } }
+    }
+  });
+}
+
 /* 🚀 run once */
 loadDarvas();
 loadInTrend();
@@ -205,6 +294,6 @@ loadBreakout();
 </script>
 
 
-</script>
+
 </body>
 </html>

@@ -289,22 +289,21 @@ const totals = data
   }
 
   // ===== OVERALL % FROM 100,000 =====
-  const startingValue = 100000;
-  const latestValue = totals[totals.length - 1];
+  const firstValue = totals[0];
+const latestValue = totals[totals.length - 1];
 
-  let overallChange = 0;
+let overallChange = 0;
 
-  if (startingValue > 0) {
-    overallChange = ((latestValue - startingValue) / startingValue) * 100;
-  }
-
+if (firstValue > 0 && latestValue > 0) {
+  overallChange = ((latestValue - firstValue) / firstValue) * 100;
+}
   // ===== DISPLAY =====
   // ===== DAILY % =====
 const dailyEl = document.getElementById("dailyChange");
 
 if (dailyEl) {
   const sign = dailyChange >= 0 ? "+" : "";
-  dailyEl.textContent = `${sign}${dailyChange.toFixed(2)}%`;
+dailyEl.textContent = `${sign}${dailyChange.toFixed(2)}%`;
   dailyEl.className = dailyChange >= 0 ? "positive" : "negative";
 }
 

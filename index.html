@@ -207,9 +207,8 @@ function loadInTrend() {
   document.body.appendChild(s);
 }
 
-function handleInTrend(data) {
 const totals = data
-  .map(r => parseFloat(r["Price"]))
+  .map(r => parseFloat(r["Total"]))
   .filter(v => !isNaN(v) && v > 0);
 
   const latest = totals[totals.length - 1];

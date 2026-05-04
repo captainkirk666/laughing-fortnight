@@ -47,8 +47,20 @@ header,
 
 /* ===== HOMEPAGE HERO CARDS ===== */
 
+.homepage {
+  margin-top: 30px;
+}
+
+/* grid layout */
+.homepage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 22px;
+}
+
+/* card container */
 .homepage-card {
-  background: #000;
+  background: linear-gradient(180deg, #0f172a, #020617);
   border-radius: 28px;
   padding: 24px 22px;
   overflow: hidden;
@@ -61,12 +73,19 @@ header,
   min-height: 320px;
 
   box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* header */
+.homepage-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 28px 70px rgba(0,0,0,0.75);
+}
+
+/* ===== HEADER ===== */
+
 .homepage-header h3 {
   font-family: "Roboto", sans-serif;
-  font-size: 20px;
+  font-size: 27px;          /* +36% bigger */
   letter-spacing: 6px;
   text-align: center;
   margin-bottom: 8px;
@@ -75,12 +94,13 @@ header,
 
 .homepage-meta {
   font-family: "Roboto", sans-serif;
-  font-size: 13px;
+  font-size: 18px;          /* +36% bigger */
   text-align: center;
   color: #94a3b8;
 }
 
-/* value block */
+/* ===== VALUE SECTION ===== */
+
 .homepage-body {
   text-align: center;
   margin-top: 10px;
@@ -100,11 +120,12 @@ header,
   margin-top: 6px;
 }
 
-/* chart area */
+/* ===== CHART AREA ===== */
+
 .homepage-chart {
   position: relative;
   height: 120px;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .homepage-chart canvas {
@@ -113,23 +134,48 @@ header,
   left: 0;
   width: 100% !important;
   height: 100% !important;
+
+  /* subtle brightness boost */
+  filter: brightness(1.1);
 }
 
-/* subtle fade at bottom (like your image) */
+/* bottom fade overlay (for that smooth chart fade look) */
 .homepage-chart::after {
   content: "";
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 50%;
+  height: 55%;
 
   background: linear-gradient(
     to bottom,
-    rgba(0,0,0,0) 0%,
-    rgba(0,0,0,0.8) 100%
+    rgba(2,6,23,0) 0%,
+    rgba(2,6,23,0.95) 100%
   );
+
   pointer-events: none;
+}
+
+/* ===== MOBILE TWEAK ===== */
+
+@media (max-width: 768px) {
+  .homepage-card {
+    padding: 20px;
+    min-height: 280px;
+  }
+
+  .homepage-value {
+    font-size: 38px;
+  }
+
+  .homepage-header h3 {
+    font-size: 22px;
+  }
+
+  .homepage-meta {
+    font-size: 15px;
+  }
 }
 
 /* ===== NAVBAR ===== */

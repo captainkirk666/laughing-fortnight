@@ -34,7 +34,7 @@ fetch("./components/navbar.html")
 
 <div class="page">
 
-<h2>IN TREND</h2>
+<h2>DARVAS STOCKS</h2>
 
 <div class="info-text">
   <p>This is a sample portfolio created to test the effectiveness of different trading strategies. </p>It is not intended as a buy recommendation, as many of the stocks featured are highly volatile and can experience significant daily gains and losses.</p>
@@ -266,33 +266,12 @@ holdingChart = new Chart(document.getElementById("holdingChart"), {
 
 /* ===== PERFORMANCE CHART (RESTORED) ===== */
 function handleHistory(data) {
-
-  console.log("HISTORY RECEIVED:", data);
-
   const dates = data.map(r => {
-    const raw = r["Date"];
-
-    let d;
-
-    if (typeof raw === "number") {
-      d = new Date((raw - 25569) * 86400 * 1000);
-    } else {
-      d = new Date(raw);
-    }
-
-    if (isNaN(d)) return null;
-
-    return d.toLocaleDateString("en-AU", {
-      day: "numeric",
-      month: "short"
-    });
+    const d = new Date(r["Date"]);
+    return d.toLocaleDateString("en-AU", { day: "numeric", month: "short" });
   });
 
-  const totals = data
-    .map(r => parseFloat(r["Total"]))
-    .filter(v => !isNaN(v) && v > 0);
-
-  // 👉 your chart code continues here...
+  const totals = data.map(r => parseFloat(r["Total"]) || 0);
 
   // ===== DAILY % CHANGE =====
   let dailyChange = 0;
@@ -307,21 +286,22 @@ function handleHistory(data) {
   }
 
   // ===== OVERALL % FROM 100,000 =====
-  const firstValue = totals[0];
-const latestValue = totals[totals.length - 1];
+  const startingValue = 100000;
+  const latestValue = totals[totals.length - 1];
 
-let overallChange = 0;
+  let overallChange = 0;
 
-if (firstValue > 0 && latestValue > 0) {
-  overallChange = ((latestValue - firstValue) / firstValue) * 100;
-}
+  if (startingValue > 0) {
+    overallChange = ((latestValue - startingValue) / startingValue) * 100;
+  }
+
   // ===== DISPLAY =====
   // ===== DAILY % =====
 const dailyEl = document.getElementById("dailyChange");
 
 if (dailyEl) {
   const sign = dailyChange >= 0 ? "+" : "";
-dailyEl.textContent = `${sign}${dailyChange.toFixed(2)}%`;
+  dailyEl.textContent = `${sign}${dailyChange.toFixed(2)}%`;
   dailyEl.className = dailyChange >= 0 ? "positive" : "negative";
 }
 
@@ -423,13 +403,21 @@ function handleData(data) {
 }
 
 function loadData(){
+  const existing = document.getElementById("dataScript");
+  if (existing) existing.remove();
+
   const s = document.createElement("script");
+  s.id = "dataScript";
   s.src = `${BASE_URL}?sheet=${encodeURIComponent(SHEET)}&callback=handleData`;
   document.body.appendChild(s);
 }
 
 function loadHistory(){
+  const existing = document.getElementById("historyScript");
+  if (existing) existing.remove();
+
   const s = document.createElement("script");
+  s.id = "historyScript";
   s.src = `${BASE_URL}?sheet=${encodeURIComponent(HISTORY_SHEET)}&callback=handleHistory`;
   document.body.appendChild(s);
 }

@@ -110,7 +110,7 @@ function handleDarvas(data) {
   const pct = ((latest - first) / first) * 100;
 
   document.getElementById("darvas-total").textContent =
-    "$" + latest.toLocaleString(undefined, {minimumFractionDigits:2});
+    "$" + latest.toLocaleString(undefined, { minimumFractionDigits: 2 });
 
   const changeEl = document.getElementById("darvas-change");
   changeEl.textContent =
@@ -119,46 +119,49 @@ function handleDarvas(data) {
   changeEl.style.color = pct >= 0 ? "#22c55e" : "#ef4444";
 
   new Chart(document.getElementById("darvas-mini"), {
-  type: "line",
-  data: {
-    labels: totals.map((_, i) => i),
-    datasets: [{
-      data: totals,
-      borderColor: "#3b82f6",
-      borderWidth: 2.5,
-      tension: 0.4,
-      pointRadius: 0,
-      fill: true,
+    type: "line",
+    data: {
+      labels: totals.map((_, i) => i),
+      datasets: [{
+        data: totals,
+        borderColor: "#3b82f6",
+        borderWidth: 2.5,
+        tension: 0.4,
+        pointRadius: 0,
+        fill: true,
 
-      backgroundColor: (ctx) => {
-        const chart = ctx.chart;
-        const { ctx: canvas, chartArea } = chart;
+        backgroundColor: (ctx) => {
+          const chart = ctx.chart;
+          const { ctx: canvas, chartArea } = chart;
 
-        if (!chartArea) return "rgba(59,130,246,0.2)";
+          if (!chartArea) return "rgba(59,130,246,0.2)";
 
-        const gradient = canvas.createLinearGradient(
-          0,
-          chartArea.top,
-          0,
-          chartArea.bottom
-        );
+          const gradient = canvas.createLinearGradient(
+            0,
+            chartArea.top,
+            0,
+            chartArea.bottom
+          );
 
-        gradient.addColorStop(0, "rgba(59,130,246,0.35)");
-        gradient.addColorStop(1, "rgba(59,130,246,0.02)");
+          gradient.addColorStop(0, "rgba(59,130,246,0.35)");
+          gradient.addColorStop(1, "rgba(59,130,246,0.02)");
 
-        return gradient;
+          return gradient;
+        }
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { display: false },
+        y: { display: false }
       }
-    }]
-  },
-  options: {
-    maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
-    scales: {
-      x: { display: false },
-      y: { display: false }
     }
-  }
-});
+  });
+}
+
+/* 🚀 run once */
 loadDarvas();
 </script>
 

@@ -139,6 +139,7 @@ header,
   position: relative;
   height: 150px;
   margin-top: 2px;
+  filter: brightness(1.15) saturate(1.1);
 }
 
 .homepage-chart canvas {

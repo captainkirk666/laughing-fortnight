@@ -142,48 +142,33 @@ function loadSheet(sheetName, callback) {
 
   
   /* ===== GENERIC RENDER ===== */
-function renderCard(data, column, prefix) {
+datasets: [{
+  data: totals,
+  borderColor: "#3b82f6",   // solid line
+  borderWidth: 2.5,
+  tension: 0.4,
+  pointRadius: 0,
+  fill: true,
 
-  const totals = data
-    .map(r => parseFloat(r[column]))
-    .filter(v => !isNaN(v) && v > 0);
+  backgroundColor: (ctx) => {
+    const chart = ctx.chart;
+    const { ctx: canvas, chartArea } = chart;
 
-  if (totals.length === 0) return;
+    if (!chartArea) return "rgba(59,130,246,0.15)";
 
-  const latest = totals[totals.length - 1];
-  const first = totals[0];
-  const pct = ((latest - first) / first) * 100;
+    const gradient = canvas.createLinearGradient(
+      0,
+      chartArea.top,
+      0,
+      chartArea.bottom
+    );
 
-  document.getElementById(`${prefix}-total`).textContent =
-    "$" + latest.toLocaleString(undefined, { minimumFractionDigits: 2 });
+    gradient.addColorStop(0, "rgba(59,130,246,0.35)");
+    gradient.addColorStop(1, "rgba(59,130,246,0.02)");
 
-  const el = document.getElementById(`${prefix}-change`);
-  el.textContent = (pct >= 0 ? "+" : "") + pct.toFixed(2) + "%";
-  el.style.color = pct >= 0 ? "#22c55e" : "#ef4444";
-
-  new Chart(document.getElementById(`${prefix}-mini`), {
-    type: "line",
-    data: {
-      labels: totals.map((_, i) => i),
-      datasets: [{
-        data: totals,
-        borderColor: "#3b82f6",
-        borderWidth: 2,
-        tension: 0.4,
-        pointRadius: 0,
-        fill: true
-      }]
-    },
-    options: {
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { display: false },
-        y: { display: false }
-      }
-    }
-  });
-}
+    return gradient;
+  }
+}]
 
 /* ===== CALLBACKS ===== */
 function handleDarvas(data) {

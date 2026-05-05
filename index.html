@@ -171,10 +171,15 @@ borderWidth: 2.5,
         tension: 0.4,
         pointRadius: 0,
         fill: origin,
+        order: 1,
+
+borderJoinStyle: "round",
+borderCapStyle: "round",
 
         backgroundColor: (ctx) => {
           const chart = ctx.chart;
           const { ctx: canvas, chartArea } = chart;
+
 
           if (!chartArea) return "rgba(59,130,246,0.15)";
 

@@ -154,8 +154,18 @@ function loadSheet(sheetName, callback) {
   document.body.appendChild(s);
 }
 
-  function handleETF(data) {
-  renderCard(data, "Total", "etf");
+function handleETF(data) {
+
+  const total = data.reduce((sum, r) => {
+    const val = parseFloat(
+      String(r["TOTAL $"] || "").replace(/[$,]/g, "")
+    );
+    return sum + (isNaN(val) ? 0 : val);
+  }, 0);
+
+  document.getElementById("etf-total").textContent =
+    "$" + total.toLocaleString(undefined, { minimumFractionDigits: 2 });
+
 }
 
   
@@ -251,7 +261,7 @@ function handleBreakout(data) {
 loadSheet("Darvas Oct 25 History", "handleDarvas");
 loadSheet("InTrend May 1 History", "handleInTrend");
 loadSheet("Breakout May 26 History", "handleBreakout");
- loadSheet("ETF May 1 History", "handleETF"); 
+loadSheet("ETF May 1", "handleETF");
   
   
 </script>

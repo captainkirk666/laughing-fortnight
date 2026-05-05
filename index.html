@@ -164,38 +164,37 @@ function loadSheet(sheetName, callback) {
     type: "line",
     data: {
       labels: totals.map((_, i) => i),
-      datasets: [{
-        data: totals,
-borderColor: "#3b82f6",
-borderWidth: 2.5,
-        tension: 0.4,
-        pointRadius: 0,
-        fill: origin,
-        order: 1,
+datasets: [{
+  data: totals,
+  borderColor: "#3b82f6",
+  borderWidth: 2.5,
+  tension: 0.4,
+  pointRadius: 0,
+  fill: "origin",
+  order: 1,
 
-borderJoinStyle: "round",
-borderCapStyle: "round",
+  borderJoinStyle: "round",
+  borderCapStyle: "round",
 
-        backgroundColor: (ctx) => {
-          const chart = ctx.chart;
-          const { ctx: canvas, chartArea } = chart;
+  backgroundColor: (ctx) => {
+    const chart = ctx.chart;
+    const { ctx: canvas, chartArea } = chart;
 
+    if (!chartArea) return "rgba(59,130,246,0.15)";
 
-          if (!chartArea) return "rgba(59,130,246,0.15)";
+    const gradient = canvas.createLinearGradient(
+      0,
+      chartArea.top,
+      0,
+      chartArea.bottom
+    );
 
-          const gradient = canvas.createLinearGradient(
-            0,
-            chartArea.top,
-            0,
-            chartArea.bottom
-          );
+    gradient.addColorStop(0, "rgba(59,130,246,0.35)");
+    gradient.addColorStop(1, "rgba(59,130,246,0.02)");
 
-          gradient.addColorStop(0, "rgba(59,130,246,0.35)");
-          gradient.addColorStop(1, "rgba(59,130,246,0.02)");
-
-          return gradient;
-        }
-      }]
+    return gradient;
+  }
+}]
     },
     options: {
       maintainAspectRatio: false,

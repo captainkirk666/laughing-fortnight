@@ -130,6 +130,24 @@ fetch("./components/navbar.html")
 const BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
 
 /* ===== GENERIC LOADER ===== */
+
+  const glowPlugin = {
+  id: "glow",
+  beforeDatasetDraw(chart) {
+    const { ctx } = chart;
+
+    ctx.save();
+    ctx.shadowColor = "rgba(96,165,250,0.6)";
+    ctx.shadowBlur = 12;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+  },
+  afterDatasetDraw(chart) {
+    chart.ctx.restore();
+  }
+};
+
+  
 function loadSheet(sheetName, callback) {
   const s = document.createElement("script");
   s.src = `${BASE_URL}?sheet=${encodeURIComponent(sheetName)}&callback=${callback}`;
@@ -164,14 +182,15 @@ function loadSheet(sheetName, callback) {
     type: "line",
     data: {
       labels: totals.map((_, i) => i),
-datasets: [{
+
+      
+     datasets: [{
   data: totals,
-  borderColor: "#3b82f6",
+  borderColor: "#60a5fa",
   borderWidth: 3,
   tension: 0.4,
   pointRadius: 0,
   fill: "origin",
-  order: 1,
 
   borderJoinStyle: "round",
   borderCapStyle: "round",
@@ -180,7 +199,7 @@ datasets: [{
     const chart = ctx.chart;
     const { ctx: canvas, chartArea } = chart;
 
-    if (!chartArea) return "rgba(59,130,246,0.15)";
+    if (!chartArea) return "rgba(59,130,246,0.1)";
 
     const gradient = canvas.createLinearGradient(
       0,
@@ -189,23 +208,29 @@ datasets: [{
       chartArea.bottom
     );
 
-gradient.addColorStop(0, "rgba(59,130,246,0.18)");
-gradient.addColorStop(0.6, "rgba(59,130,246,0.06)");
-gradient.addColorStop(1, "rgba(59,130,246,0.01)");
+    gradient.addColorStop(0, "rgba(59,130,246,0.18)");
+    gradient.addColorStop(0.6, "rgba(59,130,246,0.06)");
+    gradient.addColorStop(1, "rgba(59,130,246,0.01)");
 
     return gradient;
   }
 }]
+
+      
     },
-    options: {
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { display: false },
-        y: { display: false }
-      }
-    }
-  });
+options: {
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false }
+  },
+  scales: {
+    x: { display: false },
+    y: { display: false }
+  }
+},
+  // 👇 THIS IS THE LINE YOU ADD
+  plugins: [glowPlugin]
+    });
 }
 
 /* ===== CALLBACKS ===== */

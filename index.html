@@ -168,7 +168,13 @@ document.body.appendChild(s);
 const live = liveTotals[prefix];
 const first = totals[0];
 
-if (!live || !first) return;
+if (!first) return;
+
+// if live not ready yet, wait and try again
+if (!live) {
+  setTimeout(() => renderCard(data, column, prefix), 100);
+  return;
+}
 
 // overall %
 const overall = ((live - first) / first) * 100;

@@ -190,8 +190,8 @@ if (totals.length > 1) {
 
 
   const el = document.getElementById(`${prefix}-change`);
- el.textContent = (daily >= 0 ? "+" : "") + daily.toFixed(2) + "%";
-el.style.color = daily >= 0 ? "#22c55e" : "#ef4444";
+ el.textContent = (overall >= 0 ? "+" : "") + overall.toFixed(2) + "%";
+el.style.color = overall >= 0 ? "#22c55e" : "#ef4444";
 
   new Chart(document.getElementById(`${prefix}-mini`), {
     type: "line",

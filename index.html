@@ -43,20 +43,7 @@ fetch("./components/navbar.html")
 <div class="homepage">
   <div class="homepage-grid">
 
-    <!-- DARVAS -->
-    <div class="homepage-card">
-      <div class="homepage-header">
-        <h3>DARVAS</h3>
-        <p class="homepage-meta">Starting capital: $100,000 - Oct 2025</p>
-      </div>
-      <div class="homepage-body">
-        <div class="homepage-value" id="darvas-total">$--</div>
-        <div class="homepage-change" id="darvas-change">--%</div>
-      </div>
-      <div class="homepage-chart">
-        <canvas id="darvas-mini"></canvas>
-      </div>
-    </div>
+
 
     <!-- INTREND -->
     <div class="homepage-card">
@@ -88,6 +75,38 @@ fetch("./components/navbar.html")
       </div>
     </div>
 
+<!-- ETF -->
+<div class="homepage-card">
+  <div class="homepage-header">
+    <h3>ETF</h3>
+    <p class="homepage-meta">Starting capital: $100,000 - May 2026</p>
+  </div>
+
+  <div class="homepage-body">
+    <div class="homepage-value" id="etf-total">$--</div>
+    <div class="homepage-change" id="etf-change">--%</div>
+  </div>
+
+  <div class="homepage-chart">
+    <canvas id="etf-mini"></canvas>
+  </div>
+</div>
+    
+    <!-- DARVAS -->
+    <div class="homepage-card">
+      <div class="homepage-header">
+        <h3>DARVAS</h3>
+        <p class="homepage-meta">Starting capital: $100,000 - Oct 2025</p>
+      </div>
+      <div class="homepage-body">
+        <div class="homepage-value" id="darvas-total">$--</div>
+        <div class="homepage-change" id="darvas-change">--%</div>
+      </div>
+      <div class="homepage-chart">
+        <canvas id="darvas-mini"></canvas>
+      </div>
+    </div>
+    
   </div>
 </div>
 
@@ -117,7 +136,12 @@ function loadSheet(sheetName, callback) {
   document.body.appendChild(s);
 }
 
-/* ===== GENERIC RENDER ===== */
+  function handleETF(data) {
+  renderCard(data, "Total", "etf");
+}
+
+  
+  /* ===== GENERIC RENDER ===== */
 function renderCard(data, column, prefix) {
 
   const totals = data
@@ -174,10 +198,14 @@ function handleBreakout(data) {
   renderCard(data, "Total", "breakout");
 }
 
+  
 /* ===== RUN ===== */
 loadSheet("Darvas Oct 25 History", "handleDarvas");
 loadSheet("InTrend May 1 History", "handleInTrend");
 loadSheet("Breakout May 26 History", "handleBreakout");
+ loadSheet("ETF May 1 History", "handleETF"); 
+  
+  
 </script>
 
 </body>

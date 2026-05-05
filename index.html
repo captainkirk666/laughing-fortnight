@@ -141,34 +141,67 @@ function loadSheet(sheetName, callback) {
 }
 
   
-  /* ===== GENERIC RENDER ===== */
-datasets: [{
-  data: totals,
-  borderColor: "#3b82f6",   // solid line
-  borderWidth: 2.5,
-  tension: 0.4,
-  pointRadius: 0,
-  fill: true,
+ function renderCard(data, column, prefix) {
 
-  backgroundColor: (ctx) => {
-    const chart = ctx.chart;
-    const { ctx: canvas, chartArea } = chart;
+  const totals = data
+    .map(r => parseFloat(r[column]))
+    .filter(v => !isNaN(v) && v > 0);
 
-    if (!chartArea) return "rgba(59,130,246,0.15)";
+  if (totals.length === 0) return;
 
-    const gradient = canvas.createLinearGradient(
-      0,
-      chartArea.top,
-      0,
-      chartArea.bottom
-    );
+  const latest = totals[totals.length - 1];
+  const first = totals[0];
+  const pct = ((latest - first) / first) * 100;
 
-    gradient.addColorStop(0, "rgba(59,130,246,0.35)");
-    gradient.addColorStop(1, "rgba(59,130,246,0.02)");
+  document.getElementById(`${prefix}-total`).textContent =
+    "$" + latest.toLocaleString(undefined, { minimumFractionDigits: 2 });
 
-    return gradient;
-  }
-}]
+  const el = document.getElementById(`${prefix}-change`);
+  el.textContent = (pct >= 0 ? "+" : "") + pct.toFixed(2) + "%";
+  el.style.color = pct >= 0 ? "#22c55e" : "#ef4444";
+
+  new Chart(document.getElementById(`${prefix}-mini`), {
+    type: "line",
+    data: {
+      labels: totals.map((_, i) => i),
+      datasets: [{
+        data: totals,
+        borderColor: "#3b82f6",
+        borderWidth: 2.5,
+        tension: 0.4,
+        pointRadius: 0,
+        fill: true,
+
+        backgroundColor: (ctx) => {
+          const chart = ctx.chart;
+          const { ctx: canvas, chartArea } = chart;
+
+          if (!chartArea) return "rgba(59,130,246,0.15)";
+
+          const gradient = canvas.createLinearGradient(
+            0,
+            chartArea.top,
+            0,
+            chartArea.bottom
+          );
+
+          gradient.addColorStop(0, "rgba(59,130,246,0.35)");
+          gradient.addColorStop(1, "rgba(59,130,246,0.02)");
+
+          return gradient;
+        }
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { display: false },
+        y: { display: false }
+      }
+    }
+  });
+}
 
 /* ===== CALLBACKS ===== */
 function handleDarvas(data) {

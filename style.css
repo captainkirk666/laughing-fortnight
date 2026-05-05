@@ -114,8 +114,8 @@ header,
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px; /* tighter spacing */
-  margin: 6px 0 4px; /* reduced vertical space */
+  gap: 3px; /* tighter spacing */
+  margin: 4px 0 2px; /* reduced vertical space */
 }
 
 .homepage-value {
@@ -137,8 +137,8 @@ header,
 
 .homepage-chart {
   position: relative;
-  height: 120px;
-  margin-top: 4px;
+  height: 150px;
+  margin-top: 2px;
 }
 
 .homepage-chart canvas {

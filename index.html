@@ -50,6 +50,10 @@ fetch("./components/navbar.html")
 <a href="intrend.html" class="homepage-link">
   <div class="homepage-card">
 
+    <button class="share-btn" onclick="shareCard(event, 'InTrend',  -2.04)">
+  ⤴
+</button>
+    
     <div class="homepage-header">
       <h3>IN TREND</h3>
       <p class="homepage-meta">Starting capital: $100,000 – May 2026</p>
@@ -71,6 +75,10 @@ fetch("./components/navbar.html")
 <a href="breakout-may26.html" class="homepage-link">
   <div class="homepage-card">
 
+    <button class="share-btn" onclick="shareCard(event, 'InTrend',  -2.04)">
+  ⤴
+</button>
+    
     <div class="homepage-header">
         <h3>BREAKOUTS</h3>
         <p class="homepage-meta">Starting capital: $100,000 - May 2026</p>
@@ -90,6 +98,10 @@ fetch("./components/navbar.html")
 <a href="etf.html" class="homepage-link">
   <div class="homepage-card">
 
+    <button class="share-btn" onclick="shareCard(event, 'InTrend',  -2.04)">
+  ⤴
+</button>
+
     <div class="homepage-header">
     <h3>ETF</h3>
     <p class="homepage-meta">Starting capital: $100,000 - May 2026</p>
@@ -108,6 +120,10 @@ fetch("./components/navbar.html")
     <!-- DARVAS -->
   <a href="darvas.html" class="homepage-link"> 
   <div class="homepage-card">
+
+    <button class="share-btn" onclick="shareCard(event, 'InTrend',  -2.04)">
+  ⤴
+</button>
     
       <div class="homepage-header">
         <h3>DARVAS</h3>
@@ -310,6 +326,26 @@ function handleBreakoutHistory(data) {
 
 function handleETFHistory(data) {
   renderCard(data, "Total", "etf");
+}
+
+function shareCard(e, name, pct) {
+  e.preventDefault();       // stops link navigation
+  e.stopPropagation();      // stops bubbling to <a>
+
+  const url = window.location.origin + "/" + name.toLowerCase() + ".html";
+
+  const text = `${name} Portfolio: ${pct >= 0 ? "+" : ""}${pct}% since inception.`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: name + " Portfolio",
+      text: text,
+      url: url
+    });
+  } else {
+    navigator.clipboard.writeText(text + " " + url);
+    alert("Link copied!");
+  }
 }
   
 /* ===== RUN ===== */

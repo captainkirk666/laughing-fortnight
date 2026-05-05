@@ -245,23 +245,33 @@ options: {
 
 /* ===== CALLBACKS ===== */
 function handleDarvas(data) {
-  renderCard(data, "Total", "darvas");
+  renderTotal(data, "darvas");
 }
 
 function handleInTrend(data) {
-  renderCard(data, "Total", "intrend");
+  renderTotal(data, "intrend");
 }
 
 function handleBreakout(data) {
-  renderCard(data, "Total", "breakout");
+  renderTotal(data, "breakout");
 }
 
+function handleETF(data) {
+  renderTotal(data, "etf");
+}
   
 /* ===== RUN ===== */
-loadSheet("Darvas Oct 25 History", "handleDarvas");
-loadSheet("InTrend May 1 History", "handleInTrend");
-loadSheet("Breakout May 26 History", "handleBreakout");
+// 💰 TOTALS (live data)
+loadSheet("Darvas Oct 25", "handleDarvas");
+loadSheet("InTrend May 1", "handleInTrend");
+loadSheet("Breakout May 26", "handleBreakout");
 loadSheet("ETF May 1", "handleETF");
+
+// 📈 CHARTS (history)
+loadSheet("Darvas Oct 25 History", "handleDarvasHistory");
+loadSheet("InTrend May 1 History", "handleInTrendHistory");
+loadSheet("Breakout May 26 History", "handleBreakoutHistory");
+loadSheet("ETF May 1 History", "handleETFHistory");
   
   
 </script>

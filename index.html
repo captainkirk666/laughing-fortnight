@@ -130,7 +130,9 @@ fetch("./components/navbar.html")
 const BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
 
 /* ===== GENERIC LOADER ===== */
+const liveTotals = {};
 
+  
   const glowPlugin = {
   id: "glow",
   beforeDatasetDraw(chart) {
@@ -151,7 +153,7 @@ const BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxS
 function loadSheet(sheetName, callback) {
   const s = document.createElement("script");
   s.src = `${BASE_URL}?sheet=${encodeURIComponent(sheetName)}&callback=${callback}`;
-  document.body.appendChild(s);
+document.body.appendChild(s);
 }
 
   
@@ -163,15 +165,27 @@ function loadSheet(sheetName, callback) {
 
   if (totals.length === 0) return;
 
-  const latest = totals[totals.length - 1];
-  const first = totals[0];
-  const pct = ((latest - first) / first) * 100;
+const live = liveTotals[prefix];
+const first = totals[0];
 
+if (!live || !first) return;
+
+// overall %
+const overall = ((live - first) / first) * 100;
+
+// daily %
+let daily = 0;
+if (totals.length > 1) {
+  const prev = totals[totals.length - 2];
+  if (prev > 0) {
+    daily = ((live - prev) / prev) * 100;
+  }
+}
 
 
   const el = document.getElementById(`${prefix}-change`);
-  el.textContent = (pct >= 0 ? "+" : "") + pct.toFixed(2) + "%";
-  el.style.color = pct >= 0 ? "#22c55e" : "#ef4444";
+ el.textContent = (daily >= 0 ? "+" : "") + daily.toFixed(2) + "%";
+el.style.color = daily >= 0 ? "#22c55e" : "#ef4444";
 
   new Chart(document.getElementById(`${prefix}-mini`), {
     type: "line",
@@ -236,6 +250,8 @@ function renderTotal(data, prefix) {
     return sum + (isNaN(val) ? 0 : val);
   }, 0);
 
+
+  liveTotals[prefix] = total;
   document.getElementById(`${prefix}-total`).textContent =
     "$" + total.toLocaleString(undefined, { minimumFractionDigits: 2 });
 }

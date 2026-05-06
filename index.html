@@ -1,209 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Portfolio Dashboard</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=16">
-</head>
-
-<body>
-
-<!-- NAVBAR -->
-<div id="navbar"></div>
-
-<script>
-fetch("./components/navbar.html")
-  .then(res => res.text())
-  .then(data => {
-    document.getElementById("navbar").innerHTML = data;
-
-    const links = document.querySelectorAll(".nav-tab");
-    const current = window.location.pathname.split("/").pop();
-
-    links.forEach(link => {
-      if (link.getAttribute("href") === current) {
-        link.classList.add("active");
-      }
-    });
-  });
-</script>
-
-<div class="page">
-
-<h2>DASHBOARD</h2>
-
-
-  <div class="info-text">
-  <p>This is a sample portfolio created to test the effectiveness of different trading strategies. </p>It is not intended as a buy recommendation, as many of the stocks featured are highly volatile and can experience significant daily gains and losses.</p>
-  <p>The purpose of this site is to identify stocks that are trending and evaluate their potential as buy opportunities.</p>
-</div>
-
-<div class="homepage">
-  <div class="homepage-grid">
-
-
-
- 
-<!-- IN TREND -->
-<a href="intrend.html" class="homepage-link">
-  <div class="homepage-card">
-
-    <button class="share-btn" onclick="shareCard(event, 'InTrend',  -2.04)">
-  ⤴
-</button>
-    
-    <div class="homepage-header">
-      <h3>IN TREND</h3>
-      <p class="homepage-meta">Starting capital: $100,000 – May 2026</p>
-    </div>
-
-    <div class="homepage-body">
-      <div class="homepage-value" id="intrend-total">$--</div>
-      <div class="homepage-change" id="intrend-change">--%</div>
-    </div>
-
-    <div class="homepage-chart">
-      <canvas id="intrend-mini"></canvas>
-    </div>
-
-  </div>
-</a>
-
-    <!-- BREAKOUT -->
-<a href="breakout-may26.html" class="homepage-link">
-  <div class="homepage-card">
-
-    <button class="share-btn" onclick="shareCard(event, 'InTrend',  -2.04)">
-  ⤴
-</button>
-    
-    <div class="homepage-header">
-        <h3>BREAKOUTS</h3>
-        <p class="homepage-meta">Starting capital: $100,000 - May 2026</p>
-      </div>
-    
-    <div class="homepage-body">
-        <div class="homepage-value" id="breakout-total">$--</div>
-        <div class="homepage-change" id="breakout-change">--%</div>
-      </div>
- 
-    <div class="homepage-chart">
-        <canvas id="breakout-mini"></canvas>
-      </div>
-    </div>
-
-<!-- ETF -->
-<a href="etf.html" class="homepage-link">
-  <div class="homepage-card">
-
-    <button class="share-btn" onclick="shareCard(event, 'InTrend',  -2.04)">
-  ⤴
-</button>
-
-    <div class="homepage-header">
-    <h3>ETF</h3>
-    <p class="homepage-meta">Starting capital: $100,000 - May 2026</p>
-  </div>
-
-  <div class="homepage-body">
-  <div class="homepage-value" id="etf-total">$--</div>
-
-  <div class="card-performance">
-    <span class="daily"></span>
-    <span class="portfolio"></span>
-  </div>
-</div>
-
-  <div class="homepage-chart">
-    <canvas id="etf-mini"></canvas>
-  </div>
-</div>
-    
-    <!-- DARVAS -->
-  <a href="darvas.html" class="homepage-link"> 
-  <div class="homepage-card">
-
-    <button class="share-btn" onclick="shareCard(event, 'InTrend',  -2.04)">
-  ⤴
-</button>
-    
-      <div class="homepage-header">
-        <h3>DARVAS</h3>
-        <p class="homepage-meta">Starting capital: $100,000 - Oct 2025</p>
-      </div>
-    
-      <div class="homepage-body">
-        <div class="homepage-value" id="darvas-total">$--</div>
-        <div class="homepage-change" id="darvas-change">--%</div>
-      </div>
-      <div class="homepage-chart">
-        <canvas id="darvas-mini"></canvas>
-      </div>
-    </div>
-    
-  </div>
-</div>
-
-<!-- DISCLAIMER -->
-<div class="disclaimer">
-  <p>
-    Simulation only. Not financial advice.
-  </p>
-</div>
-
-</div>
-
-<!-- CHART.JS -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- NAV SCRIPT -->
-<script src="js/app.js"></script>
-
-<!-- DASHBOARD SCRIPT -->
 <script>
 const BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
 
-/* ===== GENERIC LOADER ===== */
+/* ===== GLOBAL STORE ===== */
 const liveTotals = {};
 
-  
-  const glowPlugin = {
+/* ===== CHART GLOW ===== */
+const glowPlugin = {
   id: "glow",
   beforeDatasetDraw(chart) {
     const { ctx } = chart;
-
     ctx.save();
     ctx.shadowColor = "rgba(96,165,250,0.6)";
     ctx.shadowBlur = 12;
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 0;
   },
   afterDatasetDraw(chart) {
     chart.ctx.restore();
   }
 };
 
-  
+/* ===== LOAD SHEET ===== */
 function loadSheet(sheetName, callback) {
   const s = document.createElement("script");
   s.src = `${BASE_URL}?sheet=${encodeURIComponent(sheetName)}&callback=${callback}`;
-document.body.appendChild(s);
+  document.body.appendChild(s);
 }
 
-
 /* ===== PERFORMANCE LOGIC ===== */
-
 function calculatePerformance(totals, live) {
   if (!totals || totals.length === 0 || !live) return null;
 
   const first = totals[0];
 
-  // portfolio %
   const portfolio = ((live - 100000) / 100000) * 100;
 
-  // daily %
   let daily = 0;
   if (totals.length > 1) {
     const prev = totals[totals.length - 2];
@@ -212,14 +41,12 @@ function calculatePerformance(totals, live) {
     }
   }
 
-  return { daily, portfolio, first };
+  return { daily, portfolio };
 }
-
 
 function formatPercent(val) {
   return (val >= 0 ? "+" : "") + val.toFixed(2) + "%";
 }
-
 
 function applyPerformanceToCard(card, daily, portfolio) {
   if (!card) return;
@@ -229,117 +56,17 @@ function applyPerformanceToCard(card, daily, portfolio) {
 
   if (!dailyEl || !portfolioEl) return;
 
-  // text
   dailyEl.textContent = "Daily " + formatPercent(daily);
   portfolioEl.textContent = "Portfolio " + formatPercent(portfolio);
 
-  // reset classes
   dailyEl.classList.remove("positive", "negative");
   portfolioEl.classList.remove("positive", "negative");
 
-  // apply colours
   dailyEl.classList.add(daily >= 0 ? "positive" : "negative");
   portfolioEl.classList.add(portfolio >= 0 ? "positive" : "negative");
 }
 
-
-
- 
-
-if (!first) return;
-
-// if live not ready yet, wait and try again
-if (!live) {
-  setTimeout(() => renderCard(data, column, prefix), 100);
-  return;
-}
-
-// overall %
-const overall = ((live - first) / first) * 100;
-   const portfolio = ((live - 100000) / 100000) * 100;
-
-// daily %
-let daily = 0;
-if (totals.length > 1) {
-  const prev = totals[totals.length - 2];
-  if (prev > 0) {
-    daily = ((live - prev) / prev) * 100;
-  }
-}
-
-
-  
-dailyEl.classList.remove("positive", "negative");
-portfolioEl.classList.remove("positive", "negative");
-
-dailyEl.classList.add(daily >= 0 ? "positive" : "negative");
-portfolioEl.classList.add(portfolio >= 0 ? "positive" : "negative");dailyEl.classList.remove("positive", "negative");
-portfolioEl.classList.remove("positive", "negative");
-
-dailyEl.classList.add(daily >= 0 ? "positive" : "negative");
-portfolioEl.classList.add(portfolio >= 0 ? "positive" : "negative");
-  }
-}
-
-  const el = document.getElementById(`${prefix}-change`);
- el.textContent = (overall >= 0 ? "+" : "") + overall.toFixed(2) + "%";
-el.style.color = overall >= 0 ? "#22c55e" : "#ef4444";
-
-  new Chart(document.getElementById(`${prefix}-mini`), {
-    type: "line",
-    data: {
-      labels: totals.map((_, i) => i),
-
-      
-     datasets: [{
-  data: totals,
-  borderColor: "#60a5fa",
-  borderWidth: 3,
-  tension: 0.4,
-  pointRadius: 0,
-  fill: "origin",
-
-  borderJoinStyle: "round",
-  borderCapStyle: "round",
-
-  backgroundColor: (ctx) => {
-    const chart = ctx.chart;
-    const { ctx: canvas, chartArea } = chart;
-
-    if (!chartArea) return "rgba(59,130,246,0.1)";
-
-    const gradient = canvas.createLinearGradient(
-      0,
-      chartArea.top,
-      0,
-      chartArea.bottom
-    );
-
-    gradient.addColorStop(0, "rgba(59,130,246,0.18)");
-    gradient.addColorStop(0.6, "rgba(59,130,246,0.06)");
-    gradient.addColorStop(1, "rgba(59,130,246,0.01)");
-
-    return gradient;
-  }
-}]
-
-      
-    },
-options: {
-  maintainAspectRatio: false,
-  plugins: {
-    legend: { display: false }
-  },
-  scales: {
-    x: { display: false },
-    y: { display: false }
-  }
-},
-  // 👇 THIS IS THE LINE YOU ADD
-  plugins: [glowPlugin]
-    });
-}
-
+/* ===== RENDER TOTAL ===== */
 function renderTotal(data, prefix) {
   const total = data.reduce((sum, r) => {
     const val = parseFloat(
@@ -348,81 +75,98 @@ function renderTotal(data, prefix) {
     return sum + (isNaN(val) ? 0 : val);
   }, 0);
 
-
   liveTotals[prefix] = total;
+
   document.getElementById(`${prefix}-total`).textContent =
     "$" + total.toLocaleString(undefined, { minimumFractionDigits: 2 });
 }
 
-  
-/* ===== CALLBACKS ===== */
-function handleDarvas(data) {
-  renderTotal(data, "darvas");
-}
+/* ===== RENDER CARD ===== */
+function renderCard(data, column, prefix) {
 
-function handleInTrend(data) {
-  renderTotal(data, "intrend");
-}
+  const totals = data
+    .map(r => parseFloat(r[column]))
+    .filter(v => !isNaN(v) && v > 0);
 
-function handleBreakout(data) {
-  renderTotal(data, "breakout");
-}
+  if (totals.length === 0) return;
 
-function handleETF(data) {
-  renderTotal(data, "etf");
-}
+  const live = liveTotals[prefix];
 
-function handleDarvasHistory(data) {
-  renderCard(data, "Total", "darvas");
-}
-
-function handleInTrendHistory(data) {
-  renderCard(data, "Total", "intrend");
-}
-
-function handleBreakoutHistory(data) {
-  renderCard(data, "Total", "breakout");
-}
-
-function handleETFHistory(data) {
-  renderCard(data, "Total", "etf");
-}
-
-function shareCard(e, name, pct) {
-  e.preventDefault();       // stops link navigation
-  e.stopPropagation();      // stops bubbling to <a>
-
-  const url = window.location.origin + "/" + name.toLowerCase() + ".html";
-
-  const text = `${name} Portfolio: ${pct >= 0 ? "+" : ""}${pct}% since inception.`;
-
-  if (navigator.share) {
-    navigator.share({
-      title: name + " Portfolio",
-      text: text,
-      url: url
-    });
-  } else {
-    navigator.clipboard.writeText(text + " " + url);
-    alert("Link copied!");
+  if (!live) {
+    setTimeout(() => renderCard(data, column, prefix), 100);
+    return;
   }
+
+  // apply performance
+  const perf = calculatePerformance(totals, live);
+  if (!perf) return;
+
+  const card = document
+    .getElementById(`${prefix}-total`)
+    .closest(".homepage-card");
+
+  applyPerformanceToCard(card, perf.daily, perf.portfolio);
+
+  // chart
+  new Chart(document.getElementById(`${prefix}-mini`), {
+    type: "line",
+    data: {
+      labels: totals.map((_, i) => i),
+      datasets: [{
+        data: totals,
+        borderColor: "#60a5fa",
+        borderWidth: 3,
+        tension: 0.4,
+        pointRadius: 0,
+        fill: "origin",
+        borderJoinStyle: "round",
+        borderCapStyle: "round",
+        backgroundColor: (ctx) => {
+          const chart = ctx.chart;
+          const { ctx: canvas, chartArea } = chart;
+          if (!chartArea) return "rgba(59,130,246,0.1)";
+
+          const gradient = canvas.createLinearGradient(
+            0, chartArea.top,
+            0, chartArea.bottom
+          );
+
+          gradient.addColorStop(0, "rgba(59,130,246,0.18)");
+          gradient.addColorStop(0.6, "rgba(59,130,246,0.06)");
+          gradient.addColorStop(1, "rgba(59,130,246,0.01)");
+
+          return gradient;
+        }
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { x: { display: false }, y: { display: false } }
+    },
+    plugins: [glowPlugin]
+  });
 }
-  
+
+/* ===== CALLBACKS ===== */
+function handleDarvas(data) { renderTotal(data, "darvas"); }
+function handleInTrend(data) { renderTotal(data, "intrend"); }
+function handleBreakout(data) { renderTotal(data, "breakout"); }
+function handleETF(data) { renderTotal(data, "etf"); }
+
+function handleDarvasHistory(data) { renderCard(data, "Total", "darvas"); }
+function handleInTrendHistory(data) { renderCard(data, "Total", "intrend"); }
+function handleBreakoutHistory(data) { renderCard(data, "Total", "breakout"); }
+function handleETFHistory(data) { renderCard(data, "Total", "etf"); }
+
 /* ===== RUN ===== */
-// 💰 TOTALS (live data)
 loadSheet("Darvas Oct 25", "handleDarvas");
 loadSheet("InTrend May 1", "handleInTrend");
 loadSheet("Breakout May 26", "handleBreakout");
 loadSheet("ETF May 1", "handleETF");
 
-// 📈 CHARTS (history)
 loadSheet("Darvas Oct 25 History", "handleDarvasHistory");
 loadSheet("InTrend May 1 History", "handleInTrendHistory");
 loadSheet("Breakout May 26 History", "handleBreakoutHistory");
 loadSheet("ETF May 1 History", "handleETFHistory");
-  
-  
 </script>
-
-</body>
-</html>

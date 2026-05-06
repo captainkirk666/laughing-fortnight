@@ -192,17 +192,77 @@ function loadSheet(sheetName, callback) {
 document.body.appendChild(s);
 }
 
-  
- function renderCard(data, column, prefix) {
 
-  const totals = data
-    .map(r => parseFloat(r[column]))
-    .filter(v => !isNaN(v) && v > 0);
+/* ===== PERFORMANCE LOGIC ===== */
 
-  if (totals.length === 0) return;
+function calculatePerformance(totals, live) {
+  if (!totals || totals.length === 0 || !live) return null;
 
-const live = liveTotals[prefix];
-const first = totals[0];
+  const first = totals[0];
+
+  // portfolio %
+  const portfolio = ((live - 100000) / 100000) * 100;
+
+  // daily %
+  let daily = 0;
+  if (totals.length > 1) {
+    const prev = totals[totals.length - 2];
+    if (prev > 0) {
+      daily = ((live - prev) / prev) * 100;
+    }
+  }
+
+  return { daily, portfolio, first };
+}
+
+
+function formatPercent(val) {
+  return (val >= 0 ? "+" : "") + val.toFixed(2) + "%";
+}
+
+
+function applyPerformanceToCard(card, daily, portfolio) {
+  if (!card) return;
+
+  const dailyEl = card.querySelector(".daily");
+  const portfolioEl = card.querySelector(".portfolio");
+
+  if (!dailyEl || !portfolioEl) return;
+
+  // text
+  dailyEl.textContent = "Daily " + formatPercent(daily);
+  portfolioEl.textContent = "Portfolio " + formatPercent(portfolio);
+
+  // reset classes
+  dailyEl.classList.remove("positive", "negative");
+  portfolioEl.classList.remove("positive", "negative");
+
+  // apply colours
+  dailyEl.classList.add(daily >= 0 ? "positive" : "negative");
+  portfolioEl.classList.add(portfolio >= 0 ? "positive" : "negative");
+}
+
+
+  const live = liveTotals[prefix];
+
+// wait until live data is ready
+if (!live) {
+  setTimeout(() => renderCard(data, column, prefix), 100);
+  return;
+}
+
+// calculate performance (NEW LOGIC)
+const perf = calculatePerformance(totals, live);
+if (!perf) return;
+
+// find the correct card
+const card = document
+  .getElementById(`${prefix}-total`)
+  .closest(".homepage-card");
+
+// apply UI updates
+applyPerformanceToCard(card, perf.daily, perf.portfolio);
+ 
 
 if (!first) return;
 
@@ -225,8 +285,10 @@ if (totals.length > 1) {
   }
 }
 
-const el = document.getElementById(`${prefix}-change`);
-if (el) {
+const changeEl = document.getElementById(`${prefix}-change`);
+if (changeEl) {
+  changeEl.textContent = ...
+}
   el.textContent = (overall >= 0 ? "+" : "") + overall.toFixed(2) + "%";
   el.style.color = overall >= 0 ? "#22c55e" : "#ef4444";
 }

@@ -159,14 +159,19 @@ function handleInTrendHistory(data) { renderCard(data, "Total", "intrend"); }
 function handleBreakoutHistory(data) { renderCard(data, "Total", "breakout"); }
 function handleETFHistory(data) { renderCard(data, "Total", "etf"); }
 
-/* ===== RUN ===== */
-loadSheet("Darvas Oct 25", "handleDarvas");
-loadSheet("InTrend May 1", "handleInTrend");
-loadSheet("Breakout May 26", "handleBreakout");
-loadSheet("ETF May 1", "handleETF");
+document.addEventListener("DOMContentLoaded", () => {
 
-loadSheet("Darvas Oct 25 History", "handleDarvasHistory");
-loadSheet("InTrend May 1 History", "handleInTrendHistory");
-loadSheet("Breakout May 26 History", "handleBreakoutHistory");
-loadSheet("ETF May 1 History", "handleETFHistory");
+  // 💰 TOTALS
+  loadSheet("Darvas Oct 25", "handleDarvas");
+  loadSheet("InTrend May 1", "handleInTrend");
+  loadSheet("Breakout May 26", "handleBreakout");
+  loadSheet("ETF May 1", "handleETF");
+
+  // 📈 HISTORY
+  loadSheet("Darvas Oct 25 History", "handleDarvasHistory");
+  loadSheet("InTrend May 1 History", "handleInTrendHistory");
+  loadSheet("Breakout May 26 History", "handleBreakoutHistory");
+  loadSheet("ETF May 1 History", "handleETFHistory");
+
+});
 </script>

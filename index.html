@@ -267,24 +267,8 @@ if (totals.length > 1) {
   }
 }
 
-const changeEl = document.getElementById(`${prefix}-change`);
-if (changeEl) {
-  changeEl.textContent = ...
-}
-  el.textContent = (overall >= 0 ? "+" : "") + overall.toFixed(2) + "%";
-  el.style.color = overall >= 0 ? "#22c55e" : "#ef4444";
-}
 
-if (card) {
-  const dailyEl = card.querySelector(".daily");
-  const portfolioEl = card.querySelector(".portfolio");
-
-  if (dailyEl && portfolioEl) {
-    const format = (v) => (v >= 0 ? "+" : "") + v.toFixed(2) + "%";
-
-    dailyEl.textContent = "Daily " + format(daily);
-    portfolioEl.textContent = "Portfolio " + format(portfolio);
-
+  
 dailyEl.classList.remove("positive", "negative");
 portfolioEl.classList.remove("positive", "negative");
 

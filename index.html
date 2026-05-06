@@ -243,25 +243,7 @@ function applyPerformanceToCard(card, daily, portfolio) {
 }
 
 
-  const live = liveTotals[prefix];
 
-// wait until live data is ready
-if (!live) {
-  setTimeout(() => renderCard(data, column, prefix), 100);
-  return;
-}
-
-// calculate performance (NEW LOGIC)
-const perf = calculatePerformance(totals, live);
-if (!perf) return;
-
-// find the correct card
-const card = document
-  .getElementById(`${prefix}-total`)
-  .closest(".homepage-card");
-
-// apply UI updates
-applyPerformanceToCard(card, perf.daily, perf.portfolio);
  
 
 if (!first) return;

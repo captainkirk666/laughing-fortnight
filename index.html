@@ -4,30 +4,66 @@
 <meta charset="UTF-8">
 <title>Portfolio Dashboard</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=16">
 </head>
 
 <body>
 
 <div class="page">
-
 <h2>DASHBOARD</h2>
 
 <div class="homepage">
-  <div class="homepage-grid">
+<div class="homepage-grid">
 
-<!-- ETF CARD (working example) -->
+<!-- CARD TEMPLATE (used 4 times) -->
+
+<!-- IN TREND -->
 <div class="homepage-card">
+  <div class="homepage-header">
+    <h3>IN TREND</h3>
+  </div>
 
+  <div class="homepage-body">
+    <div class="homepage-value" id="intrend-total">$--</div>
+    <div class="card-performance">
+      <span class="daily"></span>
+      <span class="portfolio"></span>
+    </div>
+  </div>
+
+  <div class="homepage-chart">
+    <canvas id="intrend-mini"></canvas>
+  </div>
+</div>
+
+<!-- BREAKOUT -->
+<div class="homepage-card">
+  <div class="homepage-header">
+    <h3>BREAKOUT</h3>
+  </div>
+
+  <div class="homepage-body">
+    <div class="homepage-value" id="breakout-total">$--</div>
+    <div class="card-performance">
+      <span class="daily"></span>
+      <span class="portfolio"></span>
+    </div>
+  </div>
+
+  <div class="homepage-chart">
+    <canvas id="breakout-mini"></canvas>
+  </div>
+</div>
+
+<!-- ETF -->
+<div class="homepage-card">
   <div class="homepage-header">
     <h3>ETF</h3>
-    <p class="homepage-meta">Starting capital: $100,000 - May 2026</p>
   </div>
 
   <div class="homepage-body">
     <div class="homepage-value" id="etf-total">$--</div>
-
     <div class="card-performance">
       <span class="daily"></span>
       <span class="portfolio"></span>
@@ -37,12 +73,29 @@
   <div class="homepage-chart">
     <canvas id="etf-mini"></canvas>
   </div>
-
 </div>
 
+<!-- DARVAS -->
+<div class="homepage-card">
+  <div class="homepage-header">
+    <h3>DARVAS</h3>
+  </div>
+
+  <div class="homepage-body">
+    <div class="homepage-value" id="darvas-total">$--</div>
+    <div class="card-performance">
+      <span class="daily"></span>
+      <span class="portfolio"></span>
+    </div>
+  </div>
+
+  <div class="homepage-chart">
+    <canvas id="darvas-mini"></canvas>
   </div>
 </div>
 
+</div>
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -52,15 +105,15 @@ const BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxS
 
 const liveTotals = {};
 
-/* ===== LOAD ===== */
+/* LOAD */
 function loadSheet(sheet, callback) {
   const s = document.createElement("script");
   s.src = `${BASE_URL}?sheet=${encodeURIComponent(sheet)}&callback=${callback}`;
   document.head.appendChild(s);
 }
 
-/* ===== PERFORMANCE ===== */
-function calculatePerformance(totals, live) {
+/* PERFORMANCE */
+function calcPerf(totals, live) {
   if (!totals.length || !live) return null;
 
   const portfolio = ((live - 100000) / 100000) * 100;
@@ -74,11 +127,11 @@ function calculatePerformance(totals, live) {
   return { daily, portfolio };
 }
 
-function formatPercent(v) {
+function fmt(v) {
   return (v >= 0 ? "+" : "") + v.toFixed(2) + "%";
 }
 
-function applyPerformance(card, daily, portfolio) {
+function applyPerf(card, daily, portfolio) {
   if (!card) return;
 
   const d = card.querySelector(".daily");
@@ -86,14 +139,14 @@ function applyPerformance(card, daily, portfolio) {
 
   if (!d || !p) return;
 
-  d.textContent = "Daily " + formatPercent(daily);
-  p.textContent = "Portfolio " + formatPercent(portfolio);
+  d.textContent = "Daily " + fmt(daily);
+  p.textContent = "Portfolio " + fmt(portfolio);
 
   d.className = "daily " + (daily >= 0 ? "positive" : "negative");
   p.className = "portfolio " + (portfolio >= 0 ? "positive" : "negative");
 }
 
-/* ===== TOTAL ===== */
+/* TOTAL */
 function renderTotal(data, prefix) {
   const total = data.reduce((sum, r) => {
     const val = parseFloat(String(r["TOTAL $"] || "").replace(/[$,]/g, ""));
@@ -102,18 +155,18 @@ function renderTotal(data, prefix) {
 
   liveTotals[prefix] = total;
 
-  const el = document.getElementById(`${prefix}-total`);
+  const el = document.getElementById(prefix + "-total");
   if (!el) return;
 
   el.textContent = "$" + total.toLocaleString(undefined, { minimumFractionDigits: 2 });
 }
 
-/* ===== CARD ===== */
+/* CARD */
 function renderCard(data, column, prefix) {
 
   const totals = data
     .map(r => parseFloat(r[column]))
-    .filter(v => !isNaN(v) && v > 0);
+    .filter(v => !isNaN(v));
 
   if (!totals.length) return;
 
@@ -123,25 +176,25 @@ function renderCard(data, column, prefix) {
     return;
   }
 
-  const perf = calculatePerformance(totals, live);
+  const perf = calcPerf(totals, live);
   if (!perf) return;
 
-  const totalEl = document.getElementById(`${prefix}-total`);
+  const totalEl = document.getElementById(prefix + "-total");
   if (!totalEl) return;
 
   const card = totalEl.closest(".homepage-card");
   if (!card) return;
 
-  applyPerformance(card, perf.daily, perf.portfolio);
+  applyPerf(card, perf.daily, perf.portfolio);
 
-  new Chart(document.getElementById(`${prefix}-mini`), {
+  new Chart(document.getElementById(prefix + "-mini"), {
     type: "line",
     data: {
       labels: totals.map((_, i) => i),
       datasets: [{
         data: totals,
         borderColor: "#60a5fa",
-        borderWidth: 3,
+        borderWidth: 2,
         tension: 0.4,
         pointRadius: 0,
         fill: true
@@ -154,14 +207,30 @@ function renderCard(data, column, prefix) {
   });
 }
 
-/* ===== CALLBACKS ===== */
-function handleETF(data) { renderTotal(data, "etf"); }
-function handleETFHistory(data) { renderCard(data, "Total", "etf"); }
+/* CALLBACKS */
+function handleDarvas(d) { renderTotal(d, "darvas"); }
+function handleInTrend(d) { renderTotal(d, "intrend"); }
+function handleBreakout(d) { renderTotal(d, "breakout"); }
+function handleETF(d) { renderTotal(d, "etf"); }
 
-/* ===== RUN ===== */
+function handleDarvasHistory(d) { renderCard(d, "Total", "darvas"); }
+function handleInTrendHistory(d) { renderCard(d, "Total", "intrend"); }
+function handleBreakoutHistory(d) { renderCard(d, "Total", "breakout"); }
+function handleETFHistory(d) { renderCard(d, "Total", "etf"); }
+
+/* RUN */
 document.addEventListener("DOMContentLoaded", () => {
+
+  loadSheet("Darvas Oct 25", "handleDarvas");
+  loadSheet("InTrend May 1", "handleInTrend");
+  loadSheet("Breakout May 26", "handleBreakout");
   loadSheet("ETF May 1", "handleETF");
+
+  loadSheet("Darvas Oct 25 History", "handleDarvasHistory");
+  loadSheet("InTrend May 1 History", "handleInTrendHistory");
+  loadSheet("Breakout May 26 History", "handleBreakoutHistory");
   loadSheet("ETF May 1 History", "handleETFHistory");
+
 });
 </script>
 

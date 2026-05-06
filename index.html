@@ -1,113 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Portfolio Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=16">
+</head>
+
+<body>
+
+<div class="page">
+
+<h2>DASHBOARD</h2>
+
+<div class="homepage">
+  <div class="homepage-grid">
+
+<!-- ETF CARD (working example) -->
+<div class="homepage-card">
+
+  <div class="homepage-header">
+    <h3>ETF</h3>
+    <p class="homepage-meta">Starting capital: $100,000 - May 2026</p>
+  </div>
+
+  <div class="homepage-body">
+    <div class="homepage-value" id="etf-total">$--</div>
+
+    <div class="card-performance">
+      <span class="daily"></span>
+      <span class="portfolio"></span>
+    </div>
+  </div>
+
+  <div class="homepage-chart">
+    <canvas id="etf-mini"></canvas>
+  </div>
+
+</div>
+
+  </div>
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
 const BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
 
-/* ===== GLOBAL STORE ===== */
 const liveTotals = {};
 
-/* ===== CHART GLOW ===== */
-const glowPlugin = {
-  id: "glow",
-  beforeDatasetDraw(chart) {
-    const { ctx } = chart;
-    ctx.save();
-    ctx.shadowColor = "rgba(96,165,250,0.6)";
-    ctx.shadowBlur = 12;
-  },
-  afterDatasetDraw(chart) {
-    chart.ctx.restore();
-  }
-};
-
-/* ===== LOAD SHEET ===== */
-function loadSheet(sheetName, callback) {
+/* ===== LOAD ===== */
+function loadSheet(sheet, callback) {
   const s = document.createElement("script");
-  s.src = `${BASE_URL}?sheet=${encodeURIComponent(sheetName)}&callback=${callback}`;
+  s.src = `${BASE_URL}?sheet=${encodeURIComponent(sheet)}&callback=${callback}`;
   document.head.appendChild(s);
 }
 
-/* ===== PERFORMANCE LOGIC ===== */
+/* ===== PERFORMANCE ===== */
 function calculatePerformance(totals, live) {
-  if (!totals || totals.length === 0 || !live) return null;
-
-  const first = totals[0];
+  if (!totals.length || !live) return null;
 
   const portfolio = ((live - 100000) / 100000) * 100;
 
   let daily = 0;
   if (totals.length > 1) {
     const prev = totals[totals.length - 2];
-    if (prev > 0) {
-      daily = ((live - prev) / prev) * 100;
-    }
+    daily = ((live - prev) / prev) * 100;
   }
 
   return { daily, portfolio };
 }
 
-function formatPercent(val) {
-  return (val >= 0 ? "+" : "") + val.toFixed(2) + "%";
+function formatPercent(v) {
+  return (v >= 0 ? "+" : "") + v.toFixed(2) + "%";
 }
 
-function applyPerformanceToCard(card, daily, portfolio) {
+function applyPerformance(card, daily, portfolio) {
   if (!card) return;
 
-  const dailyEl = card.querySelector(".daily");
-  const portfolioEl = card.querySelector(".portfolio");
+  const d = card.querySelector(".daily");
+  const p = card.querySelector(".portfolio");
 
-  if (!dailyEl || !portfolioEl) return;
+  if (!d || !p) return;
 
-  dailyEl.textContent = "Daily " + formatPercent(daily);
-  portfolioEl.textContent = "Portfolio " + formatPercent(portfolio);
+  d.textContent = "Daily " + formatPercent(daily);
+  p.textContent = "Portfolio " + formatPercent(portfolio);
 
-  dailyEl.classList.remove("positive", "negative");
-  portfolioEl.classList.remove("positive", "negative");
-
-  dailyEl.classList.add(daily >= 0 ? "positive" : "negative");
-  portfolioEl.classList.add(portfolio >= 0 ? "positive" : "negative");
+  d.className = "daily " + (daily >= 0 ? "positive" : "negative");
+  p.className = "portfolio " + (portfolio >= 0 ? "positive" : "negative");
 }
 
-/* ===== RENDER TOTAL ===== */
+/* ===== TOTAL ===== */
 function renderTotal(data, prefix) {
   const total = data.reduce((sum, r) => {
-    const val = parseFloat(
-      String(r["TOTAL $"] || "").replace(/[$,]/g, "")
-    );
+    const val = parseFloat(String(r["TOTAL $"] || "").replace(/[$,]/g, ""));
     return sum + (isNaN(val) ? 0 : val);
   }, 0);
 
   liveTotals[prefix] = total;
 
-  document.getElementById(`${prefix}-total`).textContent =
-    "$" + total.toLocaleString(undefined, { minimumFractionDigits: 2 });
+  const el = document.getElementById(`${prefix}-total`);
+  if (!el) return;
+
+  el.textContent = "$" + total.toLocaleString(undefined, { minimumFractionDigits: 2 });
 }
 
-/* ===== RENDER CARD ===== */
+/* ===== CARD ===== */
 function renderCard(data, column, prefix) {
 
   const totals = data
     .map(r => parseFloat(r[column]))
     .filter(v => !isNaN(v) && v > 0);
 
-  if (totals.length === 0) return;
+  if (!totals.length) return;
 
   const live = liveTotals[prefix];
-
   if (!live) {
     setTimeout(() => renderCard(data, column, prefix), 100);
     return;
   }
 
-  // apply performance
   const perf = calculatePerformance(totals, live);
   if (!perf) return;
 
-  const card = document
-    .getElementById(`${prefix}-total`)
-    .closest(".homepage-card");
+  const totalEl = document.getElementById(`${prefix}-total`);
+  if (!totalEl) return;
 
-  applyPerformanceToCard(card, perf.daily, perf.portfolio);
+  const card = totalEl.closest(".homepage-card");
+  if (!card) return;
 
-  // chart
+  applyPerformance(card, perf.daily, perf.portfolio);
+
   new Chart(document.getElementById(`${prefix}-mini`), {
     type: "line",
     data: {
@@ -118,60 +144,26 @@ function renderCard(data, column, prefix) {
         borderWidth: 3,
         tension: 0.4,
         pointRadius: 0,
-        fill: "origin",
-        borderJoinStyle: "round",
-        borderCapStyle: "round",
-        backgroundColor: (ctx) => {
-          const chart = ctx.chart;
-          const { ctx: canvas, chartArea } = chart;
-          if (!chartArea) return "rgba(59,130,246,0.1)";
-
-          const gradient = canvas.createLinearGradient(
-            0, chartArea.top,
-            0, chartArea.bottom
-          );
-
-          gradient.addColorStop(0, "rgba(59,130,246,0.18)");
-          gradient.addColorStop(0.6, "rgba(59,130,246,0.06)");
-          gradient.addColorStop(1, "rgba(59,130,246,0.01)");
-
-          return gradient;
-        }
+        fill: true
       }]
     },
     options: {
-      maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: { x: { display: false }, y: { display: false } }
-    },
-    plugins: [glowPlugin]
+    }
   });
 }
 
 /* ===== CALLBACKS ===== */
-function handleDarvas(data) { renderTotal(data, "darvas"); }
-function handleInTrend(data) { renderTotal(data, "intrend"); }
-function handleBreakout(data) { renderTotal(data, "breakout"); }
 function handleETF(data) { renderTotal(data, "etf"); }
-
-function handleDarvasHistory(data) { renderCard(data, "Total", "darvas"); }
-function handleInTrendHistory(data) { renderCard(data, "Total", "intrend"); }
-function handleBreakoutHistory(data) { renderCard(data, "Total", "breakout"); }
 function handleETFHistory(data) { renderCard(data, "Total", "etf"); }
 
+/* ===== RUN ===== */
 document.addEventListener("DOMContentLoaded", () => {
-
-  // 💰 TOTALS
-  loadSheet("Darvas Oct 25", "handleDarvas");
-  loadSheet("InTrend May 1", "handleInTrend");
-  loadSheet("Breakout May 26", "handleBreakout");
   loadSheet("ETF May 1", "handleETF");
-
-  // 📈 HISTORY
-  loadSheet("Darvas Oct 25 History", "handleDarvasHistory");
-  loadSheet("InTrend May 1 History", "handleInTrendHistory");
-  loadSheet("Breakout May 26 History", "handleBreakoutHistory");
   loadSheet("ETF May 1 History", "handleETFHistory");
-
 });
 </script>
+
+</body>
+</html>

@@ -141,6 +141,21 @@ header,
    margin-bottom: 4px;
 }
 
+.card-performance {
+  display: flex;
+  gap: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.positive {
+  color: #16a34a;
+}
+
+.negative {
+  color: #dc2626;
+}
+
 /* ===== CHART AREA ===== */
 
 .homepage-chart {

@@ -148,13 +148,8 @@ header,
   font-weight: 600;
 }
 
-.positive {
-  color: #16a34a;
-}
-
-.negative {
-  color: #dc2626;
-}
+.positive { color: #22c55e; }
+.negative { color: #ef4444; }
 
 /* ===== CHART AREA ===== */
 
@@ -543,8 +538,7 @@ tr:hover {
   background: #1e293b;
 }
 
-.positive { color: #22c55e; }
-.negative { color: #ef4444; }
+
 
 
 /* ===== TOTAL GRID (NEW LAYOUT) ===== */
@@ -570,9 +564,7 @@ tr:hover {
 }
 
 
-/* colours */
-.positive { color: #22c55e; }
-.negative { color: #ef4444; }
+
 
 /* ===== CHARTS GRID ===== */
 .charts {

@@ -345,9 +345,7 @@ header,
 
 /* ===== DROPDOWN ===== */
 
-.dropdown {
-  position: relative;
-}
+
 
 .dropdown-toggle {
   display: inline-flex;

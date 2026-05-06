@@ -213,6 +213,7 @@ if (!live) {
 
 // overall %
 const overall = ((live - first) / first) * 100;
+   const portfolio = ((live - 100000) / 100000) * 100;
 
 // daily %
 let daily = 0;
@@ -223,6 +224,29 @@ if (totals.length > 1) {
   }
 }
 
+   const card = document.getElementById(`${prefix}-total`).closest(".homepage-card");
+
+if (card) {
+  const dailyEl = card.querySelector(".daily");
+  const portfolioEl = card.querySelector(".portfolio");
+
+  if (dailyEl && portfolioEl) {
+    const format = (v) => (v >= 0 ? "+" : "") + v.toFixed(2) + "%";
+
+    dailyEl.textContent = "Daily " + format(daily);
+    portfolioEl.textContent = "Portfolio " + format(portfolio);
+
+dailyEl.classList.remove("positive", "negative");
+portfolioEl.classList.remove("positive", "negative");
+
+dailyEl.classList.add(daily >= 0 ? "positive" : "negative");
+portfolioEl.classList.add(portfolio >= 0 ? "positive" : "negative");dailyEl.classList.remove("positive", "negative");
+portfolioEl.classList.remove("positive", "negative");
+
+dailyEl.classList.add(daily >= 0 ? "positive" : "negative");
+portfolioEl.classList.add(portfolio >= 0 ? "positive" : "negative");
+  }
+}
 
   const el = document.getElementById(`${prefix}-change`);
  el.textContent = (overall >= 0 ? "+" : "") + overall.toFixed(2) + "%";

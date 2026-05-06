@@ -141,11 +141,14 @@ header,
    margin-bottom: 4px;
 }
 
+
 .card-performance {
   display: flex;
-  gap: 10px;
-  font-size: 0.9rem;
+  justify-content: center;
+  gap: 16px;
+  font-size: 20px;   /* match old % size */
   font-weight: 600;
+  margin-top: 6px;
 }
 
 .positive { color: #22c55e; }

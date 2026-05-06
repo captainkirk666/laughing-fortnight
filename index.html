@@ -225,7 +225,11 @@ if (totals.length > 1) {
   }
 }
 
-   const card = document.getElementById(`${prefix}-total`).closest(".homepage-card");
+const el = document.getElementById(`${prefix}-change`);
+if (el) {
+  el.textContent = (overall >= 0 ? "+" : "") + overall.toFixed(2) + "%";
+  el.style.color = overall >= 0 ? "#22c55e" : "#ef4444";
+}
 
 if (card) {
   const dailyEl = card.querySelector(".daily");

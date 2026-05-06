@@ -22,7 +22,7 @@ const glowPlugin = {
 function loadSheet(sheetName, callback) {
   const s = document.createElement("script");
   s.src = `${BASE_URL}?sheet=${encodeURIComponent(sheetName)}&callback=${callback}`;
-  document.body.appendChild(s);
+  document.head.appendChild(s);
 }
 
 /* ===== PERFORMANCE LOGIC ===== */

@@ -251,6 +251,31 @@ function renderCard(data, column, prefix) {
   });
 }
 
+  /* UPDATESS */
+function handleUpdates(data) {
+  if (!data || data.length === 0) return;
+
+  const update = data[0];
+
+  const message = update["Message"];
+  const dateStr = update["Date"];
+
+  if (!message || !dateStr) return;
+
+  const today = new Date();
+  const targetDate = new Date(dateStr);
+
+  const el = document.getElementById("siteUpdate");
+  const textEl = el.querySelector(".update-text");
+
+  // Only show if date is today or in the future
+  if (targetDate >= today) {
+    textEl.textContent = `${message} ${dateStr}`;
+    el.style.display = "flex";
+  }
+}
+
+  
 /* CALLBACKS */
 function handleDarvas(d) { renderTotal(d, "darvas"); }
 function handleInTrend(d) { renderTotal(d, "intrend"); }
@@ -274,6 +299,8 @@ document.addEventListener("DOMContentLoaded", () => {
   loadSheet("InTrend May 1 History", "handleInTrendHistory");
   loadSheet("Breakout May 26 History", "handleBreakoutHistory");
   loadSheet("ETF May 1 History", "handleETFHistory");
+
+  loadSheet("Updates", "handleUpdates");
 
 });
 </script>

@@ -192,21 +192,30 @@ header,
   pointer-events: none;
 }
 
-.share-btn {
+/* ===== CARD SHARE BUTTON ===== */
+
+.card-share {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 12px;
+  right: 12px;
+}
 
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 8px;
+.share-btn {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
 
-  color: #94a3b8;
-  font-size: 12px;
-  padding: 4px 8px;
+  width: 34px;
+  height: 34px;
 
+  color: #cbd5f5;
+  font-size: 16px;
   cursor: pointer;
-  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   transition: all 0.2s ease;
 }
 

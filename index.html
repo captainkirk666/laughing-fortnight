@@ -269,16 +269,34 @@ document.addEventListener("click", (e) => {
   if (!btn) return;
 
   const link = btn.getAttribute("data-link");
-  const url = window.location.origin + "/" + link;
 
-  navigator.clipboard.writeText(url);
+  const url = window.location.origin +
+    window.location.pathname.replace(/\/[^/]*$/, '/') +
+    link;
+
+  // ✅ Try modern clipboard
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(url).then(() => {
+      btn.textContent = "✓";
+      setTimeout(() => btn.textContent = "↗", 1000);
+    }).catch(() => fallbackCopy(url, btn));
+  } else {
+    fallbackCopy(url, btn);
+  }
+});
+
+// ✅ fallback method (always works)
+function fallbackCopy(text, btn) {
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  document.body.removeChild(textarea);
 
   btn.textContent = "✓";
-
-  setTimeout(() => {
-    btn.textContent = "↗";
-  }, 1000);
-});
+  setTimeout(() => btn.textContent = "↗", 1000);
+}
   
   /* UPDATESS */
 function handleUpdates(data) {

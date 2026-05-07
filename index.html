@@ -263,7 +263,7 @@ function renderCard(data, column, prefix) {
   });
 }
 
-  /* CARD SHARE */
+/* CARD SHARE */
 document.addEventListener("click", (e) => {
   const btn = e.target.closest(".share-btn");
   if (!btn) return;
@@ -273,33 +273,21 @@ document.addEventListener("click", (e) => {
   const url = window.location.origin +
     window.location.pathname.replace(/\/[^/]*$/, '/') +
     link;
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(url).catch(() => fallbackCopy(url));
+  } else {
+    fallbackCopy(url);
+  }
+
+  // ✅ UI feedback
+  btn.textContent = "✓";
+  setTimeout(() => {
+    btn.textContent = "↗";
+  }, 1000);
 });
-  
-  // ✅ Try modern clipboard
-let copied = false;
 
-if (navigator.clipboard && window.isSecureContext) {
-  navigator.clipboard.writeText(url)
-    .then(() => {
-      copied = true;
-    })
-    .catch(() => {
-      fallbackCopy(url);
-      copied = true;
-    });
-} else {
-  fallbackCopy(url);
-  copied = true;
-}
-
-// ✅ ALWAYS show feedback
-btn.textContent = "✓";
-
-setTimeout(() => {
-  btn.textContent = "↗";
-}, 1000);
-
-// ✅ fallback method (always works)
+// ✅ fallback method
 function fallbackCopy(text) {
   const textarea = document.createElement("textarea");
   textarea.value = text;

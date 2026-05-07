@@ -263,6 +263,23 @@ function renderCard(data, column, prefix) {
   });
 }
 
+  /* CARD SHARE */
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".share-btn");
+  if (!btn) return;
+
+  const link = btn.getAttribute("data-link");
+  const url = window.location.origin + "/" + link;
+
+  navigator.clipboard.writeText(url);
+
+  btn.textContent = "✓";
+
+  setTimeout(() => {
+    btn.textContent = "↗";
+  }, 1000);
+});
+  
   /* UPDATESS */
 function handleUpdates(data) {
   if (!data || data.length === 0) return;

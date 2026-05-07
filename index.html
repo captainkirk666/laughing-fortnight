@@ -34,8 +34,8 @@ fetch("./components/navbar.html")
 <div class="page">
 <h2>DASHBOARD</h2>
 
-  <div class="site-update" id="siteUpdate" style="display:none;">
-  <span class="update-label">Update:</span>
+<div class="site-update" id="siteUpdate" style="display:none;">
+  <span class="update-label">Update</span>
   <span class="update-text"></span>
 </div>
   
@@ -256,7 +256,6 @@ function handleUpdates(data) {
   if (!data || data.length === 0) return;
 
   const update = data[0];
-
   const message = update["Message"];
   const dateStr = update["Date"];
 
@@ -265,23 +264,20 @@ function handleUpdates(data) {
   const today = new Date();
   const targetDate = new Date(dateStr);
 
+  if (targetDate < today) return;
+
   const el = document.getElementById("siteUpdate");
   const textEl = el.querySelector(".update-text");
 
-  if (targetDate >= today) {
+  const formattedDate = targetDate.toLocaleDateString("en-AU", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
 
-    // ✅ format date nicely
-    const formattedDate = targetDate.toLocaleDateString("en-AU", {
-      day: "numeric",
-      month: "long",
-      year: "numeric"
-    });
+  textEl.textContent = `${message} — ${formattedDate}`;
 
-    // ✅ fix spacing + formatting
-    textEl.textContent = `${message} ${formattedDate}`;
-
-    el.style.display = "flex";
-  }
+  el.style.display = "flex";
 }
 
   

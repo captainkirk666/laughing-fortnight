@@ -761,7 +761,7 @@ tr:hover {
 /* ===== SITE UPDATE ===== */
 
 .site-update {
-  background: linear-gradient(135deg, rgba(56,189,248,0.12), rgba(30,58,138,0.25));
+    background: linear-gradient(180deg, #0f172a, #020617);
   border: 1px solid rgba(56,189,248,0.25);
   border-radius: 16px;
 

@@ -268,9 +268,18 @@ function handleUpdates(data) {
   const el = document.getElementById("siteUpdate");
   const textEl = el.querySelector(".update-text");
 
-  // Only show if date is today or in the future
   if (targetDate >= today) {
-    textEl.textContent = `${message} ${dateStr}`;
+
+    // ✅ format date nicely
+    const formattedDate = targetDate.toLocaleDateString("en-AU", {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+
+    // ✅ fix spacing + formatting
+    textEl.textContent = `${message} ${formattedDate}`;
+
     el.style.display = "flex";
   }
 }

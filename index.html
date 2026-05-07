@@ -275,27 +275,37 @@ document.addEventListener("click", (e) => {
     link;
 
   // ✅ Try modern clipboard
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(url).then(() => {
-      btn.textContent = "✓";
-      setTimeout(() => btn.textContent = "↗", 1000);
-    }).catch(() => fallbackCopy(url, btn));
-  } else {
-    fallbackCopy(url, btn);
-  }
-});
+let copied = false;
+
+if (navigator.clipboard && window.isSecureContext) {
+  navigator.clipboard.writeText(url)
+    .then(() => {
+      copied = true;
+    })
+    .catch(() => {
+      fallbackCopy(url);
+      copied = true;
+    });
+} else {
+  fallbackCopy(url);
+  copied = true;
+}
+
+// ✅ ALWAYS show feedback
+btn.textContent = "✓";
+
+setTimeout(() => {
+  btn.textContent = "↗";
+}, 1000);
 
 // ✅ fallback method (always works)
-function fallbackCopy(text, btn) {
+function fallbackCopy(text) {
   const textarea = document.createElement("textarea");
   textarea.value = text;
   document.body.appendChild(textarea);
   textarea.select();
   document.execCommand("copy");
   document.body.removeChild(textarea);
-
-  btn.textContent = "✓";
-  setTimeout(() => btn.textContent = "↗", 1000);
 }
   
   /* UPDATESS */

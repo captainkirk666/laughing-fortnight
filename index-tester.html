@@ -1,1 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Portfolio Dashboard</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=16">
+</head>
+
+<body>
+
+<!-- ✅ NAVBAR -->
+<div id="navbar"></div>
+
+<script>
+fetch("./components/navbar.html")
+  .then(res => res.text())
+  .then(data => {
+    document.getElementById("navbar").innerHTML = data;
+
+    // 👇 Step 3 goes HERE (inside fetch)
+    const links = document.querySelectorAll(".nav-tab");
+    const current = window.location.pathname.split("/").pop();
+
+    links.forEach(link => {
+      if (link.getAttribute("href") === current) {
+        link.classList.add("active");
+      }
+    });
+  });
+</script>
+  
+<div class="page">
+<h2>DASHBOARD</h2>
+
+
+  
+<div class="info-text">
+  <p>This site tracks a series of simulated portfolios built to test different trading strategies in real market conditions. </p>
+   <p> Each portfolio follows a distinct approach, with performance updated regularly to compare how each method behaves over time. </p>
+   <p> The goal is to identify trends, evaluate consistency, and better understand what works in practice. </p>
+
+</div>
+
+  <div class="site-update" id="siteUpdate" style="display:none;">
+  <span class="update-label">Update</span>
+  <span class="update-text"></span>
+</div>
+  
+<div class="homepage">
+<div class="homepage-grid">
+
+<!-- CARD TEMPLATE (used 4 times) -->
+
+<!-- IN TREND -->
+<div class="homepage-card">
+  <div class="homepage-header">
+    <h3>IN TREND</h3>
+  </div>
+<div class="card-share">
+  <button class="share-btn" data-link="intrend.html">↗</button>
+</div>
+  <div class="homepage-body">
+    <div class="homepage-value" id="intrend-total">$--</div>
+    <div class="card-performance">
+      <span class="daily"></span>
+      <span class="portfolio"></span>
+    </div>
+  </div>
+
+  <div class="homepage-chart">
+    <canvas id="intrend-mini"></canvas>
+  </div>
+</div>
+
+<!-- BREAKOUT -->
+<div class="homepage-card">
+  <div class="homepage-header">
+    <h3>BREAKOUT</h3>
+  </div>
+<div class="card-share">
+  <button class="share-btn" data-link="breakout-may26.html">↗</button>
+</div>
+  <div class="homepage-body">
+    <div class="homepage-value" id="breakout-total">$--</div>
+    <div class="card-performance">
+      <span class="daily"></span>
+      <span class="portfolio"></span>
+    </div>
+  </div>
+
+  <div class="homepage-chart">
+    <canvas id="breakout-mini"></canvas>
+  </div>
+</div>
+
+<!-- ETF -->
+<div class="homepage-card">
+  <div class="homepage-header">
+    <h3>ETF</h3>
+  </div>
+<div class="card-share">
+  <button class="share-btn" data-link="etf.html">↗</button>
+</div>
+  
+  <div class="homepage-body">
+    <div class="homepage-value" id="etf-total">$--</div>
+    <div class="card-performance">
+      <span class="daily"></span>
+      <span class="portfolio"></span>
+    </div>
+  </div>
+
+  <div class="homepage-chart">
+    <canvas id="etf-mini"></canvas>
+  </div>
+</div>
+
+<!-- DARVAS -->
+<div class="homepage-card">
+  <div class="homepage-header">
+    <h3>DARVAS</h3>
+  </div>
+<div class="card-share">
+  <button class="share-btn" data-link="darvas.html">↗</button>
+</div>
+  
+  <div class="homepage-body">
+    <div class="homepage-value" id="darvas-total">$--</div>
+    <div class="card-performance">
+      <span class="daily"></span>
+      <span class="portfolio"></span>
+    </div>
+  </div>
+
+  <div class="homepage-chart">
+    <canvas id="darvas-mini"></canvas>
+  </div>
+</div>
+
+</div>
+</div>
+</div>
+
+
+  <!-- DISCLAIMER (ORIGINAL KEPT) -->
+<div class="disclaimer">
+  <p>
+    The portfolio presented is a market simulation designed to test and evaluate different trading strategies. No real capital has been invested, and all totals are indicative only, serving as a guide to measure the effectiveness of each approach. Strategies are explored using market analysis tools such as TradingView. This site is intended for development and educational purposes only and should not be considered financial or investment advice. Always conduct your own research and seek professional advice before making financial decisions.
+  </p>
+ 
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
+
+const liveTotals = {};
+
+/* LOAD */
+function loadSheet(sheet, callback) {
+  const s = document.createElement("script");
+  s.src = `${BASE_URL}?sheet=${encodeURIComponent(sheet)}&callback=${callback}`;
+  document.head.appendChild(s);
+}
+
+/* PERFORMANCE */
+function calcPerf(totals, live) {
+  if (!totals.length || !live) return null;
+
+  const portfolio = ((live - 100000) / 100000) * 100;
+
+  let daily = 0;
+  if (totals.length > 1) {
+    const prev = totals[totals.length - 2];
+    daily = ((live - prev) / prev) * 100;
+  }
+
+  return { daily, portfolio };
+}
+
+function fmt(v) {
+  return (v >= 0 ? "+" : "") + v.toFixed(2) + "%";
+}
+
+function applyPerf(card, daily, portfolio) {
+  if (!card) return;
+
+  const d = card.querySelector(".daily");
+  const p = card.querySelector(".portfolio");
+
+  if (!d || !p) return;
+
+  d.textContent = "Daily " + fmt(daily);
+  p.textContent = "Portfolio " + fmt(portfolio);
+
+  d.className = "daily " + (daily >= 0 ? "positive" : "negative");
+  p.className = "portfolio " + (portfolio >= 0 ? "positive" : "negative");
+}
+
+/* TOTAL */
+function renderTotal(data, prefix) {
+  const total = data.reduce((sum, r) => {
+    const val = parseFloat(String(r["TOTAL $"] || "").replace(/[$,]/g, ""));
+    return sum + (isNaN(val) ? 0 : val);
+  }, 0);
+
+  liveTotals[prefix] = total;
+
+  const el = document.getElementById(prefix + "-total");
+  if (!el) return;
+
+  el.textContent = "$" + total.toLocaleString(undefined, { minimumFractionDigits: 2 });
+}
+
+/* CARD */
+function renderCard(data, column, prefix) {
+
+  const totals = data
+    .map(r => parseFloat(r[column]))
+    .filter(v => !isNaN(v));
+
+  if (!totals.length) return;
+
+  const live = liveTotals[prefix];
+  if (!live) {
+    setTimeout(() => renderCard(data, column, prefix), 100);
+    return;
+  }
+
+  const perf = calcPerf(totals, live);
+  if (!perf) return;
+
+  const totalEl = document.getElementById(prefix + "-total");
+  if (!totalEl) return;
+
+  const card = totalEl.closest(".homepage-card");
+  if (!card) return;
+
+  applyPerf(card, perf.daily, perf.portfolio);
+
+  new Chart(document.getElementById(prefix + "-mini"), {
+    type: "line",
+    data: {
+      labels: totals.map((_, i) => i),
+      datasets: [{
+        data: totals,
+        borderColor: "#60a5fa",
+        borderWidth: 2,
+        tension: 0.4,
+        pointRadius: 0,
+        fill: true
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: { x: { display: false }, y: { display: false } }
+    }
+  });
+}
+
+/* CARD SHARE */
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".share-btn");
+  if (!btn) return;
+
+  const link = btn.getAttribute("data-link");
+
+  const url = window.location.origin +
+    window.location.pathname.replace(/\/[^/]*$/, '/') +
+    link;
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(url).catch(() => fallbackCopy(url));
+  } else {
+    fallbackCopy(url);
+  }
+
+  // ✅ UI feedback
+  btn.textContent = "✓";
+  setTimeout(() => {
+    btn.textContent = "↗";
+  }, 1000);
+});
+
+// ✅ fallback method
+function fallbackCopy(text) {
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  document.body.removeChild(textarea);
+}
+  
+  /* UPDATESS */
+function handleUpdates(data) {
+  if (!data || data.length === 0) return;
+
+  const update = data[0];
+  const message = update["Message"];
+  const dateStr = update["Date"];
+
+  if (!message || !dateStr) return;
+
+  const today = new Date();
+  const targetDate = new Date(dateStr);
+
+  if (targetDate < today) return;
+
+  const el = document.getElementById("siteUpdate");
+  const textEl = el.querySelector(".update-text");
+
+  const formattedDate = targetDate.toLocaleDateString("en-AU", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+
+  textEl.textContent = `${message} — ${formattedDate}`;
+
+  el.style.display = "flex";
+}
+
+  
+/* CALLBACKS */
+function handleDarvas(d) { renderTotal(d, "darvas"); }
+function handleInTrend(d) { renderTotal(d, "intrend"); }
+function handleBreakout(d) { renderTotal(d, "breakout"); }
+function handleETF(d) { renderTotal(d, "etf"); }
+
+function handleDarvasHistory(d) { renderCard(d, "Total", "darvas"); }
+function handleInTrendHistory(d) { renderCard(d, "Total", "intrend"); }
+function handleBreakoutHistory(d) { renderCard(d, "Total", "breakout"); }
+function handleETFHistory(d) { renderCard(d, "Total", "etf"); }
+
+/* RUN */
+document.addEventListener("DOMContentLoaded", () => {
+
+  loadSheet("Darvas Oct 25", "handleDarvas");
+  loadSheet("InTrend May 1", "handleInTrend");
+  loadSheet("Breakout May 26", "handleBreakout");
+  loadSheet("ETF May 1", "handleETF");
+
+  loadSheet("Darvas Oct 25 History", "handleDarvasHistory");
+  loadSheet("InTrend May 1 History", "handleInTrendHistory");
+  loadSheet("Breakout May 26 History", "handleBreakoutHistory");
+  loadSheet("ETF May 1 History", "handleETFHistory");
+
+  loadSheet("Updates", "handleUpdates");
+
+});
+</script>
+
+</body>
+</html>

@@ -812,7 +812,7 @@ tr:hover {
 
 .tv-section{
   width:100%;
-  max-width:1100px;
+  max-width:1180px;
 
   margin:28px auto 0;
 }
@@ -854,7 +854,7 @@ position:relative;
 }
 
 .tv-mini{
-  height:215px;
+  height:315px;
 }
 
 /* 3 / 3 / 3 / 1 */
@@ -933,9 +933,9 @@ position:relative;
 
   font-family:"Source Serif 4", serif;
 
-  font-size:10px;
+  font-size:11px;
 
-  letter-spacing:1px;
+  letter-spacing:1.4px;
 
   text-transform:uppercase;
 

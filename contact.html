@@ -377,7 +377,8 @@ function renderTradingViewCharts(data) {
 
   container.innerHTML = "";
 
-  data.forEach((row, index) => {
+  // only render top 3
+  data.slice(0, 3).forEach((row, index) => {
 
     const symbol = row["TV Symbol"];
 
@@ -409,13 +410,14 @@ function renderTradingViewCharts(data) {
       style: "1",
       locale: "en",
 
-      toolbar_bg: "#0f172a",
+     toolbar_bg: "#0f172a",
 
       enable_publishing: false,
       hide_top_toolbar: false,
 
       save_image: false
     });
+
   });
 }
 

@@ -920,3 +920,26 @@ tr:hover {
 
   z-index:20;
 }
+
+/* TICKER LABEL */
+
+.tv-ticker{
+  position:absolute;
+
+  top:8px;
+  left:10px;
+
+  z-index:10;
+
+  font-family:"Source Serif 4", serif;
+
+  font-size:10px;
+
+  letter-spacing:1px;
+
+  text-transform:uppercase;
+
+  color:rgba(255,255,255,0.78);
+
+  pointer-events:none;
+}

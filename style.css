@@ -806,23 +806,15 @@ tr:hover {
 
 
 /* ===== TRADINGVIEW GRID ===== */
+/* =========================
+   TRADINGVIEW GRID
+========================= */
 
 .tv-section{
   width:100%;
-
   max-width:940px;
 
-  margin:40px auto 0;
-}
-
-.section-title{
-  font-family: "Source Serif 4", serif;
-  font-size: 18px;
-  font-weight: 600;
-  color: #f1f5f9;
-   margin-top: 4px;
-  text-align: center;
-    margin-bottom: 20px;
+  margin:28px auto 0;
 }
 
 .tv-grid{
@@ -833,22 +825,14 @@ tr:hover {
   justify-content:center;
 
   gap:18px;
-
-  max-width:900px;
-
-  margin:0 auto;
 }
-
-grid-template-columns: repeat(3,1fr);
-
-/* LAST CARD CENTERING */
 
 .tv-card{
   width:280px;
 
   background:#0f172a;
 
-  border:1px solid rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.035);
 
   border-radius:14px;
 
@@ -857,54 +841,63 @@ grid-template-columns: repeat(3,1fr);
   cursor:pointer;
 
   transition:0.25s ease;
-}
 
-.tv-card{
-  background:#0f172a;
-  border:1px solid rgba(255,255,255,0.05);
-  border-radius:14px;
-  overflow:hidden;
-  cursor:pointer;
-  transition:0.25s ease;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.02),
+    0 8px 24px rgba(0,0,0,0.35);
 }
 
 .tv-card:hover{
   transform:translateY(-2px);
-  border-color:rgba(59,130,246,0.4);
-}
 
-.tv-label{
-  padding:10px 12px;
-  font-size:12px;
-  font-weight:600;
-  letter-spacing:0.5px;
-  border-bottom:1px solid rgba(255,255,255,0.05);
+  border-color:rgba(59,130,246,0.3);
 }
 
 .tv-mini{
-  height:165px;
+  height:115px;
 }
 
-/* ===== MODAL ===== */
+/* 3 / 3 / 3 / 1 */
+
+.tv-card:nth-child(10){
+  grid-column:2;
+}
+
+/* =========================
+   MODAL
+========================= */
 
 .tv-modal{
   display:none;
+
   position:fixed;
+
   inset:0;
-  background:rgba(0,0,0,0.85);
+
+  background:rgba(0,0,0,0.88);
+
   z-index:9999;
+
   justify-content:center;
+
   align-items:center;
+
   padding:40px;
 }
 
 .tv-modal-content{
-  width:90%;
-  max-width:1200px;
-  height:80vh;
+  width:92%;
+
+  max-width:1400px;
+
+  height:85vh;
+
   background:#020617;
+
   border-radius:18px;
+
   overflow:hidden;
+
   position:relative;
 }
 
@@ -915,10 +908,15 @@ grid-template-columns: repeat(3,1fr);
 
 #closeTv{
   position:absolute;
+
   top:14px;
   right:18px;
+
   color:white;
+
   font-size:28px;
+
   cursor:pointer;
+
   z-index:20;
 }

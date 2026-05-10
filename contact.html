@@ -49,16 +49,8 @@ fetch("./components/navbar.html")
 </div>
   
 
-<!-- CARD TEMPLATE (used 4 times) -->
-
-
-
-  <div id="tv-charts"></div>
-
-<div class="tv-section">
-  <div class="tv-grid" id="tvGrid"></div>
-</div>
-
+<!-- TRADINGVIEW CHART SECTION -->
+<div id="tv-charts"></div>
 
 <!-- EXPANDABLE MODAL -->
 <div id="tvModal" class="tv-modal">
@@ -71,222 +63,27 @@ fetch("./components/navbar.html")
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- TRADINGVIEW -->
 <script src="https://s3.tradingview.com/tv.js"></script>
+
 <script>
-const BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
-
-const liveTotals = {};
-
-/* LOAD */
-function loadSheet(sheet, callback) {
-  const s = document.createElement("script");
-  s.src = `${BASE_URL}?sheet=${encodeURIComponent(sheet)}&callback=${callback}`;
-  document.head.appendChild(s);
-}
-
-/* PERFORMANCE */
-function calcPerf(totals, live) {
-  if (!totals.length || !live) return null;
-
-  const portfolio = ((live - 100000) / 100000) * 100;
-
-  let daily = 0;
-  if (totals.length > 1) {
-    const prev = totals[totals.length - 2];
-    daily = ((live - prev) / prev) * 100;
-  }
-
-  return { daily, portfolio };
-}
-
-function fmt(v) {
-  return (v >= 0 ? "+" : "") + v.toFixed(2) + "%";
-}
-
-function applyPerf(card, daily, portfolio) {
-  if (!card) return;
-
-  const d = card.querySelector(".daily");
-  const p = card.querySelector(".portfolio");
-
-  if (!d || !p) return;
-
-  d.textContent = "Daily " + fmt(daily);
-  p.textContent = "Portfolio " + fmt(portfolio);
-
-  d.className = "daily " + (daily >= 0 ? "positive" : "negative");
-  p.className = "portfolio " + (portfolio >= 0 ? "positive" : "negative");
-}
-
-/* TOTAL */
-function renderTotal(data, prefix) {
-  const total = data.reduce((sum, r) => {
-    const val = parseFloat(String(r["TOTAL $"] || "").replace(/[$,]/g, ""));
-    return sum + (isNaN(val) ? 0 : val);
-  }, 0);
-
-  liveTotals[prefix] = total;
-
-  const el = document.getElementById(prefix + "-total");
-  if (!el) return;
-
-  el.textContent = "$" + total.toLocaleString(undefined, { minimumFractionDigits: 2 });
-}
-
-/* CARD */
-function renderCard(data, column, prefix) {
-
-  const totals = data
-    .map(r => parseFloat(r[column]))
-    .filter(v => !isNaN(v));
-
-  if (!totals.length) return;
-
-  const live = liveTotals[prefix];
-  if (!live) {
-    setTimeout(() => renderCard(data, column, prefix), 100);
-    return;
-  }
-
-  const perf = calcPerf(totals, live);
-  if (!perf) return;
-
-  const totalEl = document.getElementById(prefix + "-total");
-  if (!totalEl) return;
-
-  const card = totalEl.closest(".homepage-card");
-  if (!card) return;
-
-  applyPerf(card, perf.daily, perf.portfolio);
-
-  new Chart(document.getElementById(prefix + "-mini"), {
-    type: "line",
-    data: {
-      labels: totals.map((_, i) => i),
-      datasets: [{
-        data: totals,
-        borderColor: "#60a5fa",
-        borderWidth: 2,
-        tension: 0.4,
-        pointRadius: 0,
-        fill: true
-      }]
-    },
-    options: {
-      plugins: { legend: { display: false } },
-      scales: { x: { display: false }, y: { display: false } }
-    }
-  });
-}
-
-/* CARD SHARE */
-document.addEventListener("click", (e) => {
-  const btn = e.target.closest(".share-btn");
-  if (!btn) return;
-
-  const link = btn.getAttribute("data-link");
-
-  const url = window.location.origin +
-    window.location.pathname.replace(/\/[^/]*$/, '/') +
-    link;
-
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(url).catch(() => fallbackCopy(url));
-  } else {
-    fallbackCopy(url);
-  }
-
-  // ✅ UI feedback
-  btn.textContent = "✓";
-  setTimeout(() => {
-    btn.textContent = "↗";
-  }, 1000);
-});
-
-// ✅ fallback method
-function fallbackCopy(text) {
-  const textarea = document.createElement("textarea");
-  textarea.value = text;
-  document.body.appendChild(textarea);
-  textarea.select();
-  document.execCommand("copy");
-  document.body.removeChild(textarea);
-}
-  
-  /* UPDATESS */
-function handleUpdates(data) {
-  if (!data || data.length === 0) return;
-
-  const update = data[0];
-  const message = update["Message"];
-  const dateStr = update["Date"];
-
-  if (!message || !dateStr) return;
-
-  const today = new Date();
-  const targetDate = new Date(dateStr);
-
-  if (targetDate < today) return;
-
-  const el = document.getElementById("siteUpdate");
-  const textEl = el.querySelector(".update-text");
-
-  const formattedDate = targetDate.toLocaleDateString("en-AU", {
-    day: "numeric",
-    month: "long",
-    year: "numeric"
-  });
-
-  textEl.textContent = `${message} — ${formattedDate}`;
-
-  el.style.display = "flex";
-}
-
-  totalDisplay.textContent="$"+total.toLocaleString();
-
-buildCharts(data);
-
-buildTradingViewGrid(data);
-  
-/* CALLBACKS */
-function handleDarvas(d) { renderTotal(d, "darvas"); }
-function handleInTrend(d) { renderTotal(d, "intrend"); }
-function handleBreakout(d) { renderTotal(d, "breakout"); }
-function handleETF(d) {
-  renderTotal(d, "etf");
-  renderTradingViewCharts(d);
-}
-
-function handleDarvasHistory(d) { renderCard(d, "Total", "darvas"); }
-function handleInTrendHistory(d) { renderCard(d, "Total", "intrend"); }
-function handleBreakoutHistory(d) { renderCard(d, "Total", "breakout"); }
-function handleETFHistory(d) { renderCard(d, "Total", "etf"); }
-
-/* RUN */
-document.addEventListener("DOMContentLoaded", () => {
-
-  loadSheet("Darvas Oct 25", "handleDarvas");
-  loadSheet("InTrend May 1", "handleInTrend");
-  loadSheet("Breakout May 26", "handleBreakout");
-  loadSheet("ETF May 1", "handleETF");
-
-  loadSheet("Darvas Oct 25 History", "handleDarvasHistory");
-  loadSheet("InTrend May 1 History", "handleInTrendHistory");
-  loadSheet("Breakout May 26 History", "handleBreakoutHistory");
-  loadSheet("ETF May 1 History", "handleETFHistory");
-
-  loadSheet("Updates", "handleUpdates");
-
-});
 function renderTradingViewCharts(data) {
 
   const container = document.getElementById("tv-charts");
 
-  container.innerHTML = "";
+  container.innerHTML = `
+    <div class="tv-section">
+      <div class="tv-grid" id="tvGrid"></div>
+    </div>
+  `;
 
-  // only render top 3
-  data.slice(0, 3).forEach((row, index) => {
+  const grid = document.getElementById("tvGrid");
+
+  const modal = document.getElementById("tvModal");
+  const expanded = document.getElementById("expandedChart");
+
+  // TOP 10 HOLDINGS
+  data.slice(0,10).forEach((row, index) => {
 
     const symbol = row["TV Symbol"];
 
@@ -294,40 +91,100 @@ function renderTradingViewCharts(data) {
 
     const chartId = `tv_chart_${index}`;
 
-    const wrapper = document.createElement("div");
+    const card = document.createElement("div");
 
-    wrapper.className = "tv-chart-wrapper";
+    card.className = "tv-card";
 
-    wrapper.innerHTML = `
-      <h3>${symbol}</h3>
-      <div id="${chartId}" class="tv-chart"></div>
+    card.dataset.symbol = symbol;
+
+    card.innerHTML = `
+      <div id="${chartId}" class="tv-mini"></div>
     `;
 
-    container.appendChild(wrapper);
+    grid.appendChild(card);
 
+    // MINI CHART
     new TradingView.widget({
       container_id: chartId,
+
       symbol: symbol,
 
-      interval: "W",
+      interval: "D",
+
+      timezone: "Australia/Sydney",
+
       theme: "dark",
 
       width: "100%",
-      height: 500,
+      height: "100%",
 
       style: "1",
+
       locale: "en",
 
-     toolbar_bg: "#0f172a",
+      toolbar_bg: "#0f172a",
 
       enable_publishing: false,
-      hide_top_toolbar: false,
+
+      hide_top_toolbar: true,
+
+      hide_legend: true,
 
       save_image: false
     });
 
+    // EXPANDABLE CLICK
+    card.addEventListener("click", () => {
+
+      expanded.innerHTML = "";
+
+      modal.style.display = "flex";
+
+      new TradingView.widget({
+        container_id: "expandedChart",
+
+        symbol: symbol,
+
+        interval: "D",
+
+        timezone: "Australia/Sydney",
+
+        theme: "dark",
+
+        autosize: true,
+
+        style: "1",
+
+        locale: "en",
+
+        toolbar_bg: "#0f172a",
+
+        allow_symbol_change: true,
+
+        enable_publishing: false,
+
+        save_image: false
+      });
+
+    });
+
   });
+
+  // CLOSE MODAL
+  document.getElementById("closeTv").onclick = () => {
+    modal.style.display = "none";
+    expanded.innerHTML = "";
+  };
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+      expanded.innerHTML = "";
+    }
+  });
+
 }
+</script>
 
 </body>
 </html>

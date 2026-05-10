@@ -820,9 +820,21 @@ tr:hover {
 }
 
 .tv-grid{
+  width:100%;
+  max-width:900px;
+  margin:0 auto;
+
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+
+  grid-template-columns:repeat(3, 1fr);
+
   gap:14px;
+}
+
+/* LAST CARD CENTERING */
+
+.tv-card:nth-child(7){
+  grid-column:2;
 }
 
 .tv-card{

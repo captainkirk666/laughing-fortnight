@@ -44,67 +44,6 @@ fetch("./components/navbar.html")
 
 <header>Starting Capital: $100,000 — Oct 2025</header>
 
-<!-- TABLE -->
-<div class="container">
-  <table id="stocks">
-    <thead><tr id="headers"></tr></thead>
-    <tbody></tbody>
-  </table>
-</div>
-
-<!-- TOTAL -->
-<div class="total-bar">
-
-  <div class="total-grid">
-
-<div class="total-item">
-  <div class="chart-title">Daily</div>
-  <div id="dailyChange"></div>
-</div>
-
-<div class="total-item center">
-  <div class="chart-title">Total Portfolio Value</div>
-  <div id="totalValue"></div>
-</div>
-
-<div class="total-item">
-  <div class="chart-title">Total</div>
-  <div id="totalOverall"></div>
-</div>
-</div>
-
-
-<!-- PERFORMANCE -->
-<!-- CHARTS -->
-
-<div class="charts">
-
-  <div class="chart-box">
-    <div class="chart-title">Change (%)</div>
-    <canvas id="changeChart"></canvas>
-  </div>
-
-  <div class="chart-box">
-    <div class="chart-title">Holdings ($)</div>
-    <canvas id="holdingChart"></canvas>
-  </div>
-
-  <div class="chart-box pie-box">
-    <div class="chart-title">Portfolio Allocation</div>
-    <canvas id="pieChart"></canvas>
-  </div>
-
-</div>
-  
-<div class="performance-row">
-  <div class="chart-box performance-box">
-    <div class="chart-title">Portfolio Performance</div>
-    <canvas id="performanceChart"></canvas>
-  </div>
-</div>
-
-<!-- MINI CHART GRID -->
-<div id="tv-charts"></div>
   
 <!-- DISCLAIMER (ORIGINAL KEPT) -->
 <div class="disclaimer">
@@ -299,7 +238,9 @@ function handleHistory(data) {
     overallChange = ((latestValue - startingValue) / startingValue) * 100;
   }
 
-  // ===== DISPLAY =====
+  // ===== TV CHARTS =====
+<script src="https://s3.tradingview.com/tv.js"></script>
+  
   // ===== DAILY % =====
 const dailyEl = document.getElementById("dailyChange");
 

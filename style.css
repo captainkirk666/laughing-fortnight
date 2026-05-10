@@ -808,7 +808,11 @@ tr:hover {
 /* ===== TRADINGVIEW GRID ===== */
 
 .tv-section{
-  margin-top:40px;
+  width:100%;
+
+  max-width:940px;
+
+  margin:40px auto 0;
 }
 
 .section-title{
@@ -820,21 +824,37 @@ tr:hover {
 }
 
 .tv-grid{
-  width:100%;
-  max-width:900px;
-  margin:0 auto;
-
   display:grid;
 
-  grid-template-columns:repeat(3, 1fr);
+  grid-template-columns:repeat(3, 280px);
 
-  gap:14px;
+  justify-content:center;
+
+  gap:18px;
+
+  max-width:900px;
+
+  margin:0 auto;
 }
+
+grid-template-columns: repeat(3,1fr);
 
 /* LAST CARD CENTERING */
 
-.tv-card:nth-child(7){
-  grid-column:2;
+.tv-card{
+  width:280px;
+
+  background:#0f172a;
+
+  border:1px solid rgba(255,255,255,0.05);
+
+  border-radius:14px;
+
+  overflow:hidden;
+
+  cursor:pointer;
+
+  transition:0.25s ease;
 }
 
 .tv-card{
@@ -860,7 +880,7 @@ tr:hover {
 }
 
 .tv-mini{
-  height:140px;
+  height:145px;
 }
 
 /* ===== MODAL ===== */

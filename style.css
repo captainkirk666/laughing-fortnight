@@ -803,3 +803,88 @@ tr:hover {
 .update-text {
   color: #e2e8f0;
 }
+
+
+/* ===== TRADINGVIEW GRID ===== */
+
+.tv-section{
+  margin-top:40px;
+}
+
+.section-title{
+  font-size:13px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  margin-bottom:16px;
+  opacity:0.7;
+}
+
+.tv-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:14px;
+}
+
+.tv-card{
+  background:#0f172a;
+  border:1px solid rgba(255,255,255,0.05);
+  border-radius:14px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:0.25s ease;
+}
+
+.tv-card:hover{
+  transform:translateY(-2px);
+  border-color:rgba(59,130,246,0.4);
+}
+
+.tv-label{
+  padding:10px 12px;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:0.5px;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+.tv-mini{
+  height:140px;
+}
+
+/* ===== MODAL ===== */
+
+.tv-modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.85);
+  z-index:9999;
+  justify-content:center;
+  align-items:center;
+  padding:40px;
+}
+
+.tv-modal-content{
+  width:90%;
+  max-width:1200px;
+  height:80vh;
+  background:#020617;
+  border-radius:18px;
+  overflow:hidden;
+  position:relative;
+}
+
+#expandedChart{
+  width:100%;
+  height:100%;
+}
+
+#closeTv{
+  position:absolute;
+  top:14px;
+  right:18px;
+  color:white;
+  font-size:28px;
+  cursor:pointer;
+  z-index:20;
+}

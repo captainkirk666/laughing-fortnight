@@ -820,7 +820,7 @@ tr:hover {
 .tv-grid{
   display:grid;
 
-  grid-template-columns:repeat(3, 280px);
+  grid-template-columns:repeat(3, 380px);
 
   justify-content:center;
 

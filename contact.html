@@ -98,7 +98,11 @@ function renderTradingViewCharts(data) {
     card.dataset.symbol = symbol;
 
     card.innerHTML = `
-      <div id="${chartId}" class="tv-mini"></div>
+    <div class="tv-ticker">
+  ${row["Ticker"]}
+</div>
+
+<div id="${chartId}" class="tv-mini"></div>
     `;
 
     grid.appendChild(card);

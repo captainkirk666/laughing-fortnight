@@ -831,7 +831,7 @@ tr:hover {
   width:280px;
 
   background:#0f172a;
-
+position:relative;
   border:1px solid rgba(255,255,255,0.035);
 
   border-radius:14px;

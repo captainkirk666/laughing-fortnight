@@ -55,7 +55,9 @@ fetch("./components/navbar.html")
 
   <div id="tv-charts"></div>
 
-
+<div class="tv-section">
+  <div class="tv-grid" id="tvGrid"></div>
+</div>
 
 
 <!-- EXPANDABLE MODAL -->
@@ -241,6 +243,11 @@ function handleUpdates(data) {
   el.style.display = "flex";
 }
 
+  totalDisplay.textContent="$"+total.toLocaleString();
+
+buildCharts(data);
+
+buildTradingViewGrid(data);
   
 /* CALLBACKS */
 function handleDarvas(d) { renderTotal(d, "darvas"); }

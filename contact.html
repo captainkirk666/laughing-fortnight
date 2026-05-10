@@ -426,6 +426,83 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
+<script src="https://s3.tradingview.com/tv.js"></script>
 
+<script>
+
+const symbols = [
+  "NASDAQ:NVDA",
+  "NASDAQ:AAPL",
+  "NASDAQ:TSLA",
+  "NASDAQ:AMD",
+  "NASDAQ:META",
+  "NYSE:PLTR",
+  "NASDAQ:SOFI",
+  "NASDAQ:QQQ",
+  "BINANCE:BTCUSDT",
+  "BINANCE:ETHUSDT"
+];
+
+symbols.forEach((symbol,index)=>{
+
+  new TradingView.widget({
+    autosize:true,
+    symbol:symbol,
+    interval:"D",
+    timezone:"Australia/Sydney",
+    theme:"dark",
+    style:"1",
+    locale:"en",
+    hide_top_toolbar:true,
+    hide_legend:true,
+    save_image:false,
+    studies:[],
+    container_id:`tv${index+1}`
+  });
+
+});
+
+/* ===== EXPAND ===== */
+
+const modal = document.getElementById("tvModal");
+const expanded = document.getElementById("expandedChart");
+
+document.querySelectorAll(".tv-card").forEach(card=>{
+
+  card.addEventListener("click",()=>{
+
+    expanded.innerHTML="";
+
+    modal.style.display="flex";
+
+    new TradingView.widget({
+      autosize:true,
+      symbol:card.dataset.symbol,
+      interval:"D",
+      timezone:"Australia/Sydney",
+      theme:"dark",
+      style:"1",
+      locale:"en",
+      allow_symbol_change:true,
+      container_id:"expandedChart"
+    });
+
+  });
+
+});
+
+document.getElementById("closeTv").onclick=()=>{
+  modal.style.display="none";
+  expanded.innerHTML="";
+};
+
+modal.addEventListener("click",(e)=>{
+  if(e.target===modal){
+    modal.style.display="none";
+    expanded.innerHTML="";
+  }
+});
+
+</script>
 </body>
 </html>

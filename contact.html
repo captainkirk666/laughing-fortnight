@@ -186,5 +186,37 @@ function renderTradingViewCharts(data) {
 }
 </script>
 
+  <script>
+
+const BASE_URL =
+"https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
+
+/* LOAD SHEET */
+function loadSheet(sheet, callback) {
+
+  const s = document.createElement("script");
+
+  s.src =
+    `${BASE_URL}?sheet=${encodeURIComponent(sheet)}&callback=${callback}`;
+
+  document.body.appendChild(s);
+}
+
+/* ETF CALLBACK */
+function handleETF(data) {
+
+  renderTradingViewCharts(data);
+
+}
+
+/* RUN */
+document.addEventListener("DOMContentLoaded", () => {
+
+  loadSheet("ETF May 1", "handleETF");
+
+});
+
+</script>
+  
 </body>
 </html>

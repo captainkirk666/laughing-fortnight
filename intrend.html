@@ -471,6 +471,8 @@ function renderTradingViewCharts(data) {
   const modal = document.getElementById("tvModal");
   const expanded = document.getElementById("expandedChart");
 
+  
+
   // TOP 10 HOLDINGS
   data.slice(0,10).forEach((row, index) => {
 
@@ -507,7 +509,19 @@ function renderTradingViewCharts(data) {
       timezone: "Australia/Sydney",
 
       theme: "dark",
+overrides: {
 
+  "paneProperties.background": "#111827",
+
+  "paneProperties.vertGridProperties.color":
+    "rgba(255,255,255,0.02)",
+
+  "paneProperties.horzGridProperties.color":
+    "rgba(255,255,255,0.02)",
+
+  "scalesProperties.textColor":
+    "rgba(255,255,255,0.45)"
+},
       width: "100%",
       height: "100%",
 
@@ -524,6 +538,8 @@ function renderTradingViewCharts(data) {
       hide_legend: true,
 
       save_image: false
+
+      
     });
 
     // EXPANDABLE CLICK
@@ -543,6 +559,19 @@ function renderTradingViewCharts(data) {
         timezone: "Australia/Sydney",
 
         theme: "dark",
+        overrides: {
+
+  "paneProperties.background": "#111827",
+
+  "paneProperties.vertGridProperties.color":
+    "rgba(255,255,255,0.02)",
+
+  "paneProperties.horzGridProperties.color":
+    "rgba(255,255,255,0.02)",
+
+  "scalesProperties.textColor":
+    "rgba(255,255,255,0.45)"
+},
 
         autosize: true,
 

@@ -105,6 +105,19 @@ fetch("./components/navbar.html")
   </div>
 </div>
 
+<!-- TRADINGVIEW CHART SECTION -->
+<div id="tv-charts"></div>
+
+<!-- EXPANDABLE MODAL -->
+<div id="tvModal" class="tv-modal">
+  <div class="tv-modal-content">
+
+    <span id="closeTv">&times;</span>
+
+    <div id="expandedChart"></div>
+
+  </div>
+</div>
 
   
 <!-- DISCLAIMER (ORIGINAL KEPT) -->
@@ -437,19 +450,6 @@ setInterval(loadData,10000);
 
 
   
-<!-- TRADINGVIEW CHART SECTION -->
-<div id="tv-charts"></div>
-
-<!-- EXPANDABLE MODAL -->
-<div id="tvModal" class="tv-modal">
-  <div class="tv-modal-content">
-
-    <span id="closeTv">&times;</span>
-
-    <div id="expandedChart"></div>
-
-  </div>
-</div>
 
 <!-- TRADINGVIEW -->
 <script src="https://s3.tradingview.com/tv.js"></script>

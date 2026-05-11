@@ -57,319 +57,177 @@ fetch("./components/navbar.html")
 
 </div>
 
-<!-- LIB -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- TRADINGVIEW CHART SECTION -->
+<div id="tv-charts"></div>
 
-<!-- NAV LOGIC -->
-<script src="js/app.js"></script>
+<!-- EXPANDABLE MODAL -->
+<div id="tvModal" class="tv-modal">
+  <div class="tv-modal-content">
 
-<!-- DATA + CHARTS -->
-<script>
-const BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
+    <span id="closeTv">&times;</span>
 
-const SHEET = "InTrend May 1";
-const HISTORY_SHEET = "InTrend May 1 History";
+    <div id="expandedChart"></div>
 
-let changeChart, holdingChart, pieChart, performanceChart;
+  </div>
+</div>
 
-
-/* ===== MAIN CHARTS ===== */
-function buildCharts(data) {
-  const labels = data.map(r => r["Ticker"]);
-  const change = data.map(r => parseFloat(r["Change %"]) || 0);
-  const totals = data.map(r => parseFloat(r["TOTAL $"]) || 0);
-
-changeChart = new Chart(document.getElementById("changeChart"), {
-  type: "bar",
-  data: {
-    labels,
-    datasets: [{
-      data: change,
-      backgroundColor: change.map(v => v >= 0 ? "#22c55e" : "#ef4444"),
-      barPercentage: 0.6,
-      categoryPercentage: 0.7,
-      maxBarThickness: 20,
-      borderRadius: 0
-    }]
-  },
-
-  options: {
-    maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
-
-    scales: {   // 👈 MUST be here
-      y: {
-        beginAtZero: true,
-
-        ticks: {
-          font: { size: 9 }
-        },
-
-        grid: {
-          color: (ctx) => {
-            if (ctx.tick.value === 0) {
-              return "#cbd5e1";   // zero line
-            }
-            return "rgba(148,163,184,0.08)";
-          },
-
-          lineWidth: (ctx) => {
-            if (ctx.tick.value === 0) {
-              return 1.5;
-            }
-            return 1;
-          }
-        }
-      }
-    }
-  }
-});
-
-holdingChart = new Chart(document.getElementById("holdingChart"), {
-  type: "bar",
-  data: {
-    labels,
-    datasets: [{
-      data: totals,
-
-      backgroundColor: (ctx) => {
-        const chart = ctx.chart;
-        const { ctx: canvas, chartArea, scales } = chart;
-
-        if (!chartArea) return "#3b82f6";
-
-        const yScale = scales.y;
-
-        // 👇 position of 10,000
-        const yTop = yScale.getPixelForValue(10000);
-        const yBottom = chartArea.bottom;
-
-        const gradient = canvas.createLinearGradient(0, yTop, 0, yBottom);
-
-        gradient.addColorStop(0, "#60a5fa"); // lighter
-        gradient.addColorStop(1, "#1e3a8a"); // darker
-
-        return gradient;
-      },
-
-      barPercentage: 0.6,
-      categoryPercentage: 0.7,
-      maxBarThickness: 20,
-      borderRadius: 0
-    }]
-  },
-
-  options: {
-    maintainAspectRatio: false,
-    plugins: { legend: { display: false } },   // 👈 comma fixed
-
-    scales: {
-      y: {
-        beginAtZero: true,
-
-        ticks: {
-          font: { size: 9 }
-        },
-
-        grid: {
-          color: (ctx) => {
-            if (ctx.tick.value === 0) {
-              return "#cbd5e1";
-            }
-            return "rgba(148,163,184,0.08)";
-          },
-
-          lineWidth: (ctx) => {
-            if (ctx.tick.value === 0) {
-              return 1.5;
-            }
-            return 1;
-          }
-        }
-      }
-    }
-  }
-});
-
-  pieChart = new Chart(document.getElementById("pieChart"), {
-    type: "doughnut",
-    data: {
-      labels,
-      datasets: [{ data: totals }]
-    },
-    options: {
-  maintainAspectRatio: true,   // 👈 key change
-  aspectRatio: 1,              // 👈 forces perfect circle
-  cutout: "70%",
-  plugins: { legend: { display: false } }
-}
-  });
-}
-
-
-/* ===== PERFORMANCE CHART (RESTORED) ===== */
-function handleHistory(data) {
-  const dates = data.map(r => {
-    const d = new Date(r["Date"]);
-    return d.toLocaleDateString("en-AU", { day: "numeric", month: "short" });
-  });
-
-  const totals = data.map(r => parseFloat(r["Total"]) || 0);
-
-  // ===== DAILY % CHANGE =====
-  let dailyChange = 0;
-
-  if (totals.length > 1) {
-    const prev = totals[totals.length - 2];
-    const last = totals[totals.length - 1];
-
-    if (prev > 0) {
-      dailyChange = ((last - prev) / prev) * 100;
-    }
-  }
-
-  // ===== OVERALL % FROM 100,000 =====
-  const startingValue = 100000;
-  const latestValue = totals[totals.length - 1];
-
-  let overallChange = 0;
-
-  if (startingValue > 0) {
-    overallChange = ((latestValue - startingValue) / startingValue) * 100;
-  }
-
-  // ===== TV CHARTS =====
+<!-- TRADINGVIEW -->
 <script src="https://s3.tradingview.com/tv.js"></script>
-  
-  // ===== DAILY % =====
-const dailyEl = document.getElementById("dailyChange");
 
-if (dailyEl) {
-  const sign = dailyChange >= 0 ? "+" : "";
-  dailyEl.textContent = `${sign}${dailyChange.toFixed(2)}%`;
-  dailyEl.className = dailyChange >= 0 ? "positive" : "negative";
-}
+<script>
+function renderTradingViewCharts(data) {
 
-// ===== TOTAL % =====
-const totalEl = document.getElementById("totalOverall");
+  const container = document.getElementById("tv-charts");
 
-if (totalEl) {
-  const sign = overallChange >= 0 ? "+" : "";
-  totalEl.textContent = `${sign}${overallChange.toFixed(2)}%`;
-  totalEl.className = overallChange >= 0 ? "positive" : "negative";
-}
+  container.innerHTML = `
+    <div class="tv-section">
+      <div class="tv-grid" id="tvGrid"></div>
+    </div>
+  `;
 
-  // ===== CHART =====
-  if (performanceChart) performanceChart.destroy();
+  const grid = document.getElementById("tvGrid");
 
-  performanceChart = new Chart(document.getElementById("performanceChart"), {
-    type: "line",
-    data: {
-      labels: dates,
-datasets: [{
-  data: totals,
+  const modal = document.getElementById("tvModal");
+  const expanded = document.getElementById("expandedChart");
 
-  borderColor: "#3b82f6",
-  borderWidth: 2,
-  tension: 0.35,
-  pointRadius: 0,
+  // TOP 10 HOLDINGS
+  data.slice(0,10).forEach((row, index) => {
 
-  fill: true,
+    const symbol = row["TV Symbol"];
 
-  backgroundColor: (ctx) => {
-    const chart = ctx.chart;
-    const { ctx: canvas, chartArea } = chart;
+    if (!symbol) return;
 
-    if (!chartArea) return "rgba(59,130,246,0.2)";
+    const chartId = `tv_chart_${index}`;
 
-    const gradient = canvas.createLinearGradient(
-      0,
-      chartArea.top,
-      0,
-      chartArea.bottom
-    );
+    const card = document.createElement("div");
 
-    gradient.addColorStop(0, "rgba(59,130,246,0.35)"); // near line
-    gradient.addColorStop(1, "rgba(59,130,246,0.02)"); // fade out
+    card.className = "tv-card";
 
-    return gradient;
-  }
-}]
-    },
-    options: {
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } }
-    }
-  });
-}
+    card.dataset.symbol = symbol;
 
-/* ===== TABLE ===== */
-function handleData(data) {
-  const headersRow = document.getElementById("headers");
-  const tbody = document.querySelector("#stocks tbody");
-  const totalDisplay = document.getElementById("totalValue");
+    card.innerHTML = `
+    <div class="tv-ticker">
+  ${row["Ticker"]}
+</div>
 
-  headersRow.innerHTML = "";
-  tbody.innerHTML = "";
+<div id="${chartId}" class="tv-mini"></div>
+    `;
 
-  Object.keys(data[0]).forEach(key=>{
-    const th=document.createElement("th");
-    th.textContent=key;
-    headersRow.appendChild(th);
-  });
+    grid.appendChild(card);
 
-  let total=0;
+    // MINI CHART
+    new TradingView.widget({
+      container_id: chartId,
 
-  data.forEach(row=>{
-    const tr=document.createElement("tr");
+      symbol: symbol,
 
-    Object.entries(row).forEach(([k,v])=>{
-      const td=document.createElement("td");
-      const num=parseFloat(v);
+      interval: "D",
 
-      td.textContent = (!isNaN(num) && k.toLowerCase().includes("total"))
-        ? "$"+num.toFixed(2)
-        : v;
+      timezone: "Australia/Sydney",
 
-      if(k.toLowerCase().includes("change") && !isNaN(num)){
-        td.classList.add(num>=0?"positive":"negative");
-      }
+      theme: "dark",
 
-      if(k.toLowerCase().includes("total") && !isNaN(num)) total+=num;
+      width: "100%",
+      height: "100%",
 
-      tr.appendChild(td);
+      style: "1",
+
+      locale: "en",
+
+      toolbar_bg: "#0f172a",
+
+      enable_publishing: false,
+
+      hide_top_toolbar: true,
+
+      hide_legend: true,
+
+      save_image: false
     });
 
-    tbody.appendChild(tr);
+    // EXPANDABLE CLICK
+    card.addEventListener("click", () => {
+
+      expanded.innerHTML = "";
+
+      modal.style.display = "flex";
+
+      new TradingView.widget({
+        container_id: "expandedChart",
+
+        symbol: symbol,
+
+        interval: "D",
+
+        timezone: "Australia/Sydney",
+
+        theme: "dark",
+
+        autosize: true,
+
+        style: "1",
+
+        locale: "en",
+
+        toolbar_bg: "#0f172a",
+
+        allow_symbol_change: true,
+
+        enable_publishing: false,
+
+        save_image: false
+      });
+
+    });
+
   });
 
-  totalDisplay.textContent="$"+total.toLocaleString();
-  buildCharts(data);
-}
+  // CLOSE MODAL
+  document.getElementById("closeTv").onclick = () => {
+    modal.style.display = "none";
+    expanded.innerHTML = "";
+  };
 
-function loadData(){
-  const existing = document.getElementById("dataScript");
-  if (existing) existing.remove();
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+      expanded.innerHTML = "";
+    }
+  });
+
+}
+</script>
+
+  <script>
+
+const BASE_URL =
+"https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
+
+/* LOAD SHEET */
+function loadSheet(sheet, callback) {
 
   const s = document.createElement("script");
-  s.id = "dataScript";
-  s.src = `${BASE_URL}?sheet=${encodeURIComponent(SHEET)}&callback=handleData`;
+
+  s.src =
+    `${BASE_URL}?sheet=${encodeURIComponent(sheet)}&callback=${callback}`;
+
   document.body.appendChild(s);
 }
 
-function loadHistory(){
-  const existing = document.getElementById("historyScript");
-  if (existing) existing.remove();
+/* ETF CALLBACK */
+function handleETF(data) {
 
-  const s = document.createElement("script");
-  s.id = "historyScript";
-  s.src = `${BASE_URL}?sheet=${encodeURIComponent(HISTORY_SHEET)}&callback=handleHistory`;
-  document.body.appendChild(s);
+  renderTradingViewCharts(data);
+
 }
 
-loadData();
-loadHistory();
-setInterval(loadData,10000);
+/* RUN */
+document.addEventListener("DOMContentLoaded", () => {
+
+  loadSheet("ETF May 1", "handleETF");
+
+});
+
 </script>
 </body>
 </html>

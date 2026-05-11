@@ -129,7 +129,7 @@ fetch("./components/navbar.html")
 
 <!-- DATA + CHARTS -->
 <script>
-const BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
+ BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
 
 const SHEET = "InTrend May 1";
 const HISTORY_SHEET = "InTrend May 1 History";
@@ -580,8 +580,6 @@ function renderTradingViewCharts(data) {
 
   <script>
 
-const BASE_URL =
-"https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
 
 /* LOAD SHEET */
 function loadSheet(sheet, callback) {
@@ -604,7 +602,7 @@ function handleETF(data) {
 /* RUN */
 document.addEventListener("DOMContentLoaded", () => {
 
-  loadSheet("ETF May 1", "handleETF");
+  loadSheet("InTrend May 1", "handleETF");
 
 });
 

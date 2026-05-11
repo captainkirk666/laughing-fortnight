@@ -810,58 +810,42 @@ tr:hover {
    TRADINGVIEW GRID
 ========================= */
 
+.tv-section{
+  width:100%;
+  max-width:1100px;
+
+  margin:28px auto 0;
+}
+
 .tv-grid{
   display:grid;
 
   grid-template-columns:repeat(3, 1fr);
 
   gap:30px;
-
-  max-width:1100px;
-
-  margin:0 auto;
 }
 
 .tv-card{
   width:100%;
-}
 
-.tv-card{
-  width:350px;
+  position:relative;
 
   background:#0f172a;
-position:relative;
+
   border:1px solid rgba(255,255,255,0.035);
 
   border-radius:14px;
 
   overflow:hidden;
 
-  cursor:pointer;
-
-  transition:0.25s ease;
-
   box-shadow:
     0 0 0 1px rgba(255,255,255,0.02),
     0 8px 24px rgba(0,0,0,0.35);
 }
 
-.tv-card:hover{
-  transform:translateY(-2px);
-
-  border-color:rgba(59,130,246,0.3);
-}
-
 .tv-mini{
   height:315px;
 }
-
-/* 3 / 3 / 3 / 1 */
-
-.tv-card:nth-child(10){
-  grid-column:2;
-}
-
 /* =========================
    MODAL
 ========================= */

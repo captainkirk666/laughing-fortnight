@@ -422,6 +422,7 @@ function handleData(data) {
   totalDisplay.textContent="$"+total.toLocaleString();
   buildCharts(data);
 }
+  renderTradingViewCharts(data);
 
 function loadData(){
   const existing = document.getElementById("dataScript");

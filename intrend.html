@@ -650,16 +650,6 @@ studies_overrides: {
   <script>
 
 
-/* LOAD SHEET */
-function loadSheet(sheet, callback) {
-
-  const s = document.createElement("script");
-
-  s.src =
-    `${BASE_URL}?sheet=${encodeURIComponent(sheet)}&callback=${callback}`;
-
-  document.body.appendChild(s);
-}
 
 /* ETF CALLBACK */
 function handleETF(data) {

@@ -419,10 +419,12 @@ function handleData(data) {
     tbody.appendChild(tr);
   });
 
-  totalDisplay.textContent="$"+total.toLocaleString();
-  buildCharts(data);
+totalDisplay.textContent="$"+total.toLocaleString();
+
+buildCharts(data);
+
+renderTradingViewCharts(data);
 }
-  renderTradingViewCharts(data);
 
 function loadData(){
   const existing = document.getElementById("dataScript");
@@ -647,35 +649,6 @@ studies_overrides: {
 }
 </script>
 
-  <script>
 
-
-    /* LOAD SHEET */
-function loadSheet(sheet, callback) {
-
-  const s = document.createElement("script");
-
-  s.src =
-    `${BASE_URL}?sheet=${encodeURIComponent(sheet)}&callback=${callback}`;
-
-  document.body.appendChild(s);
-}
-
-
-/* ETF CALLBACK */
-function handleETF(data) {
-
-  renderTradingViewCharts(data);
-
-}
-
-/* RUN */
-document.addEventListener("DOMContentLoaded", () => {
-
-  loadSheet("InTrend May 1", "handleETF");
-
-});
-
-</script>
 </body>
 </html>

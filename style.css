@@ -98,7 +98,7 @@ header,
 
 .card-days{
   font-family:'Source Serif 4', serif;
-  margin-top:3px;
+  margin-top:2px;
   font-size:11px;
   color:#94a3b8;
   font-weight:600;
@@ -117,8 +117,8 @@ header,
   color:#94a3b8;
   text-align:center;
   letter-spacing:0.5px;
-  margin-top:1px;
-  margin-bottom:1px;
+  margin-top:0px;
+  margin-bottom:0px;
   }
 
 
@@ -148,8 +148,8 @@ h3{
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1px; /* tighter spacing */
-  margin: 2px 0 2px; /* reduced vertical space */
+  gap: 0px; /* tighter spacing */
+  margin: 0px 0 2px; /* reduced vertical space */
 }
 
 .homepage-value {
@@ -157,15 +157,15 @@ h3{
   font-size: 48px;
   font-weight: 600;
   color: #f1f5f9;
-   margin-top: 2px;
+   margin-top: 0px;
 }
 
 .homepage-change {
   font-family: "Roboto", sans-serif;
   font-size: 20px;
   font-weight: 600;
-  margin-top: 2px;
-   margin-bottom: 2px;
+  margin-top: 0px;
+   margin-bottom: 0px;
 }
 
 
@@ -175,7 +175,7 @@ h3{
   gap: 16px;
   font-size: 20px;   /* match old % size */
   font-weight: 600;
-  margin-top: 6px;
+  margin-top: 0px;
 }
 
 .positive { color: #22c55e; }

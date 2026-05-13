@@ -385,25 +385,6 @@ datasets: [{
   fill: true
 }]
 
-  backgroundColor: (ctx) => {
-    const chart = ctx.chart;
-    const { ctx: canvas, chartArea } = chart;
-
-    if (!chartArea) return "rgba(59,130,246,0.2)";
-
-    const gradient = canvas.createLinearGradient(
-      0,
-      chartArea.top,
-      0,
-      chartArea.bottom
-    );
-
-    gradient.addColorStop(0, "rgba(59,130,246,0.35)"); // near line
-    gradient.addColorStop(1, "rgba(59,130,246,0.02)"); // fade out
-
-    return gradient;
-  }
-}]
     },
     options: {
       maintainAspectRatio: false,

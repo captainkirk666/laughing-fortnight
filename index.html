@@ -247,13 +247,48 @@ function renderCard(data, column, prefix) {
     type: "line",
     data: {
       labels: totals.map((_, i) => i),
-      datasets: [{
-        data: totals,
-        borderColor: "#60a5fa",
-        borderWidth: 2,
-        tension: 0.4,
-        pointRadius: 0,
-        fill: false
+datasets: [{
+  data: totals,
+
+  borderColor: "#67c1ff",
+
+  backgroundColor: (context) => {
+
+    const chart = context.chart;
+    const {ctx, chartArea} = chart;
+
+    if (!chartArea) return null;
+
+    const gradient = ctx.createLinearGradient(
+      0,
+      chartArea.top,
+      0,
+      chartArea.bottom
+    );
+
+    gradient.addColorStop(0,
+      "rgba(103,193,255,0.22)"
+    );
+
+    gradient.addColorStop(0.55,
+      "rgba(103,193,255,0.06)"
+    );
+
+    gradient.addColorStop(1,
+      "rgba(103,193,255,0)"
+    );
+
+    return gradient;
+  },
+
+  borderWidth: 2.2,
+
+  tension: 0.42,
+
+  pointRadius: 0,
+
+  fill: true
+}]
       }]
     },
     options: {

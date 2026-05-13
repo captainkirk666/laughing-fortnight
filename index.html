@@ -250,14 +250,16 @@ function renderCard(data, column, prefix) {
 datasets: [{
   data: totals,
 
-  borderColor: "#67c1ff",
+  borderColor: "#3b82f6",
 
   backgroundColor: (context) => {
 
     const chart = context.chart;
-    const {ctx, chartArea} = chart;
+    const { ctx, chartArea } = chart;
 
-    if (!chartArea) return null;
+    if (!chartArea) {
+      return "rgba(59,130,246,0.15)";
+    }
 
     const gradient = ctx.createLinearGradient(
       0,
@@ -266,24 +268,22 @@ datasets: [{
       chartArea.bottom
     );
 
-    gradient.addColorStop(0,
-      "rgba(103,193,255,0.22)"
+    gradient.addColorStop(
+      0,
+      "rgba(59,130,246,0.28)"
     );
 
-    gradient.addColorStop(0.55,
-      "rgba(103,193,255,0.06)"
-    );
-
-    gradient.addColorStop(1,
-      "rgba(103,193,255,0)"
+    gradient.addColorStop(
+      1,
+      "rgba(59,130,246,0.01)"
     );
 
     return gradient;
   },
 
-  borderWidth: 2.2,
+  borderWidth: 2,
 
-  tension: 0.42,
+  tension: 0.35,
 
   pointRadius: 0,
 

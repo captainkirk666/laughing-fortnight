@@ -98,6 +98,24 @@ header,
 
 /* ===== HEADER ===== */
 
+  .homepage-header h4 {
+  font-family:'Source Serif 4', serif;
+
+  font-size:18px;
+
+  font-weight:600;
+
+  color:#94a3b8;
+
+  text-align:center;
+
+  letter-spacing:0.5px;
+
+  margin-top:2px;
+  margin-bottom:8px;
+  }
+
+
 h3{
   font-family:'Source Serif 4', serif;
 
@@ -234,22 +252,7 @@ h3{
     margin-top: -6px;
   }
 
-  .homepage-header h4 {
-  font-family:'Source Serif 4', serif;
 
-  font-size:18px;
-
-  font-weight:600;
-
-  color:#94a3b8;
-
-  text-align:center;
-
-  letter-spacing:0.5px;
-
-  margin-top:2px;
-  margin-bottom:8px;
-  }
 
   .homepage-meta {
     font-size: 15px;

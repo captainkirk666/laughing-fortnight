@@ -97,19 +97,13 @@ header,
 }
 
 .card-days{
-
+  font-family:'Source Serif 4', serif;
   margin-top:6px;
-
   font-size:9px;
   color:#94a3b8;
-
   font-weight:600;
-
   letter-spacing:1.8px;
-
   text-transform:uppercase;
-
-  color:rgba(148,163,184,0.7);
 
   text-align:center;
 }
@@ -136,15 +130,10 @@ header,
 
 h3{
   font-family:'Source Serif 4', serif;
-
   font-size:18px;
-
   font-weight:600;
-
   color:#94a3b8;
-
   text-align:center;
-
   margin-top:10px;
   margin-bottom:24px;
 

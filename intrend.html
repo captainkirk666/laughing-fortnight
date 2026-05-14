@@ -287,7 +287,9 @@ holdingChart = new Chart(document.getElementById("holdingChart"), {
 
 /* ===== PERFORMANCE CHART (RESTORED) ===== */
 function handleHistory(data) {
- const dates = data.map(r => {
+const cleanData = data.filter(r => r["Date"] && r["Total"]);
+
+const dates = cleanData.map(r => {
 
   const raw = String(r["Date"]).trim();
 
@@ -306,7 +308,7 @@ function handleHistory(data) {
 
 });
 
-  const totals = data.map(r => parseFloat(r["Total"]) || 0);
+const totals = cleanData.map(r => parseFloat(r["Total"]) || 0);
 
   // ===== DAILY % CHANGE =====
   let dailyChange = 0;

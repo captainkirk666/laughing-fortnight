@@ -310,6 +310,8 @@ const dates = cleanData.map(r => {
 
 const totals = cleanData.map(r => parseFloat(r["Total"]) || 0);
 
+if (!cleanData.length) return;
+
   // ===== DAILY % CHANGE =====
   let dailyChange = 0;
 

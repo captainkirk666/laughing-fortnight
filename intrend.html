@@ -287,10 +287,24 @@ holdingChart = new Chart(document.getElementById("holdingChart"), {
 
 /* ===== PERFORMANCE CHART (RESTORED) ===== */
 function handleHistory(data) {
-  const dates = data.map(r => {
-    const d = new Date(r["Date"]);
-    return d.toLocaleDateString("en-AU", { day: "numeric", month: "short" });
+ const dates = data.map(r => {
+
+  const raw = String(r["Date"]).trim();
+
+  const parts = raw.split("-");
+
+  const d = new Date(
+    parts[0],
+    parts[1] - 1,
+    parts[2]
+  );
+
+  return d.toLocaleDateString("en-AU", {
+    day: "numeric",
+    month: "short"
   });
+
+});
 
   const totals = data.map(r => parseFloat(r["Total"]) || 0);
 

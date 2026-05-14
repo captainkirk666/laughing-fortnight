@@ -398,7 +398,60 @@ function handleHistory(data) {
     }
   );
 }
+
+  // ===== DAILY % CHANGE =====
+let dailyChange = 0;
+
+if (totals.length > 1) {
+  const prev = totals[totals.length - 2];
+  const last = totals[totals.length - 1];
+
+  if (prev > 0) {
+    dailyChange = ((last - prev) / prev) * 100;
   }
+}
+
+// ===== OVERALL % =====
+const startingValue = 100000;
+const latestValue = totals[totals.length - 1];
+
+let overallChange = 0;
+
+if (startingValue > 0) {
+  overallChange =
+    ((latestValue - startingValue) / startingValue) * 100;
+}
+
+// ===== DAILY DISPLAY =====
+const dailyEl =
+  document.getElementById("dailyChange");
+
+if (dailyEl) {
+  const sign = dailyChange >= 0 ? "+" : "";
+
+  dailyEl.textContent =
+    `${sign}${dailyChange.toFixed(2)}%`;
+
+  dailyEl.className =
+    dailyChange >= 0 ? "positive" : "negative";
+}
+
+// ===== TOTAL DISPLAY =====
+const totalEl =
+  document.getElementById("totalOverall");
+
+if (totalEl) {
+  const sign = overallChange >= 0 ? "+" : "";
+
+  totalEl.textContent =
+    `${sign}${overallChange.toFixed(2)}%`;
+
+  totalEl.className =
+    overallChange >= 0 ? "positive" : "negative";
+}
+  
+  
+
 
 /* ===== TABLE ===== */
 function handleData(data) {

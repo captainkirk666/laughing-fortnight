@@ -80,9 +80,7 @@ fetch("./components/navbar.html")
         <span class="daily"></span>
         <span class="portfolio"></span>
       </div>
-<div class="card-days">
-  ACTIVE 214 DAYS
-</div>
+<div class="card-days"></div>
     </div>
 
     <div class="homepage-chart">
@@ -120,9 +118,7 @@ fetch("./components/navbar.html")
         <span class="daily"></span>
         <span class="portfolio"></span>
       </div>
-<div class="card-days">
-  ACTIVE 214 DAYS
-</div>
+<div class="card-days"></div>
     </div>
 
     <div class="homepage-chart">
@@ -160,9 +156,7 @@ fetch("./components/navbar.html")
         <span class="daily"></span>
         <span class="portfolio"></span>
       </div>
-<div class="card-days">
-  ACTIVE 214 DAYS
-</div>
+<div class="card-days"></div>
     </div>
 
     <div class="homepage-chart">
@@ -200,9 +194,7 @@ fetch("./components/navbar.html")
         <span class="daily"></span>
         <span class="portfolio"></span>
       </div>
-<div class="card-days">
-  ACTIVE 214 DAYS
-</div>
+<div class="card-days"></div>
     </div>
 
     <div class="homepage-chart">
@@ -461,5 +453,30 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+  <script>
+document.querySelectorAll(".homepage-card").forEach(card => {
+
+  const start = card.dataset.start;
+
+  if (!start) return;
+
+  const startDate = new Date(start);
+  const today = new Date();
+
+  const diffTime = today - startDate;
+
+  const diffDays = Math.floor(
+    diffTime / (1000 * 60 * 60 * 24)
+  );
+
+  const daysEl = card.querySelector(".card-days");
+
+  if (daysEl) {
+    daysEl.textContent = `ACTIVE ${diffDays} DAYS`;
+  }
+
+});
+</script>
+  
 </body>
 </html>

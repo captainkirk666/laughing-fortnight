@@ -178,32 +178,40 @@ changeChart = new Chart(document.getElementById("changeChart"), {
     maintainAspectRatio: false,
     plugins: { legend: { display: false } },
 
-    scales: {   // 👈 MUST be here
-      y: {
-        beginAtZero: true,
+   scales: {
+  x: {
+    ticks: {
+      color: "#94a3b8"
+    },
+    grid: {
+      color: "rgba(148,163,184,0.05)"
+    }
+  },
 
-        ticks: {
-          font: { size: 9 }
-        },
+  y: {
+    ticks: {
+      color: "#94a3b8"
+    },
 
-        grid: {
-          color: (ctx) => {
-            if (ctx.tick.value === 0) {
-              return "#cbd5e1";   // zero line
-            }
-            return "rgba(148,163,184,0.08)";
-          },
-
-          lineWidth: (ctx) => {
-            if (ctx.tick.value === 0) {
-              return 1.5;
-            }
-            return 1;
-          }
+    grid: {
+      color: (ctx) => {
+        if (ctx.tick.value === 0) {
+          return "#cbd5e1";
         }
+
+        return "rgba(148,163,184,0.08)";
+      },
+
+      lineWidth: (ctx) => {
+        if (ctx.tick.value === 0) {
+          return 1.4;
+        }
+
+        return 1;
       }
     }
   }
+}
 });
 
 holdingChart = new Chart(document.getElementById("holdingChart"), {
@@ -301,11 +309,13 @@ function handleHistory(data) {
 
     const parts = raw.split("-");
 
-    const d = new Date(
-      parts[0],
-      parts[1] - 1,
-      parts[2]
-    );
+   const dates = cleanData.map(r => {
+
+  const raw = String(r["Date"]).trim();
+
+  return raw;
+
+});
 
     return d.toLocaleDateString("en-AU", {
       day: "numeric",

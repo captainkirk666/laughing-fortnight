@@ -423,6 +423,20 @@ data = [...data].sort((a, b) => {
     ) || 0;
   };
 
+  const aAcquired =
+    String(a["TV Symbol"])
+      .toUpperCase()
+      .includes("ACQUIRED");
+
+  const bAcquired =
+    String(b["TV Symbol"])
+      .toUpperCase()
+      .includes("ACQUIRED");
+
+  if(aAcquired && !bAcquired) return 1;
+
+  if(!aAcquired && bAcquired) return -1;
+
   return getTotal(b) - getTotal(a);
 
 });

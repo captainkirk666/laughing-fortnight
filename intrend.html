@@ -49,10 +49,7 @@ fetch("./components/navbar.html")
 <!-- TABLE -->
 <div class="container">
   <table id="stocks">
-    <thead>
-      <tr id="headers"></tr>
-    </thead>
-
+    <thead><tr id="headers"></tr></thead>
     <tbody></tbody>
   </table>
 </div>
@@ -178,40 +175,32 @@ changeChart = new Chart(document.getElementById("changeChart"), {
     maintainAspectRatio: false,
     plugins: { legend: { display: false } },
 
-   scales: {
-  x: {
-    ticks: {
-      color: "#94a3b8"
-    },
-    grid: {
-      color: "rgba(148,163,184,0.05)"
-    }
-  },
+    scales: {   // 👈 MUST be here
+      y: {
+        beginAtZero: true,
 
-  y: {
-    ticks: {
-      color: "#94a3b8"
-    },
+        ticks: {
+          font: { size: 9 }
+        },
 
-    grid: {
-      color: (ctx) => {
-        if (ctx.tick.value === 0) {
-          return "#cbd5e1";
+        grid: {
+          color: (ctx) => {
+            if (ctx.tick.value === 0) {
+              return "#cbd5e1";   // zero line
+            }
+            return "rgba(148,163,184,0.08)";
+          },
+
+          lineWidth: (ctx) => {
+            if (ctx.tick.value === 0) {
+              return 1.5;
+            }
+            return 1;
+          }
         }
-
-        return "rgba(148,163,184,0.08)";
-      },
-
-      lineWidth: (ctx) => {
-        if (ctx.tick.value === 0) {
-          return 1.4;
-        }
-
-        return 1;
-      },
+      }
     }
   }
-}
 });
 
 holdingChart = new Chart(document.getElementById("holdingChart"), {
@@ -298,106 +287,14 @@ holdingChart = new Chart(document.getElementById("holdingChart"), {
 
 /* ===== PERFORMANCE CHART (RESTORED) ===== */
 function handleHistory(data) {
+  const dates = data.map(r => {
+    const d = new Date(r["Date"]);
+    return d.toLocaleDateString("en-AU", { day: "numeric", month: "short" });
+  });
 
-  const cleanData = data.filter(
-    r => r["Date"] && r["Total"]
-  );
+  const totals = data.map(r => parseFloat(r["Total"]) || 0);
 
-  if (!cleanData.length) return;
-
-  const dates = cleanData.map(r =>
-    String(r["Date"]).trim()
-  );
-
-  const totals = cleanData.map(r =>
-    parseFloat(r["Total"]) || 0
-  );
-
-  if (performanceChart) {
-    performanceChart.destroy();
-  }
-
-  performanceChart = new Chart(
-    document.getElementById("performanceChart"),
-    {
-      type: "line",
-
-      data: {
-        labels: dates,
-
-        datasets: [{
-          data: totals,
-
-          borderColor: "#3b82f6",
-          borderWidth: 3,
-          tension: 0.35,
-          pointRadius: 0,
-          fill: true,
-
-          backgroundColor: (ctx) => {
-
-            const chart = ctx.chart;
-            const { ctx: canvas, chartArea } = chart;
-
-            if (!chartArea) {
-              return "rgba(59,130,246,0.15)";
-            }
-
-            const gradient =
-              canvas.createLinearGradient(
-                0,
-                chartArea.top,
-                0,
-                chartArea.bottom
-              );
-
-            gradient.addColorStop(
-              0,
-              "rgba(59,130,246,0.35)"
-            );
-
-            gradient.addColorStop(
-              1,
-              "rgba(59,130,246,0.02)"
-            );
-
-            return gradient;
-          }
-        }]
-      },
-
-      options: {
-        maintainAspectRatio: false,
-
-        plugins: {
-          legend: {
-            display: false
-          }
-        },
-
-        scales: {
-          x: {
-            ticks: {
-              color: "#94a3b8"
-            },
-            grid: {
-              color: "rgba(255,255,255,0.04)"
-            }
-          },
-
-          y: {
-            ticks: {
-              color: "#94a3b8"
-            },
-            grid: {
-              color: "rgba(255,255,255,0.04)"
-            }
-          }
-        }
-      }
-    }
-  );
-
+  // ===== DAILY % CHANGE =====
   let dailyChange = 0;
 
   if (totals.length > 1) {
@@ -409,97 +306,92 @@ function handleHistory(data) {
     }
   }
 
+  // ===== OVERALL % FROM 100,000 =====
   const startingValue = 100000;
   const latestValue = totals[totals.length - 1];
 
   let overallChange = 0;
 
   if (startingValue > 0) {
-    overallChange =
-      ((latestValue - startingValue) / startingValue) * 100;
+    overallChange = ((latestValue - startingValue) / startingValue) * 100;
   }
 
-  const dailyEl =
-    document.getElementById("dailyChange");
-
-  if (dailyEl) {
-    const sign = dailyChange >= 0 ? "+" : "";
-
-    dailyEl.textContent =
-      `${sign}${dailyChange.toFixed(2)}%`;
-
-    dailyEl.className =
-      dailyChange >= 0 ? "positive" : "negative";
-  }
-
-  const totalEl =
-    document.getElementById("totalOverall");
-
-  if (totalEl) {
-    const sign = overallChange >= 0 ? "+" : "";
-
-    totalEl.textContent =
-      `${sign}${overallChange.toFixed(2)}%`;
-
-    totalEl.className =
-      overallChange >= 0 ? "positive" : "negative";
-  }
-}
-
-  
-  // ===== DAILY % CHANGE =====
-let dailyChange = 0;
-
-if (totals.length > 1) {
-  const prev = totals[totals.length - 2];
-  const last = totals[totals.length - 1];
-
-  if (prev > 0) {
-    dailyChange = ((last - prev) / prev) * 100;
-  }
-}
-
-// ===== OVERALL % =====
-const startingValue = 100000;
-const latestValue = totals[totals.length - 1];
-
-let overallChange = 0;
-
-if (startingValue > 0) {
-  overallChange =
-    ((latestValue - startingValue) / startingValue) * 100;
-}
-
-// ===== DAILY DISPLAY =====
-const dailyEl =
-  document.getElementById("dailyChange");
+  // ===== DISPLAY =====
+  // ===== DAILY % =====
+const dailyEl = document.getElementById("dailyChange");
 
 if (dailyEl) {
   const sign = dailyChange >= 0 ? "+" : "";
-
-  dailyEl.textContent =
-    `${sign}${dailyChange.toFixed(2)}%`;
-
-  dailyEl.className =
-    dailyChange >= 0 ? "positive" : "negative";
+  dailyEl.textContent = `${sign}${dailyChange.toFixed(2)}%`;
+  dailyEl.className = dailyChange >= 0 ? "positive" : "negative";
 }
 
-// ===== TOTAL DISPLAY =====
-const totalEl =
-  document.getElementById("totalOverall");
+// ===== TOTAL % =====
+const totalEl = document.getElementById("totalOverall");
 
 if (totalEl) {
   const sign = overallChange >= 0 ? "+" : "";
-
-  totalEl.textContent =
-    `${sign}${overallChange.toFixed(2)}%`;
-
-  totalEl.className =
-    overallChange >= 0 ? "positive" : "negative";
+  totalEl.textContent = `${sign}${overallChange.toFixed(2)}%`;
+  totalEl.className = overallChange >= 0 ? "positive" : "negative";
 }
-  
-}  
 
+  // ===== CHART =====
+  if (performanceChart) performanceChart.destroy();
+
+  performanceChart = new Chart(document.getElementById("performanceChart"), {
+    type: "line",
+    data: {
+      labels: dates,
+datasets: [{
+  data: totals,
+
+  borderColor: "#3b82f6",
+
+  backgroundColor: (ctx) => {
+
+    const chart = ctx.chart;
+    const { ctx: canvas, chartArea } = chart;
+
+    if (!chartArea) {
+      return "rgba(59,130,246,0.2)";
+    }
+
+    const gradient = canvas.createLinearGradient(
+      0,
+      chartArea.top,
+      0,
+      chartArea.bottom
+    );
+
+    gradient.addColorStop(
+      0,
+      "rgba(59,130,246,0.35)"
+    );
+
+    gradient.addColorStop(
+      1,
+      "rgba(59,130,246,0.02)"
+    );
+
+    return gradient;
+  },
+
+  borderWidth: 2,
+
+  tension: 0.35,
+
+  pointRadius: 0,
+
+  fill: true
+}]
+
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } }
+    }
+  });
+}
 
 /* ===== TABLE ===== */
 function handleData(data) {

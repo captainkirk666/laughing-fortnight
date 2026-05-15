@@ -564,8 +564,15 @@ tr:hover {
   background: #1e293b;
 }
 
+/* ===== ACQUIRED IN TABLE ===== */
+.acquired{
+  opacity:0.55;
+  filter:saturate(0.7);
+}
 
-
+.acquired td{
+  color:#94a3b8 !important;
+}
 
 /* ===== TOTAL GRID (NEW LAYOUT) ===== */
 .total-grid {

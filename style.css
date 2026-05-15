@@ -967,3 +967,38 @@ tr:hover {
 
   pointer-events:none;
 }
+
+.acquired{
+  opacity:0.45;
+}
+
+.tv-acquired{
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:24px;
+  color:#94a3b8;
+}
+
+.acquired-title{
+  font-size:12px;
+  letter-spacing:3px;
+  margin-bottom:10px;
+  opacity:0.7;
+}
+
+.acquired-ticker{
+  font-size:28px;
+  font-weight:700;
+  color:white;
+  margin-bottom:18px;
+}
+
+.acquired-text{
+  font-size:13px;
+  line-height:1.6;
+  max-width:220px;
+}

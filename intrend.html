@@ -410,11 +410,15 @@ function handleData(data) {
 
 data.sort((a, b) => {
 
-  const aVal =
-    parseFloat(a["TOTAL $"]) || 0;
+const aVal =
+  parseFloat(
+    String(a["TOTAL $"]).replace(/[$,]/g, "")
+  ) || 0;
 
-  const bVal =
-    parseFloat(b["TOTAL $"]) || 0;
+const bVal =
+  parseFloat(
+    String(b["TOTAL $"]).replace(/[$,]/g, "")
+  ) || 0;
 
   return bVal - aVal;
 

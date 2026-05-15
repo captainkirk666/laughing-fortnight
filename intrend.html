@@ -408,6 +408,18 @@ function handleData(data) {
 
   let total=0;
 
+data.sort((a, b) => {
+
+  const aVal =
+    parseFloat(a["TOTAL $"]) || 0;
+
+  const bVal =
+    parseFloat(b["TOTAL $"]) || 0;
+
+  return bVal - aVal;
+
+});
+  
   data.forEach(row=>{
     const tr=document.createElement("tr");
 

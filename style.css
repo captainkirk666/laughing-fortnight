@@ -984,6 +984,7 @@ tr:hover {
 }
 
 .acquired-title{
+    font-family:"Source Serif 4", serif;
   font-size:12px;
   letter-spacing:3px;
   margin-bottom:4px;
@@ -991,9 +992,10 @@ tr:hover {
 }
 
 .acquired-ticker{
+    font-family:"Source Serif 4", serif;
   font-size:18px;
   font-weight:700;
-  color:white;
+  color:grey;
   margin-bottom:4px;
 }
 

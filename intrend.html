@@ -303,27 +303,12 @@ function handleHistory(data) {
 
   if (!cleanData.length) return;
 
-const cleanData = data.filter(r => r["Date"] && r["Total"]);
-
-if (!cleanData.length) return;
-
-const dates = cleanData.map(r => {
-  return String(r["Date"]).trim();
-});
-
-const totals = cleanData.map(
-  r => parseFloat(r["Total"]) || 0
-);
-
-    return d.toLocaleDateString("en-AU", {
-      day: "numeric",
-      month: "short"
-    });
-
+  const dates = cleanData.map(r => {
+    return String(r["Date"]).trim();
   });
 
-  const totals = cleanData.map(
-    r => parseFloat(r["Total"]) || 0
+  const totals = cleanData.map(r =>
+    parseFloat(r["Total"]) || 0
   );
 
   if (performanceChart) performanceChart.destroy();
@@ -408,8 +393,7 @@ const totals = cleanData.map(
       }
     }
   );
-
-
+}
   // ===== DAILY % CHANGE =====
 let dailyChange = 0;
 

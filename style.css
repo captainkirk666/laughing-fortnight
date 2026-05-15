@@ -665,8 +665,8 @@ tr:hover {
 }
 
 .pie-box canvas {
-  width: 85% !important;
-  height: 85% !important;
+  width: min(70%, 240px) !important;
+  height: min(70%, 240px) !important;
 }
 
 /* ===== PERFORMANCE ROW ===== */

@@ -986,15 +986,15 @@ tr:hover {
 .acquired-title{
   font-size:12px;
   letter-spacing:3px;
-  margin-bottom:10px;
+  margin-bottom:4px;
   opacity:0.7;
 }
 
 .acquired-ticker{
-  font-size:28px;
+  font-size:18px;
   font-weight:700;
   color:white;
-  margin-bottom:18px;
+  margin-bottom:4px;
 }
 
 .acquired-text{

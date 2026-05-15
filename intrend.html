@@ -303,19 +303,17 @@ function handleHistory(data) {
 
   if (!cleanData.length) return;
 
-  const dates = cleanData.map(r => {
+const cleanData = data.filter(r => r["Date"] && r["Total"]);
 
-    const raw = String(r["Date"]).trim();
+if (!cleanData.length) return;
 
-    const parts = raw.split("-");
-
-   const dates = cleanData.map(r => {
-
-  const raw = String(r["Date"]).trim();
-
-  return raw;
-
+const dates = cleanData.map(r => {
+  return String(r["Date"]).trim();
 });
+
+const totals = cleanData.map(
+  r => parseFloat(r["Total"]) || 0
+);
 
     return d.toLocaleDateString("en-AU", {
       day: "numeric",

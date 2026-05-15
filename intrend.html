@@ -406,9 +406,9 @@ function handleData(data) {
     headersRow.appendChild(th);
   });
 
-  let total=0;
+ let total = 0;
 
-data.sort((a, b) => {
+data = [...data].sort((a, b) => {
 
   const getTotal = (row) => {
 
@@ -416,8 +416,10 @@ data.sort((a, b) => {
       k => k.toLowerCase().includes("total")
     );
 
-    return parseFloat(
-      String(row[key]).replace(/[$,]/g, "")
+    const value = row[key];
+
+    return Number(
+      String(value).replace(/[^0-9.-]+/g, "")
     ) || 0;
   };
 

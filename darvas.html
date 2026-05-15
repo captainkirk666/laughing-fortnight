@@ -34,15 +34,19 @@ fetch("./components/navbar.html")
 
 <div class="page">
 
-<h2>DARVAS BOXES</h2>
+<h2>DARVAS</h2>
 
 <div class="info-text">
-  <p>The Darvas strategy focuses on stocks breaking out of defined price ranges, often accompanied by strong volume and momentum. </p>
-   <p>It identifies “Darvas boxes,” where price consolidates before pushing to new highs, signalling potential continuation. </p>
-   <p>The goal is to enter on confirmed breakouts and ride sustained upward moves while managing risk through defined exit levels. </p>
+  <p>The Darvas strategy focuses on stocks breaking out of defined price ranges, often accompanied by strong volume and momentum.</p>
+ <p>It identifies “Darvas boxes,” where price consolidates before pushing to new highs, signalling potential continuation.</p>
+ <p>The goal is to enter on confirmed breakouts and ride sustained upward moves while managing risk through defined exit levels.</p>
+
+ 
 </div>
 
 <header>Starting Capital: $100,000 — Oct 2025</header>
+
+
 
 <!-- TABLE -->
 <div class="container">
@@ -102,18 +106,34 @@ fetch("./components/navbar.html")
     <canvas id="performanceChart"></canvas>
   </div>
 </div>
+<h3>Charts</h3>
+  
+<!-- TRADINGVIEW CHART SECTION -->
+<div id="tv-charts"></div>
 
+<!-- EXPANDABLE MODAL -->
+<div id="tvModal" class="tv-modal">
+  <div class="tv-modal-content">
+
+    <span id="closeTv">&times;</span>
+
+    <div id="expandedChart"></div>
+
+  </div>
+</div>
+
+  
 <!-- DISCLAIMER (ORIGINAL KEPT) -->
 <div class="disclaimer">
   <p>
     The portfolio presented is a market simulation designed to test and evaluate different trading strategies. No real capital has been invested, and all totals are indicative only, serving as a guide to measure the effectiveness of each approach. Strategies are explored using market analysis tools such as TradingView. This site is intended for development and educational purposes only and should not be considered financial or investment advice. Always conduct your own research and seek professional advice before making financial decisions.
   </p>
-  <p>
-    And finally — don’t blindly trust a website run by a graphic designer.
-  </p>
+
 </div>
 
 </div>
+
+
 
 <!-- LIB -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -123,7 +143,7 @@ fetch("./components/navbar.html")
 
 <!-- DATA + CHARTS -->
 <script>
-const BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
+ BASE_URL = "https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec";
 
 const SHEET = "Darvas Oct 25";
 const HISTORY_SHEET = "Darvas Oct 25 History";
@@ -326,17 +346,15 @@ datasets: [{
   data: totals,
 
   borderColor: "#3b82f6",
-  borderWidth: 2,
-  tension: 0.35,
-  pointRadius: 0,
-
-  fill: true,
 
   backgroundColor: (ctx) => {
+
     const chart = ctx.chart;
     const { ctx: canvas, chartArea } = chart;
 
-    if (!chartArea) return "rgba(59,130,246,0.2)";
+    if (!chartArea) {
+      return "rgba(59,130,246,0.2)";
+    }
 
     const gradient = canvas.createLinearGradient(
       0,
@@ -345,12 +363,28 @@ datasets: [{
       chartArea.bottom
     );
 
-    gradient.addColorStop(0, "rgba(59,130,246,0.35)"); // near line
-    gradient.addColorStop(1, "rgba(59,130,246,0.02)"); // fade out
+    gradient.addColorStop(
+      0,
+      "rgba(59,130,246,0.35)"
+    );
+
+    gradient.addColorStop(
+      1,
+      "rgba(59,130,246,0.02)"
+    );
 
     return gradient;
-  }
+  },
+
+  borderWidth: 2,
+
+  tension: 0.35,
+
+  pointRadius: 0,
+
+  fill: true
 }]
+
     },
     options: {
       maintainAspectRatio: false,
@@ -374,11 +408,53 @@ function handleData(data) {
     headersRow.appendChild(th);
   });
 
-  let total=0;
+ let total = 0;
 
+data = [...data].sort((a, b) => {
+
+  const getTotal = (row) => {
+
+    const key = Object.keys(row).find(
+      k => k.toLowerCase().includes("total")
+    );
+
+    const value = row[key];
+
+    return Number(
+      String(value).replace(/[^0-9.-]+/g, "")
+    ) || 0;
+  };
+
+  const aAcquired =
+    String(a["TV Symbol"])
+      .toUpperCase()
+      .includes("ACQUIRED");
+
+  const bAcquired =
+    String(b["TV Symbol"])
+      .toUpperCase()
+      .includes("ACQUIRED");
+
+  if(aAcquired && !bAcquired) return 1;
+
+  if(!aAcquired && bAcquired) return -1;
+
+  return getTotal(b) - getTotal(a);
+
+});
+  
   data.forEach(row=>{
     const tr=document.createElement("tr");
 
+    const isAcquired =
+  String(row["TV Symbol"])
+    .toUpperCase()
+    .includes("ACQUIRED");
+
+if(isAcquired){
+  tr.classList.add("acquired");
+}
+    
     Object.entries(row).forEach(([k,v])=>{
       const td=document.createElement("td");
       const num=parseFloat(v);
@@ -399,8 +475,11 @@ function handleData(data) {
     tbody.appendChild(tr);
   });
 
-  totalDisplay.textContent="$"+total.toLocaleString();
-  buildCharts(data);
+totalDisplay.textContent="$"+total.toLocaleString();
+
+buildCharts(data);
+
+renderTradingViewCharts(data);
 }
 
 function loadData(){
@@ -427,5 +506,246 @@ loadData();
 loadHistory();
 setInterval(loadData,10000);
 </script>
+
+
+
+  
+
+<!-- TRADINGVIEW -->
+<script src="https://s3.tradingview.com/tv.js"></script>
+
+<script>
+function renderTradingViewCharts(data) {
+
+  const container = document.getElementById("tv-charts");
+
+  container.innerHTML = `
+    <div class="tv-section">
+      <div class="tv-grid" id="tvGrid"></div>
+    </div>
+  `;
+
+
+  const grid = document.getElementById("tvGrid");
+
+  const modal = document.getElementById("tvModal");
+  const expanded = document.getElementById("expandedChart");
+
+  
+
+  // TOP 10 HOLDINGS
+  data.slice(0,10).forEach((row, index) => {
+
+  const symbol = row["TV Symbol"];
+
+if (!symbol) return;
+
+const isAcquired =
+  String(symbol)
+    .toUpperCase()
+    .includes("ACQUIRED");
+    
+    const chartId = `tv_chart_${index}`;
+
+    const card = document.createElement("div");
+
+    card.className = "tv-card";
+
+    card.dataset.symbol = symbol;
+
+card.innerHTML = `
+<div id="${chartId}" class="tv-mini"></div>
+
+<div class="tv-ticker">
+  ${row["Ticker"]}
+</div>
+`;
+
+    grid.appendChild(card);
+    
+    if(isAcquired){
+
+  card.innerHTML = `
+    <div class="tv-acquired">
+
+      <div class="acquired-title">
+        ACQUIRED
+      </div>
+
+      <div class="acquired-ticker">
+        ${row["Ticker"]}
+      </div>
+
+      <div class="acquired-text">
+        Trading halted following acquisition.
+
+        <br>
+
+        Price locked at final traded value.
+      </div>
+
+    </div>
+  `;
+
+  return;
+}
+
+    // MINI CHART
+    new TradingView.widget({
+      container_id: chartId,
+
+      symbol: symbol,
+
+      interval: "W",
+
+      range: "12M",
+
+      timezone: "Australia/Sydney",
+
+      theme: "dark",
+
+backgroundColor: "#111827",
+
+gridColor: "rgba(255,255,255,0.03)",
+      
+overrides: {
+
+  "paneProperties.background": "#111827",
+
+  "paneProperties.vertGridProperties.color":
+    "rgba(255,255,255,0.02)",
+
+  "paneProperties.horzGridProperties.color":
+    "rgba(255,255,255,0.02)",
+
+  "scalesProperties.textColor":
+    "rgba(255,255,255,0.45)"
+},
+      width: "100%",
+      height: "100%",
+        style: "1",
+    hide_side_toolbar: true,
+
+      style: "1",
+
+      locale: "en",
+
+      toolbar_bg: "#0f172a",
+
+      enable_publishing: false,
+
+      hide_top_toolbar: true,
+
+      hide_legend: true,
+
+save_image: false,
+
+studies: [
+  "MASimple@tv-basicstudies"
+],
+
+studies_overrides: {
+
+  "moving average.length": 200,
+
+  "moving average.linewidth": 1,
+
+  "moving average.color":
+    "rgba(148,163,184,0.65)"
+},
+
+      
+    });
+
+    // EXPANDABLE CLICK
+    card.addEventListener("click", () => {
+
+      expanded.innerHTML = "";
+
+      modal.style.display = "flex";
+
+      new TradingView.widget({
+        container_id: "expandedChart",
+
+        symbol: symbol,
+
+        interval: "W",
+
+        range: "12M",
+
+        timezone: "Australia/Sydney",
+
+        theme: "dark",
+
+backgroundColor: "#111827",
+
+gridColor: "rgba(255,255,255,0.03)",
+        
+        overrides: {
+
+  "paneProperties.background": "#111827",
+
+  "paneProperties.vertGridProperties.color":
+    "rgba(255,255,255,0.02)",
+
+  "paneProperties.horzGridProperties.color":
+    "rgba(255,255,255,0.02)",
+
+  "scalesProperties.textColor":
+    "rgba(255,255,255,0.45)"
+},
+
+        autosize: true,
+
+        style: "1",
+  
+    hide_side_toolbar: true,
+
+        locale: "en",
+
+        toolbar_bg: "#0f172a",
+
+        allow_symbol_change: true,
+
+        enable_publishing: false,
+
+save_image: false,
+
+studies: [
+  "MASimple@tv-basicstudies"
+],
+
+studies_overrides: {
+
+  "moving average.length": 200,
+
+  "moving average.linewidth": 1,
+
+  "moving average.color":
+    "rgba(148,163,184,0.65)"
+},
+      });
+
+    });
+
+  });
+
+  // CLOSE MODAL
+  document.getElementById("closeTv").onclick = () => {
+    modal.style.display = "none";
+    expanded.innerHTML = "";
+  };
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+      expanded.innerHTML = "";
+    }
+  });
+
+}
+</script>
+
+
 </body>
 </html>

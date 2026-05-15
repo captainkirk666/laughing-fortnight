@@ -299,19 +299,23 @@ holdingChart = new Chart(document.getElementById("holdingChart"), {
 /* ===== PERFORMANCE CHART (RESTORED) ===== */
 function handleHistory(data) {
 
-  const cleanData = data.filter(r => r["Date"] && r["Total"]);
+  const cleanData = data.filter(
+    r => r["Date"] && r["Total"]
+  );
 
   if (!cleanData.length) return;
 
-  const dates = cleanData.map(r => {
-    return String(r["Date"]).trim();
-  });
+  const dates = cleanData.map(r =>
+    String(r["Date"]).trim()
+  );
 
   const totals = cleanData.map(r =>
     parseFloat(r["Total"]) || 0
   );
 
-  if (performanceChart) performanceChart.destroy();
+  if (performanceChart) {
+    performanceChart.destroy();
+  }
 
   performanceChart = new Chart(
     document.getElementById("performanceChart"),
@@ -372,10 +376,12 @@ function handleHistory(data) {
         },
 
         scales: {
+
           x: {
             ticks: {
               color: "#94a3b8"
             },
+
             grid: {
               color: "rgba(255,255,255,0.04)"
             }
@@ -385,6 +391,7 @@ function handleHistory(data) {
             ticks: {
               color: "#94a3b8"
             },
+
             grid: {
               color: "rgba(255,255,255,0.04)"
             }

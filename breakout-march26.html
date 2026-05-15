@@ -534,10 +534,15 @@ function renderTradingViewCharts(data) {
   // TOP 10 HOLDINGS
   data.slice(0,10).forEach((row, index) => {
 
-    const symbol = row["TV Symbol"];
+  const symbol = row["TV Symbol"];
 
-    if (!symbol) return;
+if (!symbol) return;
 
+const isAcquired =
+  String(symbol)
+    .toUpperCase()
+    .includes("ACQUIRED");
+    
     const chartId = `tv_chart_${index}`;
 
     const card = document.createElement("div");
@@ -555,6 +560,33 @@ card.innerHTML = `
 `;
 
     grid.appendChild(card);
+    
+    if(isAcquired){
+
+  card.innerHTML = `
+    <div class="tv-acquired">
+
+      <div class="acquired-title">
+        ACQUIRED
+      </div>
+
+      <div class="acquired-ticker">
+        ${row["Ticker"]}
+      </div>
+
+      <div class="acquired-text">
+        Trading halted following acquisition.
+
+        <br><br>
+
+        Price locked at final traded value.
+      </div>
+
+    </div>
+  `;
+
+  return;
+}
 
     // MINI CHART
     new TradingView.widget({

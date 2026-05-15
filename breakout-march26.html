@@ -430,6 +430,15 @@ data = [...data].sort((a, b) => {
   data.forEach(row=>{
     const tr=document.createElement("tr");
 
+    const isAcquired =
+  String(row["TV Symbol"])
+    .toUpperCase()
+    .includes("ACQUIRED");
+
+if(isAcquired){
+  tr.classList.add("acquired");
+}
+    
     Object.entries(row).forEach(([k,v])=>{
       const td=document.createElement("td");
       const num=parseFloat(v);

@@ -51,6 +51,29 @@ fetch("./components/navbar.html")
 <div class="homepage">
 <div class="homepage-grid">
 
+<div class="trend-checker">
+
+  <h2>Is My Stock In Trend?</h2>
+
+  <div class="trend-checker-input">
+
+    <input
+      type="text"
+      id="trendInput"
+      placeholder="Enter ASX ticker..."
+    >
+
+    <button onclick="checkTrend()">
+      CHECK
+    </button>
+
+  </div>
+
+  <div id="trendResult"></div>
+
+</div>
+
+  
 <!-- CARD TEMPLATE (used 4 times) -->
 
 <!-- IN TREND -->

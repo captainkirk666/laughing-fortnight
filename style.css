@@ -666,8 +666,9 @@ tr:hover {
 }
 
 .pie-box canvas{
-  width:min(70%,240px)!important;
-  height:min(70%,240px)!important;
+  width:min(70vw,240px)!important;
+  aspect-ratio:1 / 1;
+  height:auto!important;
   margin-top:10px;
 }
 

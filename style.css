@@ -142,6 +142,110 @@ h3{
   color: #94a3b8;
 }
 
+/* ===== TREND CHECKER  ===== */
+
+.trend-checker{
+  max-width:700px;
+  margin:50px auto;
+  padding:35px;
+  background:#08152d;
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:24px;
+  text-align:center;
+  box-shadow:0 0 25px rgba(0,0,0,0.35);
+}
+
+.trend-checker h2{
+  font-size:2rem;
+  margin-bottom:25px;
+  letter-spacing:2px;
+  color:#dbe7ff;
+}
+
+.trend-checker-input{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.trend-checker input{
+  width:260px;
+  padding:14px 18px;
+  border-radius:14px;
+  border:none;
+  background:#0f1f3d;
+  color:white;
+  font-size:1rem;
+  outline:none;
+}
+
+.trend-checker button{
+  padding:14px 28px;
+  border:none;
+  border-radius:14px;
+  background:#2563eb;
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.trend-checker button:hover{
+  transform:translateY(-2px);
+  background:#3b82f6;
+}
+
+#trendResult{
+  margin-top:30px;
+  min-height:80px;
+}
+
+.trend-result-card{
+  padding:22px;
+  border-radius:18px;
+  background:#0f1f3d;
+}
+
+.trend-yes{
+  color:#22c55e;
+}
+
+.trend-no{
+  color:#ef4444;
+}
+
+.trend-score{
+  font-size:2rem;
+  margin:10px 0;
+}
+
+.trend-notes{
+  color:#94a3b8;
+  margin-top:10px;
+}
+
+@media(max-width:768px){
+
+  .trend-checker{
+    margin:30px 15px;
+    padding:25px;
+  }
+
+  .trend-checker h2{
+    font-size:1.5rem;
+  }
+
+  .trend-checker input{
+    width:100%;
+  }
+
+  .trend-checker button{
+    width:100%;
+  }
+
+}
+
 /* ===== VALUE SECTION ===== */
 
 .homepage-body {

@@ -664,9 +664,10 @@ tr:hover {
   justify-content: center;
 }
 
-.pie-box canvas {
-  width: min(70%, 240px) !important;
-  height: min(70%, 240px) !important;
+.pie-box canvas{
+  width:min(70%,240px)!important;
+  height:min(70%,240px)!important;
+  margin-top:18px;
 }
 
 /* ===== PERFORMANCE ROW ===== */

@@ -466,6 +466,101 @@ function handleInTrendHistory(d) { renderCard(d, "Total", "intrend"); }
 function handleBreakoutHistory(d) { renderCard(d, "Total", "breakout"); }
 function handleETFHistory(d) { renderCard(d, "Total", "etf"); }
 
+
+/* =========================
+   TREND CHECKER
+========================= */
+
+const TREND_URL =
+"https://script.google.com/macros/s/AKfycbyP6ar_G67uTxgMwmhMlxSFZ3LFAtyPf7wiuLfUo_jxRpaQnYNhbkhws8aY_0AFe22yEg/exec?sheet=IN%20TREND%20SCANNER";
+
+let trendData = [];
+
+function loadTrendScanner(){
+
+  const existing =
+    document.getElementById("trendScript");
+
+  if(existing) existing.remove();
+
+  const s = document.createElement("script");
+
+  s.id = "trendScript";
+
+  s.src =
+    `${TREND_URL}&callback=handleTrendData`;
+
+  document.body.appendChild(s);
+}
+
+function handleTrendData(data){
+  trendData = data;
+}
+
+function checkTrend(){
+
+  const input =
+    document.getElementById("trendInput");
+
+  const result =
+    document.getElementById("trendResult");
+
+  const ticker =
+    input.value.trim().toUpperCase();
+
+  if(!ticker){
+    result.innerHTML = "";
+    return;
+  }
+
+  const match = trendData.find(r =>
+    String(r["Ticker"])
+      .toUpperCase() === ticker
+  );
+
+  if(match){
+
+    const isYes =
+      String(match["Result"])
+        .toUpperCase() === "YES";
+
+    result.innerHTML = `
+      <div class="trend-result-card">
+
+        <h2 class="${
+          isYes ? "trend-yes" : "trend-no"
+        }">
+
+          ${isYes ? "✅ YES" : "❌ NO"}
+
+        </h2>
+
+        <div class="trend-score">
+          Trend Score: ${match["Score"]}
+        </div>
+
+        <div class="trend-notes">
+          ${match["Notes"]}
+        </div>
+
+      </div>
+    `;
+
+  } else {
+
+    result.innerHTML = `
+      <div class="trend-result-card">
+
+        <h2 class="trend-no">
+          Ticker Not Found
+        </h2>
+
+      </div>
+    `;
+  }
+}
+
+  
 /* RUN */
 document.addEventListener("DOMContentLoaded", () => {
 

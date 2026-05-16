@@ -156,10 +156,12 @@ h3{
 }
 
 .trend-checker h2{
+  font-family:'Source Serif 4', serif;
+  font-size:18px;
   font-size:2rem;
-  margin-bottom:25px;
+  margin-bottom:12px;
   letter-spacing:2px;
-  color:#dbe7ff;
+  color:#94a3b8;
 }
 
 .trend-checker-input{

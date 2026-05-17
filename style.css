@@ -251,6 +251,63 @@ h3{
   }
 
 }
+/* ===== TREND LIST SECTION ===== */
+
+.new-entries-section{
+  max-width:1200px;
+  margin:70px auto;
+  padding:0 20px;
+}
+
+.new-entries-section h2{
+  text-align:center;
+  margin-bottom:30px;
+  font-size:2rem;
+  color:#dbe7ff;
+  letter-spacing:1px;
+}
+
+#newEntriesGrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;
+}
+
+.new-entry-card{
+  background:#08152d;
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:22px;
+  padding:24px;
+  transition:0.2s ease;
+}
+
+.new-entry-card:hover{
+  transform:translateY(-4px);
+  border-color:#38bdf8;
+}
+
+.new-entry-ticker{
+  font-size:2rem;
+  font-weight:700;
+  color:white;
+}
+
+.new-entry-score{
+  margin-top:12px;
+  font-size:1.1rem;
+  color:#38bdf8;
+}
+
+.new-entry-badge{
+  display:inline-block;
+  margin-top:18px;
+  padding:6px 12px;
+  border-radius:999px;
+  background:#22c55e22;
+  color:#22c55e;
+  font-size:0.85rem;
+  font-weight:700;
+}
 
 /* ===== VALUE SECTION ===== */
 

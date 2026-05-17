@@ -567,6 +567,64 @@ function checkTrend(){
   }
 }
 
+/* TREND LISTS */
+
+let newEntriesData = [];
+
+function loadNewEntries(){
+
+  const existing =
+    document.getElementById("newEntriesScript");
+
+  if(existing) existing.remove();
+
+  const s = document.createElement("script");
+
+  s.id = "newEntriesScript";
+
+  s.src =
+    `${BASE_URL}?sheet=${encodeURIComponent("NEW ENTRIES")}&callback=handleNewEntries`;
+
+  document.body.appendChild(s);
+}
+
+function handleNewEntries(data){
+
+  newEntriesData = data;
+
+  const grid =
+    document.getElementById("newEntriesGrid");
+
+  if(!grid) return;
+
+  grid.innerHTML = "";
+
+  data.forEach(stock => {
+
+    const card =
+      document.createElement("div");
+
+    card.className = "new-entry-card";
+
+    card.innerHTML = `
+      <div class="new-entry-ticker">
+        ${stock["Ticker"]}
+      </div>
+
+      <div class="new-entry-score">
+        Score: ${stock["Score"]}
+      </div>
+
+      <div class="new-entry-badge">
+        NEW ENTRY
+      </div>
+    `;
+
+    grid.appendChild(card);
+
+  });
+}
+  
   
 /* RUN */
 document.addEventListener("DOMContentLoaded", () => {

@@ -572,7 +572,78 @@ function checkTrend(){
     `;
   }
 }
+  
+/* TOP 10 list */
 
+let top10Data = [];
+
+function loadTop10(){
+
+  const existing =
+    document.getElementById("top10Script");
+
+  if(existing) existing.remove();
+
+  const s = document.createElement("script");
+
+  s.id = "top10Script";
+
+  s.src =
+    `${BASE_URL}?sheet=${encodeURIComponent("TOP 10")}&callback=handleTop10`;
+
+  document.body.appendChild(s);
+}
+
+function handleTop10(data){
+
+  top10Data = data;
+
+  const grid =
+    document.getElementById("top10Grid");
+
+  if(!grid) return;
+
+  grid.innerHTML = "";
+
+  data.forEach((stock,index) => {
+
+    const score =
+      Number(stock["Score"]) || 0;
+
+    const fill =
+      Math.min(score,150);
+
+    const card =
+      document.createElement("div");
+
+    card.className = "top10-card";
+
+    card.innerHTML = `
+      <div class="top10-rank">
+        #${index + 1}
+      </div>
+
+      <div class="top10-ticker">
+        ${stock["Ticker"]}
+      </div>
+
+      <div class="top10-score">
+        Score: ${score}
+      </div>
+
+      <div class="top10-bar">
+        <div
+          class="top10-fill"
+          style="width:${fill}%">
+        </div>
+      </div>
+    `;
+
+    grid.appendChild(card);
+
+  });
+}
+  
 /* TREND LISTS */
 
 let newEntriesData = [];
